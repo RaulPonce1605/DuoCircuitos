@@ -6,3 +6,8 @@ jest.mock("@expo-google-fonts/space-grotesk", () => ({
   SpaceGrotesk_600SemiBold: "SpaceGrotesk_600SemiBold",
   SpaceGrotesk_700Bold: "SpaceGrotesk_700Bold",
 }));
+
+// En Jest no hay pantalla que medir: el mock oficial da áreas seguras fijas.
+jest.mock("react-native-safe-area-context", () =>
+  jest.requireActual("react-native-safe-area-context/jest/mock").default,
+);

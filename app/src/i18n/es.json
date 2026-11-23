@@ -3,6 +3,36 @@
     "name": "Circuitos",
     "tagline": "Aprende circuitos eléctricos paso a paso"
   },
+  "tabs": {
+    "home": "Inicio",
+    "challenges": "Desafíos",
+    "leagues": "Ligas",
+    "profile": "Perfil",
+    "more": "Más"
+  },
+  "common": {
+    "comingSoon": "Próximamente"
+  },
+  "home": {
+    "title": "Tu camino",
+    "empty": "Aquí verás tu camino de lecciones."
+  },
+  "challenges": {
+    "title": "Desafíos",
+    "empty": "Los desafíos diarios y mensuales llegan pronto."
+  },
+  "leagues": {
+    "title": "Ligas",
+    "empty": "Compite cada semana con otros estudiantes. Muy pronto."
+  },
+  "profile": {
+    "title": "Perfil",
+    "empty": "Tu racha, tu EXP y tus logros aparecerán aquí."
+  },
+  "more": {
+    "title": "Más",
+    "empty": "Configuración y ayuda, muy pronto."
+  },
   "errors": {
     "unknown": "Algo salió mal. Intenta de nuevo."
   }
