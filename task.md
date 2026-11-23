@@ -38,7 +38,7 @@ Antes de programar: el repo listo para los 4 y la carpeta de información comple
 - [x] **Alex** — Inicializar la app con create-expo-app (TypeScript, Expo Router) y moverla a `app/`
 - [x] **Alex** — Configurar ESLint, TanStack Query, i18n y la carpeta `theme/`
 - [x] **Ali** — CI en GitHub Actions: lint y pruebas de backend y app en cada PR
-- [ ] **Ali** — Agregar al `.claude/settings.json` la regla deny equivalente para PowerShell
+- [x] **Ali** — Agregar al `.claude/settings.json` la regla deny equivalente para PowerShell
 - [ ] **Todos** — Leer los 4 CLAUDE.md, clonar, levantar el proyecto y abrir un PR de prueba
 
 ## Fase 1 — MVP: una lección de punta a punta
