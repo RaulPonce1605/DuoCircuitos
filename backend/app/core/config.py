@@ -2,7 +2,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Literal
 
-from pydantic import SecretStr, computed_field
+from pydantic import Field, SecretStr, computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy.engine import URL
 
@@ -38,6 +38,11 @@ class Settings(BaseSettings):
     llm_api_key: SecretStr = SecretStr("")
 
     cors_origins: list[str] = []
+
+    # Gamificación (docs/diseno/exp-y-racha.md). Nunca fijas en los servicios ni en la app.
+    xp_per_exercise_first_try: int = Field(default=10, ge=0)
+    xp_per_exercise_retry: int = Field(default=5, ge=0)
+    xp_perfect_lesson_bonus: int = Field(default=5, ge=0)
 
     @computed_field  # type: ignore[prop-decorator]
     @property
