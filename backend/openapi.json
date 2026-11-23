@@ -69,6 +69,24 @@
         "title": "HealthRead",
         "type": "object"
       },
+      "LessonSummaryRead": {
+        "properties": {
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "title"
+        ],
+        "title": "LessonSummaryRead",
+        "type": "object"
+      },
       "LoginRequest": {
         "properties": {
           "email": {
@@ -114,6 +132,72 @@
           }
         },
         "title": "LogoutRequest",
+        "type": "object"
+      },
+      "NodeRead": {
+        "properties": {
+          "is_current": {
+            "title": "Is Current",
+            "type": "boolean"
+          },
+          "key": {
+            "title": "Key",
+            "type": "string"
+          },
+          "lesson": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LessonSummaryRead"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "enum": [
+              "locked",
+              "available",
+              "completed"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "lesson",
+              "review",
+              "chest",
+              "assessment"
+            ],
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "type",
+          "status",
+          "is_current",
+          "lesson"
+        ],
+        "title": "NodeRead",
+        "type": "object"
+      },
+      "PathRead": {
+        "properties": {
+          "stages": {
+            "items": {
+              "$ref": "#/components/schemas/StageRead"
+            },
+            "title": "Stages",
+            "type": "array"
+          }
+        },
+        "required": [
+          "stages"
+        ],
+        "title": "PathRead",
         "type": "object"
       },
       "RefreshRequest": {
@@ -186,6 +270,58 @@
         "title": "RegisterRequest",
         "type": "object"
       },
+      "SectionRead": {
+        "properties": {
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "units": {
+            "items": {
+              "$ref": "#/components/schemas/UnitRead"
+            },
+            "title": "Units",
+            "type": "array"
+          }
+        },
+        "required": [
+          "slug",
+          "title",
+          "units"
+        ],
+        "title": "SectionRead",
+        "type": "object"
+      },
+      "StageRead": {
+        "properties": {
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/SectionRead"
+            },
+            "title": "Sections",
+            "type": "array"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "title",
+          "sections"
+        ],
+        "title": "StageRead",
+        "type": "object"
+      },
       "StatusRead": {
         "properties": {
           "status": {
@@ -198,6 +334,32 @@
           "status"
         ],
         "title": "StatusRead",
+        "type": "object"
+      },
+      "UnitRead": {
+        "properties": {
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/NodeRead"
+            },
+            "title": "Nodes",
+            "type": "array"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "title",
+          "nodes"
+        ],
+        "title": "UnitRead",
         "type": "object"
       },
       "UserRead": {
@@ -568,6 +730,42 @@
         "summary": "Get Me",
         "tags": [
           "users"
+        ]
+      }
+    },
+    "/path": {
+      "get": {
+        "operationId": "getPath",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PathRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "invalid_token"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Path",
+        "tags": [
+          "path"
         ]
       }
     }

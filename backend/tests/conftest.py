@@ -27,6 +27,7 @@ from app.core.config import get_settings
 from app.core.db import get_db
 from app.main import app
 from app.models import Base
+from app.services import auth as auth_service
 
 
 def _test_database_url() -> str:
@@ -92,3 +93,31 @@ async def client(db: AsyncSession) -> AsyncIterator[AsyncClient]:
             yield c
     finally:
         app.dependency_overrides.pop(get_db, None)
+
+
+# --- Datos comunes ---------------------------------------------------------------------------
+
+
+@pytest.fixture
+async def syllabus(db: AsyncSession) -> None:
+    """Importa el temario real en la base de pruebas (dentro de la transacción de la prueba)."""
+    from app.content_import.importer import import_syllabus
+    from app.content_import.validate import DEFAULT_SYLLABUS_DIR
+
+    await import_syllabus(db, DEFAULT_SYLLABUS_DIR)
+
+
+@pytest.fixture
+async def user_session(db: AsyncSession) -> "auth_service.Session":
+    return await auth_service.register(
+        db,
+        email="alumna@example.com",
+        password="contraseña-segura",
+        display_name="Alumna",
+        timezone="America/Mexico_City",
+    )
+
+
+@pytest.fixture
+def auth_headers(user_session: "auth_service.Session") -> dict[str, str]:
+    return {"Authorization": f"Bearer {user_session.access_token}"}
