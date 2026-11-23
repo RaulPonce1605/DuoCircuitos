@@ -1,0 +1,9 @@
+{
+  "app": {
+    "name": "Circuitos",
+    "tagline": "Aprende circuitos eléctricos paso a paso"
+  },
+  "errors": {
+    "unknown": "Algo salió mal. Intenta de nuevo."
+  }
+}
