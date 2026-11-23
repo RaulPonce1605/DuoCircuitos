@@ -79,7 +79,8 @@ npm run api:generate        ← crear  regenera src/api desde el OpenAPI del bac
 ### 4.2 Cliente API generado
 
 - **Por qué:** los tipos de la app siempre coinciden con el backend; si algo cambia, falla la compilación y no la app en producción.
-- Propuesta de herramienta: `openapi-typescript` + `openapi-fetch`.
+- Herramientas: `openapi-typescript` (corre con `npx` en versión fija, porque aún no soporta TypeScript 6 como dependencia) genera `src/api/schema.d.ts` desde `backend/openapi.json`; `openapi-fetch` hace las peticiones tipadas.
+- El CI falla si `backend/openapi.json` o `src/api/` están desactualizados.
 - **Prohibido:** editar archivos de `src/api/`; escribir a mano tipos que ya existen en el OpenAPI.
 - **Correcto:** cambia el backend → `npm run api:generate` → se commitea el resultado en el mismo PR.
 

@@ -179,7 +179,7 @@ uv run ruff check . && uv run ruff format --check . && uv run mypy app && uv run
 - [ ] Errores como excepciones de dominio con código estable.
 - [ ] Migración de Alembic si cambió el esquema.
 - [ ] Pruebas en `tests/api/` y `tests/services/`.
-- [ ] Cliente de la app regenerado en el mismo PR.
+- [ ] `uv run python -m app.openapi_export` y `npm run api:generate` (en `app/`) ejecutados y commiteados en el mismo PR.
 
 ### Nuevo tipo de ejercicio (parte backend)
 - [ ] Id del tipo agregado a la tabla del CLAUDE.md raíz y al formato de `contenido/README.md`.
