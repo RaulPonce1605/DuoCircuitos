@@ -36,8 +36,9 @@ backend/
 
 ```
 uv sync
-docker compose up -d db
+docker compose up -d db                   # Postgres en localhost:5433
 uv run alembic upgrade head
+uv run python -m app.content_import       # valida e importa contenido/ (idempotente)
 uv run fastapi dev app/main.py
 uv run ruff check . && uv run ruff format --check . && uv run mypy app && uv run pytest
 ```

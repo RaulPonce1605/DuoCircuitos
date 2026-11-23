@@ -1,0 +1,3 @@
+# Archivos generados: siempre LF, así regenerarlos en Windows no aparece como cambio.
+backend/openapi.json text eol=lf
+app/src/api/schema.d.ts text eol=lf

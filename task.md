@@ -49,7 +49,7 @@ Al terminar la fase 1, un alumno se registra, entra al camino, hace una lección
 
 - [x] **R** — Modelos y migración inicial: usuario, etapa, sección, unidad, nodo, lección, ejercicio, intento, progreso
 - [x] **R** — Auth con JWT propio: registro, login, refresh, Argon2 y pruebas
-- [ ] **R** — Importador: carga toda la carpeta de información y `camino.yaml` a la base de datos
+- [x] **R** — Importador: carga toda la carpeta de información y `camino.yaml` a la base de datos
 - [ ] **Alex** — Navegación con las 5 pestañas (Inicio, Desafíos, Ligas, Perfil, Más) y pantallas vacías
 - [ ] **Alex** — Pantallas de registro e inicio de sesión y dónde guardar los tokens en móvil y web
 - [ ] **Alex** — Componentes base en `ui/`: botón, barra de progreso, tarjeta, contador
