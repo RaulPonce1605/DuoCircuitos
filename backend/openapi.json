@@ -41,6 +41,80 @@
         "title": "AuthRead",
         "type": "object"
       },
+      "CheckRequest": {
+        "properties": {
+          "answer": {
+            "discriminator": {
+              "mapping": {
+                "fill_pattern": "#/components/schemas/FillPatternAnswer",
+                "multiple_choice": "#/components/schemas/MultipleChoiceAnswer",
+                "numeric": "#/components/schemas/NumericAnswer"
+              },
+              "propertyName": "type"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/MultipleChoiceAnswer"
+              },
+              {
+                "$ref": "#/components/schemas/FillPatternAnswer"
+              },
+              {
+                "$ref": "#/components/schemas/NumericAnswer"
+              }
+            ],
+            "title": "Answer"
+          }
+        },
+        "required": [
+          "answer"
+        ],
+        "title": "CheckRequest",
+        "type": "object"
+      },
+      "CheckResultRead": {
+        "properties": {
+          "attempt_completed": {
+            "title": "Attempt Completed",
+            "type": "boolean"
+          },
+          "correct": {
+            "title": "Correct",
+            "type": "boolean"
+          },
+          "correct_answer": {
+            "title": "Correct Answer",
+            "type": "string"
+          },
+          "explanation": {
+            "title": "Explanation",
+            "type": "string"
+          },
+          "next_exercise": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ExerciseInstanceRead"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "progress": {
+            "$ref": "#/components/schemas/LessonProgressRead"
+          }
+        },
+        "required": [
+          "correct",
+          "correct_answer",
+          "explanation",
+          "progress",
+          "next_exercise",
+          "attempt_completed"
+        ],
+        "title": "CheckResultRead",
+        "type": "object"
+      },
       "ErrorRead": {
         "description": "Error con un código estable que la app traduce (`errors.<code>`).",
         "properties": {
@@ -55,6 +129,82 @@
         "title": "ErrorRead",
         "type": "object"
       },
+      "ExerciseInstanceRead": {
+        "properties": {
+          "exercise": {
+            "discriminator": {
+              "mapping": {
+                "fill_pattern": "#/components/schemas/FillPatternPublic",
+                "multiple_choice": "#/components/schemas/MultipleChoicePublic",
+                "numeric": "#/components/schemas/NumericPublic"
+              },
+              "propertyName": "type"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/MultipleChoicePublic"
+              },
+              {
+                "$ref": "#/components/schemas/FillPatternPublic"
+              },
+              {
+                "$ref": "#/components/schemas/NumericPublic"
+              }
+            ],
+            "title": "Exercise"
+          },
+          "instance_id": {
+            "format": "uuid",
+            "title": "Instance Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "instance_id",
+          "exercise"
+        ],
+        "title": "ExerciseInstanceRead",
+        "type": "object"
+      },
+      "FillPatternAnswer": {
+        "properties": {
+          "text": {
+            "maxLength": 200,
+            "title": "Text",
+            "type": "string"
+          },
+          "type": {
+            "const": "fill_pattern",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "text"
+        ],
+        "title": "FillPatternAnswer",
+        "type": "object"
+      },
+      "FillPatternPublic": {
+        "properties": {
+          "prompt": {
+            "title": "Prompt",
+            "type": "string"
+          },
+          "type": {
+            "const": "fill_pattern",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "prompt"
+        ],
+        "title": "FillPatternPublic",
+        "type": "object"
+      },
       "HealthRead": {
         "properties": {
           "status": {
@@ -67,6 +217,124 @@
           "status"
         ],
         "title": "HealthRead",
+        "type": "object"
+      },
+      "LessonAttemptRead": {
+        "properties": {
+          "attempt_id": {
+            "format": "uuid",
+            "title": "Attempt Id",
+            "type": "string"
+          },
+          "current_exercise": {
+            "$ref": "#/components/schemas/ExerciseInstanceRead"
+          },
+          "lesson": {
+            "$ref": "#/components/schemas/LessonRefRead"
+          },
+          "progress": {
+            "$ref": "#/components/schemas/LessonProgressRead"
+          }
+        },
+        "required": [
+          "attempt_id",
+          "lesson",
+          "progress",
+          "current_exercise"
+        ],
+        "title": "LessonAttemptRead",
+        "type": "object"
+      },
+      "LessonAttemptSummaryRead": {
+        "properties": {
+          "accuracy": {
+            "title": "Accuracy",
+            "type": "integer"
+          },
+          "attempt_id": {
+            "format": "uuid",
+            "title": "Attempt Id",
+            "type": "string"
+          },
+          "concepts": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Concepts",
+            "type": "array"
+          },
+          "exercise_count": {
+            "title": "Exercise Count",
+            "type": "integer"
+          },
+          "first_try_correct": {
+            "title": "First Try Correct",
+            "type": "integer"
+          },
+          "lesson": {
+            "$ref": "#/components/schemas/LessonRefRead"
+          },
+          "streak": {
+            "title": "Streak",
+            "type": "integer"
+          },
+          "streak_extended": {
+            "title": "Streak Extended",
+            "type": "boolean"
+          },
+          "xp_awarded": {
+            "title": "Xp Awarded",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "attempt_id",
+          "lesson",
+          "exercise_count",
+          "first_try_correct",
+          "accuracy",
+          "xp_awarded",
+          "concepts",
+          "streak",
+          "streak_extended"
+        ],
+        "title": "LessonAttemptSummaryRead",
+        "type": "object"
+      },
+      "LessonProgressRead": {
+        "properties": {
+          "completed": {
+            "title": "Completed",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "completed",
+          "total"
+        ],
+        "title": "LessonProgressRead",
+        "type": "object"
+      },
+      "LessonRefRead": {
+        "properties": {
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "title"
+        ],
+        "title": "LessonRefRead",
         "type": "object"
       },
       "LessonSummaryRead": {
@@ -134,6 +402,54 @@
         "title": "LogoutRequest",
         "type": "object"
       },
+      "MultipleChoiceAnswer": {
+        "properties": {
+          "option": {
+            "maximum": 50.0,
+            "minimum": 0.0,
+            "title": "Option",
+            "type": "integer"
+          },
+          "type": {
+            "const": "multiple_choice",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "option"
+        ],
+        "title": "MultipleChoiceAnswer",
+        "type": "object"
+      },
+      "MultipleChoicePublic": {
+        "properties": {
+          "options": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Options",
+            "type": "array"
+          },
+          "prompt": {
+            "title": "Prompt",
+            "type": "string"
+          },
+          "type": {
+            "const": "multiple_choice",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "prompt",
+          "options"
+        ],
+        "title": "MultipleChoicePublic",
+        "type": "object"
+      },
       "NodeRead": {
         "properties": {
           "is_current": {
@@ -182,6 +498,56 @@
           "lesson"
         ],
         "title": "NodeRead",
+        "type": "object"
+      },
+      "NumericAnswer": {
+        "properties": {
+          "type": {
+            "const": "numeric",
+            "title": "Type",
+            "type": "string"
+          },
+          "unit": {
+            "default": "",
+            "maxLength": 10,
+            "title": "Unit",
+            "type": "string"
+          },
+          "value": {
+            "maxLength": 40,
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "value"
+        ],
+        "title": "NumericAnswer",
+        "type": "object"
+      },
+      "NumericPublic": {
+        "properties": {
+          "prompt": {
+            "title": "Prompt",
+            "type": "string"
+          },
+          "type": {
+            "const": "numeric",
+            "title": "Type",
+            "type": "string"
+          },
+          "unit": {
+            "title": "Unit",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "prompt",
+          "unit"
+        ],
+        "title": "NumericPublic",
         "type": "object"
       },
       "PathRead": {
@@ -413,14 +779,14 @@
         "type": "object"
       },
       "ValidationErrorRead": {
-        "description": "422: el cuerpo o los parámetros no pasan la validación.",
+        "description": "422. `validation_error`: el cuerpo o los parámetros no pasan la validación (trae\n`detail`). Otros códigos (`invalid_answer`) son errores de dominio sin `detail`.",
         "properties": {
           "code": {
-            "const": "validation_error",
             "title": "Code",
             "type": "string"
           },
           "detail": {
+            "default": [],
             "items": {
               "$ref": "#/components/schemas/ValidationIssue"
             },
@@ -429,8 +795,7 @@
           }
         },
         "required": [
-          "code",
-          "detail"
+          "code"
         ],
         "title": "ValidationErrorRead",
         "type": "object"
@@ -676,6 +1041,94 @@
         ]
       }
     },
+    "/exercise-instances/{instance_id}/check": {
+      "post": {
+        "operationId": "checkExercise",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "instance_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Instance Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckResultRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "invalid_token"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "not_found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "already_answered, not_current_exercise"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorRead"
+                }
+              }
+            },
+            "description": "validation_error, invalid_answer"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Check Exercise",
+        "tags": [
+          "lessons"
+        ]
+      }
+    },
     "/health": {
       "get": {
         "operationId": "getHealth",
@@ -694,6 +1147,161 @@
         "summary": "Get Health",
         "tags": [
           "health"
+        ]
+      }
+    },
+    "/lesson-attempts/{attempt_id}/summary": {
+      "get": {
+        "operationId": "getLessonSummary",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "attempt_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Attempt Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LessonAttemptSummaryRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "invalid_token"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "not_found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "attempt_not_completed"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorRead"
+                }
+              }
+            },
+            "description": "validation_error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Lesson Summary",
+        "tags": [
+          "lessons"
+        ]
+      }
+    },
+    "/lessons/{lesson_slug}/attempts": {
+      "post": {
+        "operationId": "startLesson",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "lesson_slug",
+            "required": true,
+            "schema": {
+              "title": "Lesson Slug",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LessonAttemptRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "invalid_token"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "not_found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "node_locked"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorRead"
+                }
+              }
+            },
+            "description": "validation_error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Start Lesson",
+        "tags": [
+          "lessons"
         ]
       }
     },

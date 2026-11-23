@@ -33,6 +33,20 @@ class NodeLocked(DomainError):
     code = "node_locked"
 
 
+class AlreadyAnswered(DomainError):
+    code = "already_answered"
+
+
+class NotCurrentExercise(DomainError):
+    """Se intentó responder un ejercicio que no es el siguiente de la cola."""
+
+    code = "not_current_exercise"
+
+
+class AttemptNotCompleted(DomainError):
+    code = "attempt_not_completed"
+
+
 class InvalidAnswer(DomainError):
     """La respuesta no corresponde al tipo del ejercicio o está fuera de rango."""
 

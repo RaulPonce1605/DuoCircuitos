@@ -16,10 +16,11 @@ class ValidationIssue(BaseModel):
 
 
 class ValidationErrorRead(BaseModel):
-    """422: el cuerpo o los parámetros no pasan la validación."""
+    """422. `validation_error`: el cuerpo o los parámetros no pasan la validación (trae
+    `detail`). Otros códigos (`invalid_answer`) son errores de dominio sin `detail`."""
 
-    code: Literal["validation_error"]
-    detail: list[ValidationIssue]
+    code: str
+    detail: list[ValidationIssue] = []
 
 
 class StatusRead(BaseModel):

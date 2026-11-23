@@ -72,6 +72,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/exercise-instances/{instance_id}/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Check Exercise */
+        post: operations["checkExercise"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/health": {
         parameters: {
             query?: never;
@@ -83,6 +100,40 @@ export interface paths {
         get: operations["getHealth"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/lesson-attempts/{attempt_id}/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Lesson Summary */
+        get: operations["getLessonSummary"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/lessons/{lesson_slug}/attempts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Start Lesson */
+        post: operations["startLesson"];
         delete?: never;
         options?: never;
         head?: never;
@@ -143,6 +194,24 @@ export interface components {
             token_type: "bearer";
             user: components["schemas"]["UserRead"];
         };
+        /** CheckRequest */
+        CheckRequest: {
+            /** Answer */
+            answer: components["schemas"]["MultipleChoiceAnswer"] | components["schemas"]["FillPatternAnswer"] | components["schemas"]["NumericAnswer"];
+        };
+        /** CheckResultRead */
+        CheckResultRead: {
+            /** Attempt Completed */
+            attempt_completed: boolean;
+            /** Correct */
+            correct: boolean;
+            /** Correct Answer */
+            correct_answer: string;
+            /** Explanation */
+            explanation: string;
+            next_exercise: components["schemas"]["ExerciseInstanceRead"] | null;
+            progress: components["schemas"]["LessonProgressRead"];
+        };
         /**
          * ErrorRead
          * @description Error con un código estable que la app traduce (`errors.<code>`).
@@ -151,6 +220,36 @@ export interface components {
             /** Code */
             code: string;
         };
+        /** ExerciseInstanceRead */
+        ExerciseInstanceRead: {
+            /** Exercise */
+            exercise: components["schemas"]["MultipleChoicePublic"] | components["schemas"]["FillPatternPublic"] | components["schemas"]["NumericPublic"];
+            /**
+             * Instance Id
+             * Format: uuid
+             */
+            instance_id: string;
+        };
+        /** FillPatternAnswer */
+        FillPatternAnswer: {
+            /** Text */
+            text: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "fill_pattern";
+        };
+        /** FillPatternPublic */
+        FillPatternPublic: {
+            /** Prompt */
+            prompt: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "fill_pattern";
+        };
         /** HealthRead */
         HealthRead: {
             /**
@@ -158,6 +257,54 @@ export interface components {
              * @constant
              */
             status: "ok";
+        };
+        /** LessonAttemptRead */
+        LessonAttemptRead: {
+            /**
+             * Attempt Id
+             * Format: uuid
+             */
+            attempt_id: string;
+            current_exercise: components["schemas"]["ExerciseInstanceRead"];
+            lesson: components["schemas"]["LessonRefRead"];
+            progress: components["schemas"]["LessonProgressRead"];
+        };
+        /** LessonAttemptSummaryRead */
+        LessonAttemptSummaryRead: {
+            /** Accuracy */
+            accuracy: number;
+            /**
+             * Attempt Id
+             * Format: uuid
+             */
+            attempt_id: string;
+            /** Concepts */
+            concepts: string[];
+            /** Exercise Count */
+            exercise_count: number;
+            /** First Try Correct */
+            first_try_correct: number;
+            lesson: components["schemas"]["LessonRefRead"];
+            /** Streak */
+            streak: number;
+            /** Streak Extended */
+            streak_extended: boolean;
+            /** Xp Awarded */
+            xp_awarded: number;
+        };
+        /** LessonProgressRead */
+        LessonProgressRead: {
+            /** Completed */
+            completed: number;
+            /** Total */
+            total: number;
+        };
+        /** LessonRefRead */
+        LessonRefRead: {
+            /** Slug */
+            slug: string;
+            /** Title */
+            title: string;
         };
         /** LessonSummaryRead */
         LessonSummaryRead: {
@@ -187,6 +334,28 @@ export interface components {
             /** Refresh Token */
             refresh_token?: string | null;
         };
+        /** MultipleChoiceAnswer */
+        MultipleChoiceAnswer: {
+            /** Option */
+            option: number;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "multiple_choice";
+        };
+        /** MultipleChoicePublic */
+        MultipleChoicePublic: {
+            /** Options */
+            options: string[];
+            /** Prompt */
+            prompt: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "multiple_choice";
+        };
         /** NodeRead */
         NodeRead: {
             /** Is Current */
@@ -204,6 +373,33 @@ export interface components {
              * @enum {string}
              */
             type: "lesson" | "review" | "chest" | "assessment";
+        };
+        /** NumericAnswer */
+        NumericAnswer: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "numeric";
+            /**
+             * Unit
+             * @default
+             */
+            unit: string;
+            /** Value */
+            value: string;
+        };
+        /** NumericPublic */
+        NumericPublic: {
+            /** Prompt */
+            prompt: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "numeric";
+            /** Unit */
+            unit: string;
         };
         /** PathRead */
         PathRead: {
@@ -309,15 +505,16 @@ export interface components {
         };
         /**
          * ValidationErrorRead
-         * @description 422: el cuerpo o los parámetros no pasan la validación.
+         * @description 422. `validation_error`: el cuerpo o los parámetros no pasan la validación (trae
+         *     `detail`). Otros códigos (`invalid_answer`) son errores de dominio sin `detail`.
          */
         ValidationErrorRead: {
+            /** Code */
+            code: string;
             /**
-             * Code
-             * @constant
+             * Detail
+             * @default []
              */
-            code: "validation_error";
-            /** Detail */
             detail: components["schemas"]["ValidationIssue"][];
         };
         /** ValidationIssue */
@@ -497,6 +694,68 @@ export interface operations {
             };
         };
     };
+    checkExercise: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                instance_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CheckRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckResultRead"];
+                };
+            };
+            /** @description invalid_token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description not_found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description already_answered, not_current_exercise */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description validation_error, invalid_answer */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorRead"];
+                };
+            };
+        };
+    };
     getHealth: {
         parameters: {
             query?: never;
@@ -513,6 +772,122 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HealthRead"];
+                };
+            };
+        };
+    };
+    getLessonSummary: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                attempt_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LessonAttemptSummaryRead"];
+                };
+            };
+            /** @description invalid_token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description not_found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description attempt_not_completed */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description validation_error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorRead"];
+                };
+            };
+        };
+    };
+    startLesson: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                lesson_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LessonAttemptRead"];
+                };
+            };
+            /** @description invalid_token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description not_found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description node_locked */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description validation_error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorRead"];
                 };
             };
         };
