@@ -8,7 +8,7 @@ services:
     image: postgres:17-alpine
     env_file: ./backend/.env
     ports:
-      - "5432:5432"
+      - "5433:5432"   # 5433 en tu máquina para no chocar con un PostgreSQL instalado localmente
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:

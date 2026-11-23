@@ -1,5 +1,21 @@
 """Modelos ORM. Importa aquí cada modelo nuevo para que Alembic lo detecte."""
 
+from app.models.attempt import ExerciseInstance, LessonAttempt
 from app.models.base import Base
+from app.models.progress import NodeProgress
+from app.models.syllabus import Exercise, Lesson, Node, Section, Stage, Unit
+from app.models.user import User
 
-__all__ = ["Base"]
+__all__ = [
+    "Base",
+    "Exercise",
+    "ExerciseInstance",
+    "Lesson",
+    "LessonAttempt",
+    "Node",
+    "NodeProgress",
+    "Section",
+    "Stage",
+    "Unit",
+    "User",
+]
