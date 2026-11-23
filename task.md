@@ -62,7 +62,7 @@ Al terminar la fase 1, un alumno se registra, entra al camino, hace una lección
 - [x] **R** — Endpoints para iniciar lección y comprobar respuesta; valores parametrizados generados en el backend
 - [x] **R** — Validadores: opción múltiple, completar patrón y cálculo con unidad y tolerancia (parser seguro, sin `eval`)
 - [x] **R** — Backend de EXP y racha: sumar al terminar la lección, con pruebas
-- [ ] **Alex** — Pantalla del camino conectada a la API
+- [x] **Alex** — Pantalla del camino conectada a la API
 - [ ] **Alex** — Pantalla de lección: barra de progreso, ejercicio, botón Comprobar, retroalimentación
 - [ ] **Alex** — Componentes de los 3 tipos de ejercicio
 - [ ] **Ali** — Pantalla de resumen de lección: EXP, % de precisión, conceptos

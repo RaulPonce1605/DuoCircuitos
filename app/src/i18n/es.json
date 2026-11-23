@@ -11,7 +11,8 @@
     "more": "Más"
   },
   "common": {
-    "comingSoon": "Próximamente"
+    "comingSoon": "Próximamente",
+    "retry": "Reintentar"
   },
   "auth": {
     "loginTitle": "Qué bueno verte",
@@ -33,7 +34,26 @@
   },
   "home": {
     "title": "Tu camino",
-    "empty": "Aquí verás tu camino de lecciones."
+    "empty": "Aquí verás tu camino de lecciones.",
+    "loading": "Cargando tu camino",
+    "streak_one": "Racha de {{count}} día",
+    "streak_other": "Racha de {{count}} días",
+    "xp_one": "{{count}} punto de EXP",
+    "xp_other": "{{count}} puntos de EXP"
+  },
+  "path": {
+    "nodeType": {
+      "lesson": "Lección",
+      "review": "Repaso",
+      "chest": "Cofre",
+      "assessment": "Evaluación"
+    },
+    "status": {
+      "locked": "Bloqueado",
+      "available": "Disponible",
+      "completed": "Completado",
+      "current": "Empieza aquí"
+    }
   },
   "challenges": {
     "title": "Desafíos",
