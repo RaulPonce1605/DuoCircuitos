@@ -21,6 +21,9 @@ STATUS_BY_ERROR: dict[type[errors.DomainError], int] = {
     errors.InvalidToken: 401,
     errors.NotFound: 404,
     errors.NodeLocked: 409,
+    errors.AlreadyAnswered: 409,
+    errors.NotCurrentExercise: 409,
+    errors.AttemptNotCompleted: 409,
     errors.InvalidAnswer: 422,
     errors.UnknownExerciseType: 500,
 }
@@ -31,7 +34,11 @@ def error_responses(*error_types: type[errors.DomainError]) -> dict[int | str, d
     responses: dict[int | str, dict[str, Any]] = {}
     for error_type in error_types:
         status = STATUS_BY_ERROR[error_type]
-        responses.setdefault(status, {"model": ErrorRead, "description": ""})
+        # Un 422 de dominio comparte schema con el de validación: un solo tipo por código HTTP.
+        model = ValidationErrorRead if status == 422 else ErrorRead
+        responses.setdefault(status, {"model": model, "description": "validation_error"})
+        if status != 422 and responses[status]["description"] == "validation_error":
+            responses[status]["description"] = ""
         codes = responses[status]["description"]
         responses[status]["description"] = (
             f"{codes}, {error_type.code}" if codes else error_type.code
