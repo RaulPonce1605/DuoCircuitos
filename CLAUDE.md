@@ -223,3 +223,13 @@ La columna "En código" es el nombre obligatorio en modelos, tipos, rutas y vari
 - Si cambió el OpenAPI, el cliente de `app/src/api/` está regenerado en el mismo PR.
 - Si cambió el esquema de la base de datos, hay una migración de Alembic.
 - Se completó el checklist correspondiente del CLAUDE.md del módulo.
+
+### 5.8 Tareas: cada quien las suyas, solo Rico puede tomar las de otros
+
+- Las tareas y su responsable están en `task.md` (R = Rico, Alex, D = Danna, Ali).
+- **Por qué:** Rico va a adelantar todo lo que pueda del proyecto; los demás trabajan solo en lo suyo para no pisarse.
+- **Rico** (en git: `RaulPonce`, en GitHub: `RaulPonce1605`) puede hacer cualquier tarea de `task.md`, aunque esté asignada a otra persona.
+- **Alex, Danna y Ali** solo hacen las tareas marcadas con su nombre o inicial, o las de **Todos**.
+- **Prohibido:** que Alex, Danna o Ali hagan una tarea asignada a otra persona; empezar una tarea que ya está marcada `[x]` en `task.md`.
+- Antes de empezar una tarea, Claude revisa en `task.md` a quién está asignada y confirma quién está trabajando (por ejemplo con `git config user.name`). Si la tarea no le toca a esa persona y no es Rico, se detiene y lo avisa.
+- Al terminar una tarea, se marca `[x]` en `task.md` en el mismo PR.
