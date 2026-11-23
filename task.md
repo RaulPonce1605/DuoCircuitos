@@ -27,7 +27,7 @@ Rico lleva todo el backend y la IA; los demás solo tocan backend para revisar P
 Antes de programar: el repo listo para los 4 y la carpeta de información completa. El temario se arma de una vez al inicio, no se va construyendo durante el proyecto.
 
 - [ ] **D** — Reunir el material del curso: apuntes, libro y lo que pida el profesor
-- [ ] **D** — Armar la carpeta de información completa: `camino.yaml` y todas las unidades (Ley de Ohm, serie y paralelo, Kirchhoff, Thévenin, circuitos RC) con teoría, ejercicios de cálculo, explicaciones y pistas
+- [x] **D** — Armar la carpeta de información completa: `camino.yaml` y todas las unidades (Ley de Ohm, serie y paralelo, Kirchhoff, Thévenin, circuitos RC) con teoría, ejercicios de cálculo, explicaciones y pistas
 - [ ] **D** — Revisar con alguien que sepa circuitos que fórmulas y respuestas sean correctas
 - [ ] **D** — Guardar las capturas de referencia en `docs/referencias/`
 - [ ] **R** — Hacer `git init -b main`, crear el repo en GitHub y agregar a los 3 como colaboradores
