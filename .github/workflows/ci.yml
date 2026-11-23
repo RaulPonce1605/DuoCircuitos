@@ -78,6 +78,10 @@ jobs:
           cache: npm
           cache-dependency-path: app/package-lock.json
       - run: npm ci
+      - name: El cliente de src/api coincide con backend/openapi.json
+        run: |
+          npm run api:generate
+          git diff --exit-code -- src/api || (echo "::error::Corre 'npm run api:generate' y commitea src/api" && exit 1)
       - run: npm run lint
       - run: npx tsc --noEmit
       - run: npm test -- --ci
