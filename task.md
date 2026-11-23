@@ -53,7 +53,7 @@ Al terminar la fase 1, un alumno se registra, entra al camino, hace una lección
 - [ ] **Alex** — Navegación con las 5 pestañas (Inicio, Desafíos, Ligas, Perfil, Más) y pantallas vacías
 - [ ] **Alex** — Pantallas de registro e inicio de sesión y dónde guardar los tokens en móvil y web
 - [ ] **Alex** — Componentes base en `ui/`: botón, barra de progreso, tarjeta, contador
-- [ ] **Ali** — Diseñar el sistema de EXP y racha: cuánto da cada ejercicio, cuándo se rompe la racha, zona horaria
+- [x] **Ali** — Diseñar el sistema de EXP y racha: cuánto da cada ejercicio, cuándo se rompe la racha, zona horaria
 - [ ] **Ali** — Tokens de diseño propios: colores, tipografía, espaciado (sin marca de Duolingo)
 
 ### La lección funciona
