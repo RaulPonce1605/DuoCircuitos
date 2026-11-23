@@ -55,7 +55,7 @@ npm run api:generate        ← crear  regenera src/api desde el OpenAPI del bac
 
 - **Por qué:** cada capa se prueba por separado; si cambia el backend solo se toca el servicio; las pantallas quedan simples.
 - **Pantalla** (`src/app/` + componentes): dibuja y llama hooks.
-- **Hook** (`src/hooks/`): expone datos, estado de carga y acciones; usa TanStack Query (propuesta) para caché y reintentos.
+- **Hook** (`src/hooks/`): expone datos, estado de carga y acciones; usa TanStack Query para caché y reintentos (el `QueryClient` está en `src/services/query-client.ts`).
 - **Servicio** (`src/services/`): llama al cliente generado y adapta la respuesta al modelo de la app.
 - **Cliente API** (`src/api/`): generado; nadie lo escribe a mano.
 - **Prohibido:** `fetch`, `axios` o el cliente API dentro de componentes, pantallas o hooks; saltarse capas; lógica de negocio en componentes.
