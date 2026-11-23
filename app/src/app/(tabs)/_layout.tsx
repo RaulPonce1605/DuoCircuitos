@@ -1,15 +1,20 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Tabs } from "expo-router";
+import { Redirect, Tabs } from "expo-router";
 import { useTranslation } from "react-i18next";
 
 import { TAB_ROUTES } from "@/components/tab-routes";
+import { useSession } from "@/hooks/use-session";
 import { useTheme } from "@/hooks/use-theme";
 import { fonts } from "@/theme";
 
 export default function TabsLayout() {
   const { t } = useTranslation();
   const theme = useTheme();
+  const { status } = useSession();
 
+  if (status !== "signedIn") {
+    return <Redirect href="/login" />;
+  }
   return (
     <Tabs
       screenOptions={{

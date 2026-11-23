@@ -1,11 +1,13 @@
-import { Stack } from "expo-router";
-
 import { AppProviders } from "@/components/app-providers";
+import { RootNavigator } from "@/components/root-navigator";
+import { SessionProvider } from "@/hooks/use-session";
 
 export default function RootLayout() {
   return (
     <AppProviders>
-      <Stack screenOptions={{ headerShown: false }} />
+      <SessionProvider>
+        <RootNavigator />
+      </SessionProvider>
     </AppProviders>
   );
 }

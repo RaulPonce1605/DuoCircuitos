@@ -14,6 +14,16 @@ import { TAB_ROUTES } from "@/components/tab-routes";
 import i18n from "@/i18n";
 import es from "@/i18n/es.json";
 
+jest.mock("@/hooks/use-session", () => ({
+  useSession: () => ({
+    status: "signedIn",
+    user: { display_name: "Ana" },
+    signIn: jest.fn(),
+    signUp: jest.fn(),
+    signOut: jest.fn(),
+  }),
+}));
+
 describe("pestañas", () => {
   it("son las 5 del producto, en orden", () => {
     expect(TAB_ROUTES.map((tab) => i18n.t(tab.titleKey))).toEqual([

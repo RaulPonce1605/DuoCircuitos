@@ -13,6 +13,24 @@
   "common": {
     "comingSoon": "Próximamente"
   },
+  "auth": {
+    "loginTitle": "Qué bueno verte",
+    "loginSubtitle": "Inicia sesión para seguir con tu camino.",
+    "registerTitle": "Crea tu cuenta",
+    "registerSubtitle": "Guarda tu progreso, tu EXP y tu racha.",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "displayName": "Tu nombre",
+    "passwordHint": "Mínimo 8 caracteres.",
+    "login": "Entrar",
+    "register": "Crear cuenta",
+    "toRegister": "¿No tienes cuenta? Regístrate",
+    "toLogin": "¿Ya tienes cuenta? Inicia sesión",
+    "invalidEmail": "Escribe un correo válido.",
+    "shortPassword": "La contraseña necesita al menos 8 caracteres.",
+    "missingName": "Escribe tu nombre.",
+    "missingPassword": "Escribe tu contraseña."
+  },
   "home": {
     "title": "Tu camino",
     "empty": "Aquí verás tu camino de lecciones."
@@ -27,13 +45,26 @@
   },
   "profile": {
     "title": "Perfil",
-    "empty": "Tu racha, tu EXP y tus logros aparecerán aquí."
+    "empty": "Tu racha, tu EXP y tus logros aparecerán aquí.",
+    "greeting": "Hola, {{name}}",
+    "logout": "Cerrar sesión"
   },
   "more": {
     "title": "Más",
     "empty": "Configuración y ayuda, muy pronto."
   },
   "errors": {
-    "unknown": "Algo salió mal. Intenta de nuevo."
+    "unknown": "Algo salió mal. Intenta de nuevo.",
+    "network": "No hay conexión con el servidor. Revisa tu internet e intenta de nuevo.",
+    "validation_error": "Revisa los datos e intenta de nuevo.",
+    "email_taken": "Ya existe una cuenta con ese correo.",
+    "invalid_credentials": "El correo o la contraseña no son correctos.",
+    "invalid_token": "Tu sesión terminó. Inicia sesión de nuevo.",
+    "not_found": "No encontramos lo que buscabas.",
+    "node_locked": "Esa lección todavía está bloqueada.",
+    "already_answered": "Ese ejercicio ya se respondió.",
+    "not_current_exercise": "Ese no es el ejercicio actual.",
+    "attempt_not_completed": "La lección aún no termina.",
+    "invalid_answer": "Esa respuesta no es válida para este ejercicio."
   }
 }
