@@ -8,6 +8,7 @@ Uso (desde `backend/`):
 Sale con código 1 y lista los errores si algo no cumple `contenido/README.md`.
 """
 
+import io
 import itertools
 import random
 import re
@@ -289,4 +290,6 @@ def main(argv: list[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
+    if isinstance(sys.stdout, io.TextIOWrapper):
+        sys.stdout.reconfigure(encoding="utf-8")  # la consola de Windows no usa UTF-8
     sys.exit(main())
