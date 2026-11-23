@@ -1,0 +1,66 @@
+# Orden del camino de aprendizaje. El orden de cada lista ES el orden de desbloqueo.
+# Formato: contenido/README.md. Validar: cd backend && uv run python -m app.content_import.validate
+
+etapas:
+  - id: e1-fundamentos
+    titulo: Fundamentos
+    secciones:
+      - id: s1-magnitudes
+        titulo: Magnitudes y Ley de Ohm
+        unidades:
+          - id: u01-ley-de-ohm
+            titulo: Ley de Ohm
+            nodos:
+              - { tipo: leccion, leccion: ohm-01 }
+              - { tipo: leccion, leccion: ohm-02 }
+              - { tipo: repaso }
+              - { tipo: cofre }
+              - { tipo: evaluacion }
+
+      - id: s2-circuitos-resistivos
+        titulo: Circuitos resistivos
+        unidades:
+          - id: u02-serie-y-paralelo
+            titulo: Serie y paralelo
+            nodos:
+              - { tipo: leccion, leccion: sp-01 }
+              - { tipo: leccion, leccion: sp-02 }
+              - { tipo: repaso }
+              - { tipo: cofre }
+              - { tipo: evaluacion }
+
+  - id: e2-analisis
+    titulo: Análisis de circuitos
+    secciones:
+      - id: s3-metodos-de-analisis
+        titulo: Leyes y métodos de análisis
+        unidades:
+          - id: u03-kirchhoff
+            titulo: Leyes de Kirchhoff
+            nodos:
+              - { tipo: leccion, leccion: kir-01 }
+              - { tipo: leccion, leccion: kir-02 }
+              - { tipo: repaso }
+              - { tipo: cofre }
+              - { tipo: evaluacion }
+
+          - id: u04-thevenin
+            titulo: Thévenin y Norton
+            nodos:
+              - { tipo: leccion, leccion: thev-01 }
+              - { tipo: leccion, leccion: thev-02 }
+              - { tipo: repaso }
+              - { tipo: cofre }
+              - { tipo: evaluacion }
+
+      - id: s4-circuitos-con-capacitores
+        titulo: Circuitos con capacitores
+        unidades:
+          - id: u05-circuitos-rc
+            titulo: Circuitos RC
+            nodos:
+              - { tipo: leccion, leccion: rc-01 }
+              - { tipo: leccion, leccion: rc-02 }
+              - { tipo: repaso }
+              - { tipo: cofre }
+              - { tipo: evaluacion }
