@@ -1,0 +1,11 @@
+# Contexto de build = raíz del repo; la imagen del backend solo necesita backend/ y contenido/.
+*
+!backend/
+!contenido/
+backend/.venv/
+backend/.env
+backend/tests/
+**/__pycache__/
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
