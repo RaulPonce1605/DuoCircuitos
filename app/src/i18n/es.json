@@ -85,5 +85,11 @@
     "not_current_exercise": "Ese no es el ejercicio actual.",
     "attempt_not_completed": "La lección aún no termina.",
     "invalid_answer": "Esa respuesta no es válida para este ejercicio."
+  },
+  "exercise": {
+    "fillLabel": "Tu respuesta",
+    "numericLabel": "Resultado",
+    "numericHint": "Usa punto o coma decimal. Puedes escribir 2.2e-3.",
+    "unitLabel": "Unidad"
   }
 }
