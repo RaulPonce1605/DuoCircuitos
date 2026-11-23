@@ -4,3 +4,4 @@ export { Card } from "./card";
 export { Counter } from "./counter";
 export { ProgressBar } from "./progress-bar";
 export { Screen } from "./screen";
+export { TextField } from "./text-field";
