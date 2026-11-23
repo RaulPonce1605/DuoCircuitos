@@ -31,6 +31,8 @@ class LessonAttempt(Base):
     first_try_correct: Mapped[int | None]
     accuracy: Mapped[int | None]
     xp_awarded: Mapped[int | None]
+    # Si al terminar este intento la racha subió (la pantalla de racha lo celebra).
+    streak_extended: Mapped[bool | None]
 
     lesson: Mapped[Lesson] = relationship()
     instances: Mapped[list["ExerciseInstance"]] = relationship(

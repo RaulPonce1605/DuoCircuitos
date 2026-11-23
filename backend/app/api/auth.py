@@ -15,9 +15,9 @@ from app.schemas.auth import (
     SessionMode,
 )
 from app.schemas.common import StatusRead
-from app.schemas.user import UserRead
 from app.services import auth as auth_service
 from app.services.errors import EmailTaken, InvalidCredentials, InvalidToken
+from app.services.users import user_read
 
 router = APIRouter(prefix="/auth", tags=["auth"], responses=VALIDATION_ERROR_RESPONSES)
 
@@ -105,7 +105,7 @@ def _auth_response(
         access_token=session.access_token,
         expires_in=session.expires_in,
         refresh_token=refresh_token,
-        user=UserRead.model_validate(session.user),
+        user=user_read(session.user),
     )
 
 
