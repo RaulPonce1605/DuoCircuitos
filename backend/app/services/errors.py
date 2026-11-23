@@ -27,6 +27,12 @@ class NotFound(DomainError):
     code = "not_found"
 
 
+class NodeLocked(DomainError):
+    """El nodo existe pero el usuario aún no lo desbloquea."""
+
+    code = "node_locked"
+
+
 class InvalidAnswer(DomainError):
     """La respuesta no corresponde al tipo del ejercicio o está fuera de rango."""
 

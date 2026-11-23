@@ -106,6 +106,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/path": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Path */
+        get: operations["getPath"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -142,6 +159,13 @@ export interface components {
              */
             status: "ok";
         };
+        /** LessonSummaryRead */
+        LessonSummaryRead: {
+            /** Slug */
+            slug: string;
+            /** Title */
+            title: string;
+        };
         /** LoginRequest */
         LoginRequest: {
             /**
@@ -162,6 +186,29 @@ export interface components {
         LogoutRequest: {
             /** Refresh Token */
             refresh_token?: string | null;
+        };
+        /** NodeRead */
+        NodeRead: {
+            /** Is Current */
+            is_current: boolean;
+            /** Key */
+            key: string;
+            lesson: components["schemas"]["LessonSummaryRead"] | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "locked" | "available" | "completed";
+            /**
+             * Type
+             * @enum {string}
+             */
+            type: "lesson" | "review" | "chest" | "assessment";
+        };
+        /** PathRead */
+        PathRead: {
+            /** Stages */
+            stages: components["schemas"]["StageRead"][];
         };
         /**
          * RefreshRequest
@@ -200,6 +247,24 @@ export interface components {
              */
             timezone: string;
         };
+        /** SectionRead */
+        SectionRead: {
+            /** Slug */
+            slug: string;
+            /** Title */
+            title: string;
+            /** Units */
+            units: components["schemas"]["UnitRead"][];
+        };
+        /** StageRead */
+        StageRead: {
+            /** Sections */
+            sections: components["schemas"]["SectionRead"][];
+            /** Slug */
+            slug: string;
+            /** Title */
+            title: string;
+        };
         /** StatusRead */
         StatusRead: {
             /**
@@ -207,6 +272,15 @@ export interface components {
              * @constant
              */
             status: "ok";
+        };
+        /** UnitRead */
+        UnitRead: {
+            /** Nodes */
+            nodes: components["schemas"]["NodeRead"][];
+            /** Slug */
+            slug: string;
+            /** Title */
+            title: string;
         };
         /** UserRead */
         UserRead: {
@@ -459,6 +533,35 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["UserRead"];
+                };
+            };
+            /** @description invalid_token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+        };
+    };
+    getPath: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PathRead"];
                 };
             };
             /** @description invalid_token */
