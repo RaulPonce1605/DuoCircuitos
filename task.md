@@ -33,7 +33,7 @@ Antes de programar: el repo listo para los 4 y la carpeta de información comple
 - [ ] **R** — Hacer `git init -b main`, crear el repo en GitHub y agregar a los 3 como colaboradores
 - [x] **R** — Proteger `main`: sin push directo, PR con 1 aprobación
 - [x] **R** — Revisar y limpiar el repo accidental de `C:\Users\raulp`
-- [ ] **R** — Inicializar backend con uv (FastAPI, Ruff, mypy, pytest) y `docker-compose.yml` con PostgreSQL
+- [x] **R** — Inicializar backend con uv (FastAPI, Ruff, mypy, pytest) y `docker-compose.yml` con PostgreSQL
 - [ ] **R** — Script que valida el formato de la carpeta de información y corre en el CI
 - [ ] **Alex** — Inicializar la app con create-expo-app (TypeScript, Expo Router) y moverla a `app/`
 - [ ] **Alex** — Configurar ESLint, TanStack Query, i18n y la carpeta `theme/`
