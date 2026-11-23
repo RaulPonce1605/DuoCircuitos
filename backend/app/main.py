@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import health
+from app.api import auth, health, users
+from app.api.errors import register_error_handlers
 from app.core.config import get_settings
 
 
@@ -11,11 +12,14 @@ def create_app() -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
-        allow_credentials=True,
+        allow_credentials=True,  # la app web manda la cookie del refresh token
         allow_methods=["*"],
         allow_headers=["*"],
     )
+    register_error_handlers(app)
     app.include_router(health.router)
+    app.include_router(auth.router)
+    app.include_router(users.router)
     return app
 
 

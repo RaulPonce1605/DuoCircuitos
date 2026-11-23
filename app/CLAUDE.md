@@ -122,7 +122,9 @@ npm run api:generate        ← crear  regenera src/api desde el OpenAPI del bac
 
 ### 4.7 Sesión y tokens
 
-- Mobile: tokens en `expo-secure-store`. Web: **decisión pendiente** (secure-store no funciona en web).
+- Móvil: el refresh token en `expo-secure-store` (`session_mode: "body"`).
+- Web: el refresh token vive en una **cookie httpOnly** que pone el backend (`session_mode: "cookie"`); JavaScript nunca lo ve. Las peticiones a `/auth/*` van con `credentials: "include"`.
+- En los dos: el access token solo vive **en memoria**.
 - **Prohibido:** tokens en `AsyncStorage` o en logs.
 
 ### 4.8 TypeScript estricto

@@ -17,3 +17,15 @@ def test_every_route_has_operation_id_and_tags() -> None:
         for method, operation in methods.items():
             assert operation.get("operationId"), f"{method.upper()} {path} sin operation_id"
             assert operation.get("tags"), f"{method.upper()} {path} sin tags"
+
+
+def test_validation_errors_use_our_schema() -> None:
+    from app.main import app
+
+    schema = app.openapi()
+    assert "HTTPValidationError" not in schema["components"]["schemas"]
+    for path, methods in schema["paths"].items():
+        for method, operation in methods.items():
+            if "422" in operation["responses"]:
+                ref = operation["responses"]["422"]["content"]["application/json"]["schema"]
+                assert ref["$ref"].endswith("/ValidationErrorRead"), f"{method} {path}"
