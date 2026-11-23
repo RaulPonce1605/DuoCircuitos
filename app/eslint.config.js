@@ -26,4 +26,9 @@ module.exports = defineConfig([
       ],
     },
   },
+  {
+    // En las pruebas los textos fijos son datos de prueba, no texto de la UI.
+    files: ["**/__tests__/**", "**/*.test.ts", "**/*.test.tsx"],
+    rules: { "react/jsx-no-literals": "off" },
+  },
 ]);
