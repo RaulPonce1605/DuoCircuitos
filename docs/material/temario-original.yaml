@@ -1,0 +1,399 @@
+# Temario completo: 3 unidades, 6 niveles, 24 ejercicios.
+# Respuestas numéricas en unidades base del SI (A, V, Ω, W).
+# El validador debe aceptar prefijos equivalentes (mA, kΩ, mW) y aplicar la tolerancia.
+
+version: 1
+tolerancia_default: 0.02   # ±2 %
+puntos_por_ejercicio: 25   # 4 ejercicios = 100 por nivel
+
+unidades:
+  - id: u1
+    titulo: Fundamentos
+    niveles:
+      - id: n1
+        titulo: Voltaje, corriente y resistencia
+        explicacion: >
+          El voltaje (V) es la diferencia de potencial que empuja a las cargas; se mide en volts (V).
+          La corriente (I) es la cantidad de carga que pasa por un punto cada segundo; se mide en amperes (A).
+          La resistencia (R) es la oposición de un material al paso de la corriente; se mide en ohms (Ω)
+          y depende del material, la longitud y el grosor del conductor.
+        formulas:
+          - latex: 'I = \frac{Q}{t}'
+            descripcion: Q = carga (C), t = tiempo (s)
+          - latex: 'R = \rho \frac{L}{A}'
+            descripcion: ρ = resistividad (Ω·m), L = longitud (m), A = área de la sección (m²)
+          - latex: 'G = \frac{1}{R}'
+            descripcion: G = conductancia (S)
+        ejemplo:
+          enunciado: Por un cable pasan 30 C en 10 s. ¿Cuál es la corriente?
+          solucion: I = Q / t = 30 C / 10 s = 3 A.
+        ejercicios:
+          - id: "1.1"
+            tipo: opcion_multiple
+            enunciado: ¿En qué unidad se mide la resistencia eléctrica?
+            diagrama: null
+            opciones:
+              - { id: a, texto: Volt }
+              - { id: b, texto: Ampere }
+              - { id: c, texto: Ohm }
+              - { id: d, texto: Watt }
+            respuesta: c
+            pista: Su símbolo es la letra griega Ω.
+            procedimiento: >
+              El volt mide voltaje, el ampere corriente y el watt potencia.
+              La resistencia se mide en ohms (Ω).
+
+          - id: "1.2"
+            tipo: numerico
+            enunciado: Por un conductor pasan 120 C de carga en 1 minuto. ¿Cuál es la corriente?
+            diagrama: null
+            respuesta: { valor: 2, unidad: A }
+            pista: Convierte el tiempo a segundos antes de dividir.
+            procedimiento: t = 1 min = 60 s. I = Q / t = 120 C / 60 s = 2 A.
+
+          - id: "1.3"
+            tipo: opcion_multiple
+            enunciado: ¿Cómo se conecta un amperímetro para medir la corriente de un resistor?
+            diagrama: >
+              Fuente de voltaje, resistor y un medidor marcado con "A" en el mismo camino de la corriente.
+            opciones:
+              - { id: a, texto: En paralelo con el resistor }
+              - { id: b, texto: En serie con el resistor }
+              - { id: c, texto: Entre las terminales de la fuente }
+              - { id: d, texto: No importa cómo se conecte }
+            respuesta: b
+            pista: La corriente que quieres medir tiene que pasar a través del medidor.
+            procedimiento: >
+              El amperímetro mide la carga que lo atraviesa, así que debe estar en el mismo camino
+              que el resistor: en serie. El voltímetro es el que va en paralelo.
+
+          - id: "1.4"
+            tipo: numerico
+            enunciado: >
+              Un alambre de cobre (ρ = 1.72 × 10⁻⁸ Ω·m) mide 100 m y tiene una sección de 1 mm².
+              ¿Cuál es su resistencia?
+            diagrama: null
+            respuesta: { valor: 1.72, unidad: Ω }
+            pista: "Convierte el área a metros cuadrados: 1 mm² = 1 × 10⁻⁶ m²."
+            procedimiento: R = ρL / A = (1.72 × 10⁻⁸ Ω·m)(100 m) / (1 × 10⁻⁶ m²) = 1.72 Ω.
+
+      - id: n2
+        titulo: Ley de Ohm y potencia
+        explicacion: >
+          La Ley de Ohm dice que la corriente en un resistor es proporcional al voltaje aplicado:
+          si el voltaje sube, la corriente sube en la misma proporción. La potencia es la rapidez con que
+          un elemento convierte energía eléctrica en calor, luz o movimiento; se mide en watts (W).
+        formulas:
+          - latex: 'V = I R'
+            descripcion: Ley de Ohm
+          - latex: 'P = V I = I^2 R = \frac{V^2}{R}'
+            descripcion: Potencia en sus tres formas
+        ejemplo:
+          enunciado: Un resistor de 4 Ω se conecta a 12 V. ¿Qué corriente circula y qué potencia disipa?
+          solucion: I = V / R = 12 / 4 = 3 A. P = V · I = 12 · 3 = 36 W.
+        ejercicios:
+          - id: "2.1"
+            tipo: numerico
+            enunciado: Un resistor de 220 Ω se conecta a una fuente de 5 V. ¿Qué corriente circula?
+            diagrama: Fuente de 5 V en serie con un resistor de 220 Ω.
+            respuesta: { valor: 0.0227273, unidad: A }   # 22.7 mA
+            pista: Despeja la corriente de V = I R.
+            procedimiento: I = V / R = 5 V / 220 Ω = 0.0227 A = 22.7 mA.
+
+          - id: "2.2"
+            tipo: numerico
+            enunciado: Un foco consume 60 W cuando se conecta a 120 V. ¿Cuál es su resistencia en operación?
+            diagrama: null
+            respuesta: { valor: 240, unidad: Ω }
+            pista: Usa la fórmula de potencia que relaciona P, V y R sin la corriente.
+            procedimiento: P = V² / R, entonces R = V² / P = (120 V)² / 60 W = 14 400 / 60 = 240 Ω.
+
+          - id: "2.3"
+            tipo: opcion_multiple
+            enunciado: Si el voltaje sobre un resistor fijo se duplica, ¿qué pasa con la potencia que disipa?
+            diagrama: null
+            opciones:
+              - { id: a, texto: Se queda igual }
+              - { id: b, texto: Se duplica }
+              - { id: c, texto: Se cuadruplica }
+              - { id: d, texto: Se reduce a la mitad }
+            respuesta: c
+            pista: En P = V² / R, el voltaje está elevado al cuadrado.
+            procedimiento: "Con 2V: P' = (2V)² / R = 4 V² / R = 4P. La potencia se multiplica por 4."
+
+          - id: "2.4"
+            tipo: numerico
+            enunciado: Por un resistor de 1 kΩ circula una corriente de 10 mA. ¿Qué potencia disipa?
+            diagrama: null
+            respuesta: { valor: 0.1, unidad: W }   # 100 mW
+            pista: Convierte a unidades base (A y Ω) y usa P = I² R.
+            procedimiento: I = 0.01 A, R = 1000 Ω. P = (0.01)² · 1000 = 0.1 W = 100 mW.
+
+  - id: u2
+    titulo: Circuitos resistivos
+    niveles:
+      - id: n3
+        titulo: Circuitos serie y paralelo
+        explicacion: >
+          En serie, los elementos están uno tras otro: la corriente es la misma en todos y los voltajes
+          se reparten. En paralelo, los elementos comparten los mismos dos nodos: el voltaje es el mismo
+          en todos y la corriente se reparte entre las ramas. Varios resistores se pueden sustituir por uno
+          solo equivalente (Req).
+        formulas:
+          - latex: 'R_{serie} = R_1 + R_2 + \dots + R_n'
+            descripcion: Resistencia equivalente en serie
+          - latex: '\frac{1}{R_{paralelo}} = \frac{1}{R_1} + \frac{1}{R_2} + \dots + \frac{1}{R_n}'
+            descripcion: Resistencia equivalente en paralelo
+          - latex: 'R_1 \parallel R_2 = \frac{R_1 R_2}{R_1 + R_2}'
+            descripcion: Atajo para dos resistores en paralelo
+        ejemplo:
+          enunciado: >
+            Calcula la resistencia equivalente de 10, 20 y 30 Ω en serie, y de 6 y 3 Ω en paralelo.
+          solucion: "Serie: 10 + 20 + 30 = 60 Ω. Paralelo: (6 · 3) / (6 + 3) = 18 / 9 = 2 Ω."
+        ejercicios:
+          - id: "3.1"
+            tipo: numerico
+            enunciado: >
+              Se conectan en serie tres resistores de 100 Ω, 220 Ω y 330 Ω.
+              ¿Cuál es la resistencia equivalente?
+            diagrama: Los tres resistores uno tras otro entre las terminales a y b.
+            respuesta: { valor: 650, unidad: Ω }
+            pista: En serie, las resistencias se suman.
+            procedimiento: Req = 100 + 220 + 330 = 650 Ω.
+
+          - id: "3.2"
+            tipo: numerico
+            enunciado: Dos resistores de 12 Ω y 6 Ω están en paralelo. ¿Cuál es la resistencia equivalente?
+            diagrama: Los dos resistores conectados entre los mismos dos nodos a y b.
+            respuesta: { valor: 4, unidad: Ω }
+            pista: "Para dos resistores en paralelo: producto entre suma."
+            procedimiento: Req = (12 · 6) / (12 + 6) = 72 / 18 = 4 Ω.
+
+          - id: "3.3"
+            tipo: numerico
+            enunciado: >
+              Una fuente de 24 V alimenta a R1 = 4 Ω en serie con un arreglo en paralelo de
+              R2 = 6 Ω y R3 = 12 Ω. ¿Cuál es la corriente que entrega la fuente?
+            diagrama: >
+              Fuente de 24 V → R1 (4 Ω) → nodo donde se dividen R2 (6 Ω) y R3 (12 Ω) en paralelo
+              → regreso a la fuente.
+            respuesta: { valor: 3, unidad: A }
+            pista: Primero reduce el paralelo a un solo resistor, luego súmalo con R1.
+            procedimiento: >
+              R2 ∥ R3 = (6 · 12) / (6 + 12) = 4 Ω. Req = 4 + 4 = 8 Ω. I = V / Req = 24 / 8 = 3 A.
+
+          - id: "3.4"
+            tipo: opcion_multiple
+            enunciado: En un circuito con resistores en paralelo, ¿qué magnitud es igual en todas las ramas?
+            diagrama: null
+            opciones:
+              - { id: a, texto: La corriente }
+              - { id: b, texto: El voltaje }
+              - { id: c, texto: La resistencia }
+              - { id: d, texto: La potencia }
+            respuesta: b
+            pista: Todas las ramas están conectadas a los mismos dos nodos.
+            procedimiento: >
+              Como todas las ramas comparten los mismos dos nodos, tienen la misma diferencia de potencial.
+              La corriente se reparte según la resistencia de cada rama.
+
+      - id: n4
+        titulo: Divisores de voltaje y corriente
+        explicacion: >
+          Un divisor de voltaje son resistores en serie: el voltaje de la fuente se reparte en proporción
+          a cada resistencia, y el resistor más grande se queda con más voltaje. Un divisor de corriente son
+          resistores en paralelo: la corriente total se reparte, y la rama con menos resistencia se lleva
+          más corriente.
+        formulas:
+          - latex: 'V_x = V_s \frac{R_x}{R_1 + R_2 + \dots + R_n}'
+            descripcion: Divisor de voltaje
+          - latex: 'I_1 = I_T \frac{R_2}{R_1 + R_2}'
+            descripcion: Divisor de corriente para dos ramas (en el numerador va la resistencia de la otra rama)
+        ejemplo:
+          enunciado: Una fuente de 12 V alimenta R1 = 2 kΩ y R2 = 4 kΩ en serie. ¿Cuál es el voltaje en R2?
+          solucion: V2 = 12 · 4 / (2 + 4) = 48 / 6 = 8 V.
+        ejercicios:
+          - id: "4.1"
+            tipo: numerico
+            enunciado: Una fuente de 9 V alimenta R1 = 1 kΩ y R2 = 2 kΩ en serie. ¿Cuál es el voltaje en R2?
+            diagrama: Fuente de 9 V con R1 arriba y R2 abajo; la salida se mide entre las terminales de R2.
+            respuesta: { valor: 6, unidad: V }
+            pista: El voltaje se reparte en proporción a cada resistencia.
+            procedimiento: V2 = 9 · 2 / (1 + 2) = 18 / 3 = 6 V.
+
+          - id: "4.2"
+            tipo: numerico
+            enunciado: >
+              Una corriente total de 6 A se divide entre R1 = 3 Ω y R2 = 6 Ω en paralelo.
+              ¿Cuánta corriente pasa por R1?
+            diagrama: Fuente de corriente de 6 A conectada a R1 (3 Ω) y R2 (6 Ω) en paralelo.
+            respuesta: { valor: 4, unidad: A }
+            pista: En el numerador va la resistencia de la otra rama, no la de R1.
+            procedimiento: >
+              I1 = 6 · 6 / (3 + 6) = 36 / 9 = 4 A. Comprobación: I2 = 6 · 3 / 9 = 2 A, y 4 + 2 = 6 A.
+
+          - id: "4.3"
+            tipo: numerico
+            enunciado: >
+              Se quieren obtener 5 V a partir de una fuente de 15 V con un divisor. Si R1 (arriba) es de 10 kΩ,
+              ¿de cuánto debe ser R2 (donde se mide la salida)?
+            diagrama: Fuente de 15 V, R1 = 10 kΩ arriba, R2 desconocida abajo; salida de 5 V en R2.
+            respuesta: { valor: 5000, unidad: Ω }   # 5 kΩ
+            pista: Si R2 tiene 5 V, a R1 le tocan los otros 10 V, y la corriente es la misma en ambos.
+            procedimiento: V_R1 = 15 − 5 = 10 V. I = 10 V / 10 kΩ = 1 mA. R2 = 5 V / 1 mA = 5 kΩ.
+
+          - id: "4.4"
+            tipo: opcion_multiple
+            enunciado: >
+              Si a la salida de un divisor de voltaje se conecta una carga resistiva,
+              ¿qué pasa con el voltaje de salida?
+            diagrama: null
+            opciones:
+              - { id: a, texto: Aumenta }
+              - { id: b, texto: Disminuye }
+              - { id: c, texto: No cambia }
+              - { id: d, texto: Se vuelve cero }
+            respuesta: b
+            pista: La carga queda en paralelo con R2. ¿Qué le pasa a una resistencia cuando le pones otra en paralelo?
+            procedimiento: >
+              La carga en paralelo con R2 forma una resistencia equivalente menor que R2. Como el divisor
+              reparte en proporción a la resistencia, la parte de abajo recibe menos voltaje.
+
+  - id: u3
+    titulo: Análisis de circuitos
+    niveles:
+      - id: n5
+        titulo: Leyes de Kirchhoff
+        explicacion: >
+          La Ley de Corrientes de Kirchhoff (LCK) dice que toda la corriente que entra a un nodo tiene que salir:
+          la carga no se acumula ni se pierde. La Ley de Voltajes de Kirchhoff (LVK) dice que, al recorrer
+          cualquier malla cerrada, la suma de los voltajes es cero: lo que suben las fuentes lo bajan los resistores.
+        formulas:
+          - latex: '\sum I_{entran} = \sum I_{salen}'
+            descripcion: LCK
+          - latex: '\sum_{malla} V = 0'
+            descripcion: LVK
+        ejemplo:
+          enunciado: A un nodo entran 5 A y salen dos ramas; por una salen 2 A. ¿Cuánto sale por la otra?
+          solucion: Por LCK, 5 = 2 + I, entonces I = 3 A.
+        ejercicios:
+          - id: "5.1"
+            tipo: numerico
+            enunciado: >
+              A un nodo entran dos corrientes de 3 A y 5 A. Salen dos ramas: por una salen 2 A.
+              ¿Cuánta corriente sale por la otra rama?
+            diagrama: Nodo con dos flechas entrando (3 A y 5 A) y dos saliendo (2 A e I).
+            respuesta: { valor: 6, unidad: A }
+            pista: Suma lo que entra y resta lo que ya sabes que sale.
+            procedimiento: "Entra: 3 + 5 = 8 A. Sale: 2 + I. Por LCK, 8 = 2 + I, entonces I = 6 A."
+
+          - id: "5.2"
+            tipo: numerico
+            enunciado: >
+              Una malla tiene una fuente de 20 V y tres resistores en serie. En dos de ellos se miden caídas
+              de 5 V y 8 V. ¿Cuál es la caída en el tercer resistor?
+            diagrama: Malla con la fuente de 20 V y R1, R2, R3 en serie; V_R1 = 5 V, V_R2 = 8 V, V_R3 desconocido.
+            respuesta: { valor: 7, unidad: V }
+            pista: Lo que sube la fuente debe ser igual a la suma de lo que bajan los resistores.
+            procedimiento: "Por LVK: 20 − 5 − 8 − V3 = 0, entonces V3 = 7 V."
+
+          - id: "5.3"
+            tipo: numerico
+            enunciado: >
+              Un circuito serie tiene dos fuentes que se oponen, una de 12 V y otra de 4 V,
+              y dos resistores de 2 Ω y 6 Ω. ¿Cuál es la corriente?
+            diagrama: >
+              Malla con fuente de 12 V (positivo arriba), R1 = 2 Ω, fuente de 4 V conectada en sentido
+              contrario y R2 = 6 Ω.
+            respuesta: { valor: 1, unidad: A }
+            pista: Si las fuentes se oponen, el voltaje neto es la diferencia entre ellas.
+            procedimiento: "LVK: 12 − 2I − 4 − 6I = 0, entonces 8 = 8I, e I = 1 A, en el sentido de la fuente de 12 V."
+
+          - id: "5.4"
+            tipo: opcion_multiple
+            enunciado: ¿En qué principio físico se basa la Ley de Corrientes de Kirchhoff?
+            diagrama: null
+            opciones:
+              - { id: a, texto: Conservación de la energía }
+              - { id: b, texto: Conservación de la carga }
+              - { id: c, texto: Ley de Ohm }
+              - { id: d, texto: Conservación del momento }
+            respuesta: b
+            pista: La LCK habla de lo que entra y sale de un nodo. ¿Qué es lo que fluye?
+            procedimiento: >
+              La corriente es carga en movimiento. Como la carga no se crea ni se destruye en un nodo,
+              lo que entra debe salir. La LVK, en cambio, se basa en la conservación de la energía.
+
+      - id: n6
+        titulo: Introducción a nodos y mallas
+        explicacion: >
+          Son dos métodos ordenados para resolver circuitos que no se reducen con serie y paralelo.
+          En el análisis de nodos se elige un nodo de referencia (tierra, 0 V), se nombran los voltajes
+          de los demás nodos y se aplica LCK en cada uno. En el análisis de mallas se asigna una corriente
+          a cada malla y se aplica LVK en cada una. En ambos casos se obtiene un sistema de ecuaciones.
+          Con n nodos se necesitan n − 1 ecuaciones de nodo; con m mallas, m ecuaciones de malla.
+        formulas:
+          - latex: '\sum \frac{V_{nodo} - V_{vecino}}{R} = I_{inyectada}'
+            descripcion: Ecuación de nodo (LCK)
+          - latex: '\sum V_{fuentes} = \sum R \cdot (I_{malla} - I_{malla\,vecina})'
+            descripcion: Ecuación de malla (LVK)
+        ejemplo:
+          enunciado: >
+            Una fuente de 10 V alimenta al nodo V1 a través de R1 = 2 Ω. Desde V1 bajan a tierra
+            R2 = 4 Ω y R3 = 4 Ω. ¿Cuánto vale V1?
+          solucion: >
+            LCK en V1: (V1 − 10)/2 + V1/4 + V1/4 = 0, entonces V1/2 − 5 + V1/2 = 0, y V1 = 5 V.
+        ejercicios:
+          - id: "6.1"
+            tipo: numerico
+            enunciado: >
+              Una fuente de 12 V alimenta el nodo A a través de R1 = 2 Ω. Desde A bajan a tierra
+              R2 = 3 Ω y R3 = 6 Ω. ¿Cuál es el voltaje del nodo A?
+            diagrama: Fuente de 12 V → R1 (2 Ω) → nodo A; de A a tierra, R2 (3 Ω) y R3 (6 Ω) en paralelo.
+            respuesta: { valor: 6, unidad: V }
+            pista: "Escribe LCK en A: la corriente que llega por R1 sale por R2 y R3."
+            procedimiento: >
+              (VA − 12)/2 + VA/3 + VA/6 = 0. Multiplica por 6: 3VA − 36 + 2VA + VA = 0,
+              entonces 6VA = 36 y VA = 6 V.
+
+          - id: "6.2"
+            tipo: numerico
+            enunciado: >
+              Una fuente de corriente inyecta 2 A al nodo A. De A a tierra hay R1 = 10 Ω; de A al nodo B
+              hay R2 = 5 Ω; de B a tierra hay R3 = 5 Ω. ¿Cuál es el voltaje del nodo A?
+            diagrama: Fuente de corriente de 2 A hacia A; R1 de A a tierra; R2 entre A y B; R3 de B a tierra.
+            respuesta: { valor: 10, unidad: V }
+            pista: "Son dos nodos desconocidos: plantea LCK en A y en B y resuelve el sistema."
+            procedimiento: >
+              Nodo B: (VA − VB)/5 = VB/5, entonces VA = 2VB. Nodo A: 2 = VA/10 + (VA − VB)/5.
+              Sustituyendo VA = 2VB: 2 = 0.2VB + 0.2VB = 0.4VB, entonces VB = 5 V y VA = 10 V.
+
+          - id: "6.3"
+            tipo: numerico
+            enunciado: >
+              Un circuito tiene dos mallas. La malla 1 tiene una fuente de 10 V y R1 = 2 Ω. Ambas mallas
+              comparten R2 = 4 Ω. La malla 2 tiene R3 = 2 Ω y ninguna fuente. ¿Qué corriente pasa por R2?
+            diagrama: >
+              Dos ventanas lado a lado. Izquierda: fuente de 10 V y R1 (2 Ω). Rama central compartida:
+              R2 (4 Ω). Derecha: R3 (2 Ω). Corrientes de malla I1 e I2 en sentido horario.
+            respuesta: { valor: 1, unidad: A }
+            pista: Por R2 pasan las dos corrientes de malla en sentidos opuestos, así que su corriente es I1 − I2.
+            procedimiento: >
+              Malla 1: 10 = 2I1 + 4(I1 − I2) = 6I1 − 4I2. Malla 2: 0 = 4(I2 − I1) + 2I2 = −4I1 + 6I2,
+              entonces I2 = (2/3)I1. Sustituyendo: 10 = 6I1 − (8/3)I1 = (10/3)I1, entonces I1 = 3 A
+              e I2 = 2 A. Corriente en R2 = 3 − 2 = 1 A.
+
+          - id: "6.4"
+            tipo: opcion_multiple
+            enunciado: Un circuito tiene 4 nodos. ¿Cuántas ecuaciones de nodo se necesitan para resolverlo?
+            diagrama: null
+            opciones:
+              - { id: a, texto: "2" }
+              - { id: b, texto: "3" }
+              - { id: c, texto: "4" }
+              - { id: d, texto: "5" }
+            respuesta: b
+            pista: Uno de los nodos se usa como referencia y vale 0 V.
+            procedimiento: >
+              Se elige un nodo como referencia (0 V). Quedan 4 − 1 = 3 voltajes desconocidos,
+              así que se necesitan 3 ecuaciones.
