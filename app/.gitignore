@@ -1,0 +1,10 @@
+# Generados por Expo (el resto ya está en el .gitignore raíz)
+expo-env.d.ts
+.metro-health-check*
+.kotlin/
+*.orig.*
+
+# Credenciales de firma de apps
+*.jks
+*.p8
+*.mobileprovision
