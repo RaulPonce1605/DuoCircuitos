@@ -71,5 +71,5 @@ contenido/
 - [ ] Ninguna pista revela el resultado.
 - [ ] Teoría en el cuerpo que cubre todos los `conceptos`.
 - [ ] Nodo agregado en `camino.yaml` en la posición correcta.
-- [ ] El importador del backend carga el archivo sin errores.
+- [ ] El validador pasa: `cd backend && uv run python -m app.content_import.validate`.
 - [ ] Commit `feat(contenido): ...` en una rama `feature/*` con PR.

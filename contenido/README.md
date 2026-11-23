@@ -77,7 +77,7 @@ Por tipo:
 Detalle de `numeric`:
 
 - **`parametros`**: cada variable con `min`, `max` y `paso`. El backend sortea un valor múltiplo de `paso` dentro del rango.
-- **`solucion`**: fórmula con los nombres de los parámetros. Permitido: `+ - * / ^ ( )`, `sqrt`, `abs`, `sin`, `cos`, `tan`, `atan`, `log10`, `pi`. Nada más.
+- **`solucion`**: fórmula con los nombres de los parámetros. Permitido: `+ - * / ^ ( )`, `sqrt`, `abs`, `sin`, `cos`, `tan`, `atan`, `log10`, `ln`, `exp`, `pi`. Nada más. Se permiten números con notación científica (`1.72e-8`).
 - **`unidad`**: unidad SI base del resultado (`A`, `V`, `Ω`, `W`...). El estudiante puede responder con prefijo SI (`mA`, `kΩ`) y el backend lo convierte.
 - **`tolerancia`**: `{ tipo: relativa, valor: 0.02 }` (±2 %) o `{ tipo: absoluta, valor: 0.01 }` (± en la unidad base).
 
