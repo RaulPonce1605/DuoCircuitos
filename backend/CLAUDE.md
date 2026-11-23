@@ -127,7 +127,7 @@ uv run ruff check . && uv run ruff format --check . && uv run mypy app && uv run
 - El backend sortea los parámetros dentro de los rangos del temario, **guarda la instancia** (parámetros + semilla) y devuelve el enunciado ya resuelto con un `exercise_instance_id`.
 - Al Comprobar, el backend recalcula el resultado con la fórmula del temario, normaliza los prefijos SI de la unidad (m, k, µ, M...) y compara con la tolerancia.
 - **Prohibido:** `eval()` / `exec()` sobre fórmulas; confiar en parámetros enviados por el cliente; comparar floats con `==`.
-- **Correcto:** evaluar la fórmula con un parser seguro sobre un AST con lista blanca de operadores y funciones (`+ - * / ^ ( )`, `sqrt`, `abs`, `sin`, `cos`, `tan`, `atan`, `log10`, `pi`).
+- **Correcto:** evaluar la fórmula con un parser seguro sobre un AST con lista blanca de operadores y funciones (`+ - * / ^ ( )`, `sqrt`, `abs`, `sin`, `cos`, `tan`, `atan`, `log10`, `ln`, `exp`, `pi`). Implementado en `app/services/exercises/formula.py`.
 
 ### 3.9 Tutor con IA
 
