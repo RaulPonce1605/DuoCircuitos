@@ -37,7 +37,18 @@
       "Bash(git push * -f*)",
       "Bash(rm -rf*)",
       "Bash(rm -fr*)",
-      "Bash(rm -r -f*)"
+      "Bash(rm -r -f*)",
+      "PowerShell(git push --force*)",
+      "PowerShell(git push -f*)",
+      "PowerShell(git push * --force*)",
+      "PowerShell(git push * -f*)",
+      "PowerShell(Remove-Item * -Recurse*)",
+      "PowerShell(Remove-Item -Recurse*)",
+      "PowerShell(rm * -Recurse*)",
+      "PowerShell(rm -Recurse*)",
+      "PowerShell(rm -r *)",
+      "PowerShell(rmdir /s*)",
+      "PowerShell(rd /s*)"
     ]
   },
   "hooks": {
