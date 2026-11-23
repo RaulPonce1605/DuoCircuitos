@@ -88,7 +88,7 @@ async def client(db: AsyncSession) -> AsyncIterator[AsyncClient]:
 
     app.dependency_overrides[get_db] = _get_db
     try:
-        async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as c:
+        async with AsyncClient(transport=ASGITransport(app=app), base_url="https://test") as c:
             yield c
     finally:
         app.dependency_overrides.pop(get_db, None)

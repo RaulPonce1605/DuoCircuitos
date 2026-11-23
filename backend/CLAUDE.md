@@ -104,7 +104,9 @@ uv run ruff check . && uv run ruff format --check . && uv run mypy app && uv run
 - **Por qué:** no dependemos de un servicio de terceros y lo controlamos todo desde el backend.
 - Contraseñas con hash **Argon2** (`pwdlib`). JWT firmados con `PyJWT` y `JWT_SECRET` del `.env`.
 - Access token de vida corta + refresh token de vida larga. El refresh se guarda **hasheado** en la base de datos para poder revocarlo y se rota en cada uso.
-- **Decisiones pendientes:** duración exacta de cada token; algoritmo (HS256 vs. RS256); inicio de sesión social.
+- **Decidido:** HS256; access de 15 min y refresh de 30 días (configurables en `.env`). Todos los refresh de un mismo login comparten familia: si se reutiliza uno ya rotado (posible robo), se revoca la familia completa.
+- **Dos modos de sesión** (`session_mode`): `body` para la app móvil (el refresh viaja en el JSON) y `cookie` para la web (el refresh va en una cookie `httpOnly`, `Secure`, `path=/auth`; el JSON trae `refresh_token: null`).
+- **Pendiente:** inicio de sesión social.
 - **Prohibido:** guardar contraseñas o refresh tokens en texto plano; poner datos sensibles en el payload del JWT; validar el token a mano en cada ruta.
 - **Correcto:** la ruta recibe el usuario por dependencia: `user: CurrentUser` (un `Annotated[User, Depends(get_current_user)]`).
 

@@ -28,6 +28,10 @@ class Settings(BaseSettings):
     jwt_secret: SecretStr
     jwt_access_ttl_minutes: int = 15
     jwt_refresh_ttl_days: int = 30
+    # Cookie del refresh token en la app web. En producción, si la app y la API están en dominios
+    # distintos: REFRESH_COOKIE_SAMESITE=none (exige secure=true).
+    refresh_cookie_secure: bool = True
+    refresh_cookie_samesite: Literal["lax", "strict", "none"] = "lax"
 
     llm_provider: str = ""
     llm_model: str = ""
