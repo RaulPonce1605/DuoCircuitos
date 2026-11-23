@@ -25,3 +25,15 @@ class InvalidToken(DomainError):
 
 class NotFound(DomainError):
     code = "not_found"
+
+
+class InvalidAnswer(DomainError):
+    """La respuesta no corresponde al tipo del ejercicio o está fuera de rango."""
+
+    code = "invalid_answer"
+
+
+class UnknownExerciseType(DomainError):
+    """Hay un ejercicio en la base cuyo tipo no tiene validador (error de despliegue)."""
+
+    code = "unknown_exercise_type"

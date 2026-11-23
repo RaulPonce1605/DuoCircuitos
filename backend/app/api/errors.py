@@ -20,6 +20,8 @@ STATUS_BY_ERROR: dict[type[errors.DomainError], int] = {
     errors.InvalidCredentials: 401,
     errors.InvalidToken: 401,
     errors.NotFound: 404,
+    errors.InvalidAnswer: 422,
+    errors.UnknownExerciseType: 500,
 }
 
 
