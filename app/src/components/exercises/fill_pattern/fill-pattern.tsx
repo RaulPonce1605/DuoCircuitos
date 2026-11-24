@@ -6,6 +6,11 @@ import type { ExerciseComponentProps } from "@/components/exercises/types";
 import { AppText, TextField } from "@/components/ui";
 import { useTheme } from "@/hooks/use-theme";
 
+/** El hueco "___" no debe quedar solo en otra línea: se une con espacio no separable. */
+export function keepBlankTogether(prompt: string): string {
+  return prompt.replace(/ (?=_{2,})/g, " ");
+}
+
 export function FillPattern({
   exercise,
   onAnswerChange,
@@ -22,7 +27,7 @@ export function FillPattern({
 
   return (
     <View style={{ gap: theme.spacing.md }}>
-      <AppText variant="subtitle">{exercise.prompt}</AppText>
+      <AppText variant="subtitle">{keepBlankTogether(exercise.prompt)}</AppText>
       <TextField
         label={t("exercise.fillLabel")}
         value={text}

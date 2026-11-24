@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 
 import { AppProviders } from "@/components/app-providers";
-import { FillPattern } from "@/components/exercises/fill_pattern/fill-pattern";
+import { FillPattern, keepBlankTogether } from "@/components/exercises/fill_pattern/fill-pattern";
 import { MultipleChoice } from "@/components/exercises/multiple_choice/multiple-choice";
 import { NumericAnswer } from "@/components/exercises/numeric/numeric-answer";
 import { ExerciseRenderer, exerciseRegistry } from "@/components/exercises/registry";
@@ -33,7 +33,7 @@ describe("registro", () => {
     await renderWith(
       <ExerciseRenderer type={exercise.type} exercise={exercise} onAnswerChange={jest.fn()} disabled={false} />,
     );
-    expect(screen.getByText(exercise.prompt)).toBeOnTheScreen();
+    expect(screen.getByText(exercise.prompt.replace(/ (?=_{2,})/g, " "))).toBeOnTheScreen();
   });
 });
 
@@ -59,6 +59,11 @@ describe("MultipleChoice", () => {
 });
 
 describe("FillPattern", () => {
+  it("el hueco no se separa de la palabra anterior", () => {
+    expect(keepBlankTogether("V = I · ___")).toBe("V = I · ___");
+    expect(keepBlankTogether("la ___ es la misma")).toBe("la ___ es la misma");
+  });
+
   it("manda el texto y null si queda vacío", async () => {
     const onAnswerChange = jest.fn();
     await renderWith(<FillPattern exercise={FILL} onAnswerChange={onAnswerChange} disabled={false} />);
