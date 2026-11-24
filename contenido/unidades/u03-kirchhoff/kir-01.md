@@ -14,7 +14,7 @@ conceptos:
 ejercicios:
   - id: kir-01-lck
     tipo: numeric
-    enunciado: "A un nodo entran dos corrientes de {I1} A y {I2} A. Salen dos ramas: por una salen {I3} A. ¿Cuánta corriente sale por la otra rama?"
+    enunciado: "A un nodo entran dos corrientes de {I1} A y {I2} A, y de él salen dos ramas. La corriente en una de las ramas de salida es de {I3} A. ¿Cuánta corriente sale por la otra rama?"
     parametros:
       I1: { min: 2, max: 10, paso: 1 }
       I2: { min: 2, max: 10, paso: 1 }

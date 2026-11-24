@@ -69,8 +69,8 @@ ejercicios:
 
   - id: ohm-02-potencia-formula
     tipo: fill_pattern
-    enunciado: "La potencia eléctrica es el voltaje por la corriente: P = V · ___"
-    respuestas_aceptadas: ["I"]
+    enunciado: "Completa la fórmula de la potencia eléctrica: P = V · ___"
+    respuestas_aceptadas: ["I", "corriente"]
     explicacion: "La potencia es P = V · I: voltaje en volts por corriente en amperes da watts."
     pistas:
       - "Volts por esta magnitud dan watts."

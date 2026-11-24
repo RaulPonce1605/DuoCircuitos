@@ -139,6 +139,12 @@ def test_cli_returns_zero_for_valid_and_one_for_invalid(syllabus: Path) -> None:
         (LESSON, "id: ohm-01-fill", "id: ohm-01-mc", "ejercicio repetido"),
         (LESSON, "La **Ley de Ohm** relaciona voltaje, corriente y resistencia.\n", "", "teoría"),
         (LESSON, "objetivos:", "objetivo:", "objetivos"),
+        (
+            LESSON,
+            'respuestas_aceptadas: ["R"]',
+            'respuestas_aceptadas: ["R", "V = I"]',
+            "el enunciado ya dice",
+        ),
     ],
 )
 def test_detects_invalid_syllabus(

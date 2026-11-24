@@ -66,7 +66,7 @@ Al terminar la fase 1, un alumno se registra, entra al camino, hace una lección
 - [x] **Alex** — Pantalla de lección: barra de progreso, ejercicio, botón Comprobar, retroalimentación
 - [x] **Alex** — Componentes de los 3 tipos de ejercicio
 - [x] **Ali** — Pantalla de resumen de lección: EXP, % de precisión, conceptos
-- [ ] **D** — Recorrer cada lección en la app y corregir errores del temario
+- [x] **D** — Recorrer cada lección en la app y corregir errores del temario
 - [ ] **Todos** — Probar el flujo completo en web y en el celular con Expo Go
 
 ## Fase 2 — Tutor y gamificación

@@ -71,8 +71,8 @@ ejercicios:
 
   - id: ohm-01-conductancia
     tipo: fill_pattern
-    enunciado: "La conductancia es el inverso de la resistencia: G = 1 / ___"
-    respuestas_aceptadas: ["R"]
+    enunciado: "Completa la definición de conductancia: G = 1 / ___"
+    respuestas_aceptadas: ["R", "resistencia"]
     explicacion: "La conductancia mide qué tan fácil pasa la corriente: G = 1 / R. Se mide en siemens (S)."
     pistas:
       - "La conductancia es lo contrario de la oposición al paso de la corriente."

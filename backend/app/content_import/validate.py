@@ -158,6 +158,18 @@ def _check_lesson(lesson: Lesson, where: str, report: ValidationReport) -> None:
                 )
             elif isinstance(exercise, FillPatternExercise):
                 _check_hints_hide(exercise.hints, exercise.accepted_answers, exercise_where, report)
+                for answer in exercise.accepted_answers:
+                    if _contains_word(exercise.prompt, answer):
+                        report.add(exercise_where, f"el enunciado ya dice la respuesta '{answer}'")
+
+
+def _contains_word(text: str, answer: str) -> bool:
+    """¿Aparece la respuesta como palabra completa? Las de una letra ("R") no cuentan: aparecen
+    en cualquier texto."""
+    word = answer.strip()
+    if len(word) < 2:
+        return False
+    return re.search(rf"(?<!\w){re.escape(word)}(?!\w)", text, re.IGNORECASE) is not None
 
 
 def _check_hints_hide(
@@ -165,11 +177,8 @@ def _check_hints_hide(
 ) -> None:
     """Ninguna pista puede contener la respuesta como palabra completa."""
     for answer in answers:
-        if len(answer.strip()) < 2:
-            continue  # respuestas de una letra ("R") aparecen en cualquier texto
-        pattern = re.compile(rf"(?<!\w){re.escape(answer.strip())}(?!\w)", re.IGNORECASE)
         for number, hint in enumerate(hints, start=1):
-            if pattern.search(hint):
+            if _contains_word(hint, answer):
                 report.add(where, f"la pista {number} contiene la respuesta '{answer}'")
 
 
