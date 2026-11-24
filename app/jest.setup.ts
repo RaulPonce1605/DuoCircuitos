@@ -11,3 +11,18 @@ jest.mock("@expo-google-fonts/space-grotesk", () => ({
 jest.mock("react-native-safe-area-context", () =>
   jest.requireActual("react-native-safe-area-context/jest/mock").default,
 );
+
+// TanStack Query programa la limpieza de caché a 5 minutos; ese temporizador impide que Jest
+// termine. En pruebas: caché sin limpieza programada (gcTime infinito) y sin reintentos.
+jest.mock("@/services/query-client", () => {
+  const { QueryClient } = jest.requireActual("@tanstack/react-query");
+  return {
+    createQueryClient: () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: { gcTime: Infinity, retry: false },
+          mutations: { gcTime: Infinity, retry: false },
+        },
+      }),
+  };
+});

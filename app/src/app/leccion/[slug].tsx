@@ -1,14 +1,8 @@
-import { useTranslation } from "react-i18next";
+import { useLocalSearchParams } from "expo-router";
 
-import { EmptyState } from "@/components/empty-state";
-import { Screen } from "@/components/ui";
+import { LessonView } from "@/components/lesson/lesson-view";
 
-// Marcador: la pantalla de lección completa llega en su propio PR.
 export default function LessonScreen() {
-  const { t } = useTranslation();
-  return (
-    <Screen>
-      <EmptyState icon="flash" title={t("path.nodeType.lesson")} message={t("common.comingSoon")} />
-    </Screen>
-  );
+  const { slug } = useLocalSearchParams<{ slug: string }>();
+  return <LessonView key={slug} lessonSlug={slug} />;
 }

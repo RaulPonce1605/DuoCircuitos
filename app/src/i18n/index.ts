@@ -1,6 +1,7 @@
 import { createInstance } from "i18next";
 import { initReactI18next } from "react-i18next";
 
+import { applyDocumentLanguage } from "./document-language";
 import es from "./es.json";
 
 export const defaultNS = "translation";
@@ -16,5 +17,7 @@ void i18n.use(initReactI18next).init({
   interpolation: { escapeValue: false }, // React ya escapa
   returnNull: false,
 });
+
+applyDocumentLanguage("es");
 
 export default i18n;

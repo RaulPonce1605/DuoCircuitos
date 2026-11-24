@@ -26,11 +26,13 @@ export function Screen({ children, scroll = false, footer }: Props) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
       {scroll ? (
-        <ScrollView contentContainerStyle={[content, { flexGrow: 1 }]}>{children}</ScrollView>
+        <ScrollView style={{ flex: 1, minHeight: 0 }} contentContainerStyle={[content, { flexGrow: 1 }]}>
+          {children}
+        </ScrollView>
       ) : (
         <View style={[content, { flex: 1 }]}>{children}</View>
       )}
-      {footer ? <View style={[content, { flex: 0 }]}>{footer}</View> : null}
+      {footer ? <View style={[content, { flexGrow: 0, flexShrink: 0 }]}>{footer}</View> : null}
     </SafeAreaView>
   );
 }

@@ -54,6 +54,40 @@
       "current": "Empieza aquí"
     }
   },
+  "lesson": {
+    "loading": "Preparando tu lección",
+    "progress": "Progreso de la lección",
+    "exit": "Salir de la lección",
+    "check": "Comprobar",
+    "continue": "Continuar",
+    "correct": "¡Correcto!",
+    "incorrect": "No es correcto",
+    "correctAnswer": "Respuesta correcta: {{answer}}",
+    "willRepeat": "Este ejercicio volverá al final de la lección.",
+    "chooseAnswer": "Elige o escribe una respuesta para comprobar."
+  },
+  "summary": {
+    "loading": "Cargando tu resumen",
+    "title": "¡Lección completada!",
+    "xp": "EXP ganada",
+    "xpValue": "+{{count}}",
+    "accuracy": "Precisión",
+    "accuracyValue": "{{value}} %",
+    "firstTry": "Al primer intento",
+    "firstTryValue": "{{correct}} de {{total}}",
+    "concepts": "Conceptos trabajados",
+    "streak_one": "Racha de {{count}} día",
+    "streak_other": "Racha de {{count}} días",
+    "streakUp": "¡Tu racha subió!",
+    "streakKept": "Ya practicaste hoy: tu racha se mantiene.",
+    "continue": "Continuar"
+  },
+  "exercise": {
+    "fillLabel": "Tu respuesta",
+    "numericLabel": "Resultado",
+    "numericHint": "Usa punto o coma decimal. Puedes escribir 2.2e-3.",
+    "unitLabel": "Unidad"
+  },
   "challenges": {
     "title": "Desafíos",
     "empty": "Los desafíos diarios y mensuales llegan pronto."
@@ -85,11 +119,5 @@
     "not_current_exercise": "Ese no es el ejercicio actual.",
     "attempt_not_completed": "La lección aún no termina.",
     "invalid_answer": "Esa respuesta no es válida para este ejercicio."
-  },
-  "exercise": {
-    "fillLabel": "Tu respuesta",
-    "numericLabel": "Resultado",
-    "numericHint": "Usa punto o coma decimal. Puedes escribir 2.2e-3.",
-    "unitLabel": "Unidad"
   }
 }
