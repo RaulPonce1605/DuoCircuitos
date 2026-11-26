@@ -4,16 +4,17 @@ Fuente: [Plan de tareas en Claude Docs](https://claude.ai/artifact/LBa2i9T76Tt9b
 
 ## Resumen
 
-Las fases van en orden: primero que una lección funcione de punta a punta, después todo lo demás. Sin fechas: mientras antes terminemos, mejor. Somos 4, cada quien dueño de un módulo, y todos trabajamos con Claude Code siguiendo los CLAUDE.md del repo.
+Las fases van en orden: primero que una lección funcione de punta a punta, después todo lo demás. Sin fechas: mientras antes terminemos, mejor. Somos 5, cada quien dueño de un módulo, y todos trabajamos con Claude Code siguiendo los CLAUDE.md del repo.
 
 | Inicial | Persona | Dueño de |
 | --- | --- | --- |
-| R | Rico | Todo el backend y la IA: auth, modelos, validación de ejercicios, gamificación del lado del servidor, tutor y sus pruebas |
+| R | Rico | Backend base y la IA: auth, modelos, validación de ejercicios, tutor y sus pruebas, seguridad |
+| E | Emiliano | Backend de gamificación: energía, cofres, logros, desafíos, repaso y evaluación, ligas, tienda, amigos y despliegue del backend |
 | Alex | Alex | App: navegación, camino, pantalla de lección, componentes de ejercicio, perfil |
 | D | Danna | La carpeta de información (temario) completa desde el inicio, su revisión y las pruebas de contenido en la app |
 | Ali | Ali | Pantallas de gamificación, diseño, CI y despliegue de la web |
 
-Rico lleva todo el backend y la IA; los demás solo tocan backend para revisar PRs. Uso "Alex" y "Ali" completos porque los dos empiezan con A.
+Rico y Emiliano llevan el backend (Rico la base y la IA, Emiliano la gamificación); los demás solo tocan backend para revisar PRs. Uso "Alex" y "Ali" completos porque los dos empiezan con A.
 
 **Reglas para todos**
 
@@ -24,13 +25,13 @@ Rico lleva todo el backend y la IA; los demás solo tocan backend para revisar P
 
 ## Fase 0 — Arranque
 
-Antes de programar: el repo listo para los 4 y la carpeta de información completa. El temario se arma de una vez al inicio, no se va construyendo durante el proyecto.
+Antes de programar: el repo listo para todos y la carpeta de información completa. El temario se arma de una vez al inicio, no se va construyendo durante el proyecto.
 
 - [ ] **D** — Reunir el material del curso: apuntes, libro y lo que pida el profesor
 - [x] **D** — Armar la carpeta de información completa: `camino.yaml` y todas las unidades (Ley de Ohm, serie y paralelo, Kirchhoff, Thévenin, circuitos RC) con teoría, ejercicios de cálculo, explicaciones y pistas
 - [ ] **D** — Revisar con alguien que sepa circuitos que fórmulas y respuestas sean correctas
 - [ ] **D** — Guardar las capturas de referencia en `docs/referencias/`
-- [ ] **R** — Hacer `git init -b main`, crear el repo en GitHub y agregar a los 3 como colaboradores
+- [x] **R** — Hacer `git init -b main`, crear el repo en GitHub y agregar a los 3 como colaboradores
 - [x] **R** — Proteger `main`: sin push directo, PR con 1 aprobación
 - [x] **R** — Revisar y limpiar el repo accidental de `C:\Users\raulp`
 - [x] **R** — Inicializar backend con uv (FastAPI, Ruff, mypy, pytest) y `docker-compose.yml` con PostgreSQL
@@ -85,10 +86,10 @@ Al terminar la fase 2, el alumno puede pedir ayuda en cualquier ejercicio, y la 
 
 ### Gamificación
 
-- [ ] **R** — Backend de energía: se gasta al fallar y se recarga con el tiempo
-- [ ] **R** — Backend de cofres, logros y medallas
-- [ ] **R** — Desafíos diarios y mensual: se generan cada día y se actualizan al ganar EXP
-- [ ] **R** — Nodos de repaso y evaluación de unidad: mezclan ejercicios de toda la unidad
+- [ ] **E** — Backend de energía: se gasta al fallar y se recarga con el tiempo
+- [ ] **E** — Backend de cofres, logros y medallas
+- [ ] **E** — Desafíos diarios y mensual: se generan cada día y se actualizan al ganar EXP
+- [ ] **E** — Nodos de repaso y evaluación de unidad: mezclan ejercicios de toda la unidad
 - [ ] **Ali** — Contador de energía en la app
 - [ ] **Ali** — Pantalla de cofre ("Pulsa para abrir") y pantalla de racha al terminar la lección
 - [ ] **Ali** — Pantallas de logros y medallas
@@ -100,21 +101,21 @@ Al terminar la fase 2, el alumno puede pedir ayuda en cualquier ejercicio, y la 
 
 Nada de esta fase entra si algo de la fase 1 o 2 sigue fallando. Ordenadas de más a menos valor para la demo.
 
-- [ ] **R** — Ligas semanales: grupos, ranking por EXP y cierre automático cada semana
+- [ ] **E** — Ligas semanales: grupos, ranking por EXP y cierre automático cada semana
 - [ ] **Alex** — Pantalla de Ligas con ranking y tiempo restante
 - [ ] **R** — Ejercicio de identificar en un diagrama: formato en el temario y validador
 - [ ] **D** — Ejercicios de diagrama para cada unidad
 - [ ] **Alex** — Componente que dibuja el circuito y deja tocar sus elementos
-- [ ] **R** — Backend de la tienda: recargas de energía y protector de racha
+- [ ] **E** — Backend de la tienda: recargas de energía y protector de racha
 - [ ] **Ali** — Pantalla de la tienda
-- [ ] **R** — Amigos y seguidores
+- [ ] **E** — Amigos y seguidores
 - [ ] **Ali** — Notificaciones para recordar la racha
 
 ## Cierre — Pulido y demo
 
 Esta fase es para que todo lo hecho funcione sin fallas, no para empezar funciones nuevas.
 
-- [ ] **R** — Desplegar backend y base de datos en un servidor
+- [ ] **E** — Desplegar backend y base de datos en un servidor
 - [ ] **Ali** — Desplegar la app web en un hosting
 - [ ] **Ali** — Usuario de demo con progreso a la mitad, racha y logros para mostrar
 - [ ] **Alex** — Revisar la app en celulares Android y iPhone y en la web; corregir pantallas rotas
