@@ -34,6 +34,7 @@ const UNIT: PathUnit = {
     },
     { key: "u01:review:1", type: "review", status: "locked", is_current: false, lesson: null },
     { key: "u01:chest:1", type: "chest", status: "available", is_current: false, lesson: null },
+    { key: "u01:assessment:1", type: "assessment", status: "available", is_current: false, lesson: null },
   ],
 };
 
@@ -48,27 +49,37 @@ beforeEach(() => {
   });
 });
 
-async function renderUnit(onOpenLesson = jest.fn()) {
+async function renderUnit(onOpenNode = jest.fn()) {
   await render(
     <AppProviders>
-      <UnitCard unit={UNIT} onOpenLesson={onOpenLesson} />
+      <UnitCard unit={UNIT} onOpenNode={onOpenNode} />
     </AppProviders>,
   );
-  return onOpenLesson;
+  return onOpenNode;
 }
 
 describe("UnitCard", () => {
   it("abre una lección disponible o completada", async () => {
-    const onOpenLesson = await renderUnit();
+    const onOpenNode = await renderUnit();
 
     await fireEvent.press(screen.getByRole("button", { name: /Ley de Ohm y potencia/ }));
     await fireEvent.press(screen.getByRole("button", { name: /Voltaje, corriente/ }));
 
-    expect(onOpenLesson.mock.calls).toEqual([["ohm-02"], ["ohm-01"]]);
+    expect(onOpenNode.mock.calls).toEqual([["ohm-02"], ["ohm-01"]]);
+  });
+
+  it("abre una evaluación disponible por su clave", async () => {
+    const onOpenNode = await renderUnit();
+
+    await fireEvent.press(
+      screen.getByRole("button", { name: `${es.path.nodeType.assessment}, ${es.path.status.available}` }),
+    );
+
+    expect(onOpenNode).toHaveBeenCalledWith("u01:assessment:1");
   });
 
   it("los nodos bloqueados y los que aún no se juegan no responden", async () => {
-    const onOpenLesson = await renderUnit();
+    const onOpenNode = await renderUnit();
 
     const locked = screen.getByRole("button", { name: `${es.path.nodeType.review}, ${es.path.status.locked}` });
     const chest = screen.getByRole("button", { name: `${es.path.nodeType.chest}, ${es.common.comingSoon}` });
@@ -76,7 +87,7 @@ describe("UnitCard", () => {
     expect(chest).toBeDisabled();
     await fireEvent.press(locked);
     await fireEvent.press(chest);
-    expect(onOpenLesson).not.toHaveBeenCalled();
+    expect(onOpenNode).not.toHaveBeenCalled();
   });
 
   it("marca la lección actual", async () => {

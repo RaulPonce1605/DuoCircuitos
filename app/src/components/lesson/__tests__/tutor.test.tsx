@@ -25,6 +25,7 @@ jest.mock("@/services/tutor-service", () => ({
 
 const ATTEMPT: LessonAttempt = {
   attempt_id: "a-1",
+  node: { key: "ohm-01", type: "lesson", unit_title: "Ley de Ohm" },
   lesson: { slug: "ohm-01", title: "Voltaje, corriente y resistencia" },
   progress: { completed: 0, total: 1 },
   current_exercise: {

@@ -7,11 +7,11 @@ import type { PathUnit } from "@/services/path-service";
 
 type Props = {
   unit: PathUnit;
-  onOpenLesson: (lessonSlug: string) => void;
+  onOpenNode: (nodeKey: string) => void;
 };
 
 /** Una unidad dibujada como un circuito: los nodos unidos por una pista de cobre. */
-export function UnitCard({ unit, onOpenLesson }: Props) {
+export function UnitCard({ unit, onOpenNode }: Props) {
   const theme = useTheme();
   return (
     <Card>
@@ -23,7 +23,7 @@ export function UnitCard({ unit, onOpenLesson }: Props) {
         const traceLit = node.status === "completed" && next !== undefined && next.status !== "locked";
         return (
           <View key={node.key}>
-            <PathNode node={node} onOpenLesson={onOpenLesson} />
+            <PathNode node={node} onOpenNode={onOpenNode} />
             {next ? (
               <View
                 testID={`trace-${node.key}`}

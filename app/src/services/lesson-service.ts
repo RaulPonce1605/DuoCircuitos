@@ -10,10 +10,9 @@ export type LessonSummary = components["schemas"]["LessonAttemptSummaryRead"];
 
 /** La validación y el sorteo de valores son del backend; aquí solo se llama a la API. */
 export const lessonService = {
-  start: (lessonSlug: string): Promise<LessonAttempt> =>
-    authService.authed(() =>
-      api.POST("/lessons/{lesson_slug}/attempts", { params: { path: { lesson_slug: lessonSlug } } }),
-    ),
+  /** Inicia un nodo jugable: lección (su clave es el slug), repaso o evaluación. */
+  start: (nodeKey: string): Promise<LessonAttempt> =>
+    authService.authed(() => api.POST("/nodes/{node_key}/attempts", { params: { path: { node_key: nodeKey } } })),
 
   check: (instanceId: string, answer: ExerciseAnswer): Promise<CheckResult> =>
     authService.authed(() =>

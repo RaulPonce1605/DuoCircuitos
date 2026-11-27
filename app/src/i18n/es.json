@@ -102,7 +102,13 @@
     "streak_other": "Racha de {{count}} días",
     "streakUp": "¡Tu racha subió!",
     "streakKept": "Ya practicaste hoy: tu racha se mantiene.",
-    "continue": "Continuar"
+    "continue": "Continuar",
+    "nodeTitle": {
+      "lesson": "Lección de {{unit}}",
+      "review": "Repaso: {{unit}}",
+      "assessment": "Evaluación: {{unit}}",
+      "chest": "Cofre de {{unit}}"
+    }
   },
   "exercise": {
     "fillLabel": "Tu respuesta",
@@ -143,6 +149,7 @@
     "invalid_answer": "Esa respuesta no es válida para este ejercicio.",
     "tutor_rate_limited": "Pediste mucha ayuda en la última hora. Descansa un poco e intenta más tarde.",
     "tutor_exercise_limit": "Ya usaste toda la ayuda para este ejercicio.",
-    "not_enough_energy": "Te quedaste sin energía. Se recarga sola con el tiempo: vuelve en un rato."
+    "not_enough_energy": "Te quedaste sin energía. Se recarga sola con el tiempo: vuelve en un rato.",
+    "node_not_playable": "Este paso del camino no se juega: se abre."
   }
 }
