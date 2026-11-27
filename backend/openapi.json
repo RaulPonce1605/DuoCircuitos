@@ -198,6 +198,11 @@
             "title": "Progress",
             "type": "integer"
           },
+          "reward_coins": {
+            "default": 0,
+            "title": "Reward Coins",
+            "type": "integer"
+          },
           "reward_xp": {
             "title": "Reward Xp",
             "type": "integer"
@@ -381,6 +386,10 @@
       },
       "ChestRewardRead": {
         "properties": {
+          "coins": {
+            "title": "Coins",
+            "type": "integer"
+          },
           "energy": {
             "title": "Energy",
             "type": "integer"
@@ -392,7 +401,8 @@
         },
         "required": [
           "xp",
-          "energy"
+          "energy",
+          "coins"
         ],
         "title": "ChestRewardRead",
         "type": "object"
@@ -1359,6 +1369,81 @@
         "title": "SectionRead",
         "type": "object"
       },
+      "ShopItemRead": {
+        "description": "Un artículo. La app lo nombra con i18n: `shop.items.<id>`.",
+        "properties": {
+          "id": {
+            "enum": [
+              "energy_refill",
+              "streak_freeze"
+            ],
+            "title": "Id",
+            "type": "string"
+          },
+          "price": {
+            "title": "Price",
+            "type": "integer"
+          },
+          "unavailable_reason": {
+            "anyOf": [
+              {
+                "enum": [
+                  "not_enough_coins",
+                  "energy_already_full",
+                  "streak_freeze_limit"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unavailable Reason"
+          }
+        },
+        "required": [
+          "id",
+          "price",
+          "unavailable_reason"
+        ],
+        "title": "ShopItemRead",
+        "type": "object"
+      },
+      "ShopRead": {
+        "properties": {
+          "coins": {
+            "title": "Coins",
+            "type": "integer"
+          },
+          "energy": {
+            "$ref": "#/components/schemas/EnergyRead"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ShopItemRead"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "streak_freeze_max": {
+            "title": "Streak Freeze Max",
+            "type": "integer"
+          },
+          "streak_freezes": {
+            "title": "Streak Freezes",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "coins",
+          "streak_freezes",
+          "streak_freeze_max",
+          "energy",
+          "items"
+        ],
+        "title": "ShopRead",
+        "type": "object"
+      },
       "StageRead": {
         "properties": {
           "sections": {
@@ -1477,6 +1562,10 @@
       },
       "UserRead": {
         "properties": {
+          "coins": {
+            "title": "Coins",
+            "type": "integer"
+          },
           "created_at": {
             "format": "date-time",
             "title": "Created At",
@@ -1522,6 +1611,10 @@
             "title": "Streak Current",
             "type": "integer"
           },
+          "streak_freezes": {
+            "title": "Streak Freezes",
+            "type": "integer"
+          },
           "streak_longest": {
             "title": "Streak Longest",
             "type": "integer"
@@ -1549,7 +1642,9 @@
           "notify_challenges",
           "profile_public",
           "league_tier",
-          "league_tier_id"
+          "league_tier_id",
+          "coins",
+          "streak_freezes"
         ],
         "title": "UserRead",
         "type": "object"
@@ -2725,6 +2820,125 @@
         "summary": "Get Path",
         "tags": [
           "path"
+        ]
+      }
+    },
+    "/shop": {
+      "get": {
+        "description": "Monedas, artículos con su precio y si se pueden comprar ahora.",
+        "operationId": "getShop",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShopRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "invalid_token"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorRead"
+                }
+              }
+            },
+            "description": "validation_error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Shop",
+        "tags": [
+          "shop"
+        ]
+      }
+    },
+    "/shop/items/{item_id}/buy": {
+      "post": {
+        "description": "Compra un artículo: la recarga llena la energía; el protector se guarda para un día sin\npráctica.",
+        "operationId": "buyShopItem",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "item_id",
+            "required": true,
+            "schema": {
+              "enum": [
+                "energy_refill",
+                "streak_freeze"
+              ],
+              "title": "Item Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShopRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "invalid_token"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "not_enough_coins, energy_already_full, streak_freeze_limit"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorRead"
+                }
+              }
+            },
+            "description": "validation_error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Buy Shop Item",
+        "tags": [
+          "shop"
         ]
       }
     }

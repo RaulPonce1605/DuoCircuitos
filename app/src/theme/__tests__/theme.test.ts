@@ -30,6 +30,7 @@ const PAIRS: [keyof ColorTokens, keyof ColorTokens, number][] = [
   ["xp", "surface", 3],
   ["streak", "surface", 3],
   ["energy", "surface", 3],
+  ["coins", "surface", 3],
   ["warning", "surface", 3],
   ["locked", "surface", 2],
 ];

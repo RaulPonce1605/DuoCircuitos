@@ -27,6 +27,7 @@ export type ColorTokens = {
   xp: string;
   streak: string;
   energy: string;
+  coins: string;
   locked: string;
 };
 
@@ -51,6 +52,7 @@ export const lightColors: ColorTokens = {
   xp: "#8A5A00",
   streak: "#C2491D",
   energy: "#2F5FB3",
+  coins: "#7A5C00",
   locked: "#A39C92",
 };
 
@@ -75,5 +77,6 @@ export const darkColors: ColorTokens = {
   xp: "#F2C14E",
   streak: "#FF8A57",
   energy: "#82AEF5",
+  coins: "#E8C547",
   locked: "#5E676D",
 };

@@ -83,7 +83,8 @@ describe("MoreMenu", () => {
 
     await fireEvent.press(screen.getByRole("button", { name: es.more.achievements }));
     await fireEvent.press(screen.getByRole("button", { name: es.more.badges }));
+    await fireEvent.press(screen.getByRole("button", { name: es.more.shop }));
     await fireEvent.press(screen.getByRole("button", { name: es.more.settings }));
-    expect(mockPush.mock.calls).toEqual([["/logros"], ["/medallas"], ["/configuracion"]]);
+    expect(mockPush.mock.calls).toEqual([["/logros"], ["/medallas"], ["/tienda"], ["/configuracion"]]);
   });
 });

@@ -18,6 +18,7 @@ Una placa de circuito: **verde azulado** (la placa) como color principal y **cob
 | `xp` | `#8A5A00` | `#F2C14E` | EXP |
 | `streak` | `#C2491D` | `#FF8A57` | Racha |
 | `energy` | `#2F5FB3` | `#82AEF5` | Energía |
+| `coins` | `#7A5C00` | `#E8C547` | Monedas |
 | `locked` | `#A39C92` | `#5E676D` | Nodos bloqueados |
 | `background` · `surface` · `surfaceMuted` · `border` | | | Superficies |
 | `text` · `textMuted` · `textOnPrimary` | | | Texto |

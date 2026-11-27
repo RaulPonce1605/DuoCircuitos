@@ -151,6 +151,15 @@ class Settings(BaseSettings):
     league_group_size: int = Field(default=20, ge=2)
     league_promote_count: int = Field(default=5, ge=0)
     league_demote_count: int = Field(default=5, ge=0)
+    # Monedas y tienda (docs/diseno/tienda.md). Las monedas salen de cofres y desafíos.
+    chest_lesson_coins_min: int = Field(default=5, ge=0)
+    chest_lesson_coins_max: int = Field(default=15, ge=0)
+    chest_node_coins: int = Field(default=50, ge=0)
+    challenge_reward_coins: int = Field(default=10, ge=0)
+    shop_energy_refill_price: int = Field(default=60, ge=1)
+    shop_streak_freeze_price: int = Field(default=150, ge=1)
+    # Cuántos protectores de racha puede tener guardados a la vez.
+    streak_freeze_max: int = Field(default=2, ge=1)
     # Logros y sus medallas. Se pueden cambiar con ACHIEVEMENTS (JSON).
     achievements: list[AchievementDefinition] = Field(
         default_factory=lambda: list(DEFAULT_ACHIEVEMENTS)
@@ -160,6 +169,8 @@ class Settings(BaseSettings):
     def _rewards_are_consistent(self) -> Self:
         if self.chest_lesson_xp_min > self.chest_lesson_xp_max:
             raise ValueError("CHEST_LESSON_XP_MIN es mayor que CHEST_LESSON_XP_MAX")
+        if self.chest_lesson_coins_min > self.chest_lesson_coins_max:
+            raise ValueError("CHEST_LESSON_COINS_MIN es mayor que CHEST_LESSON_COINS_MAX")
         if self.chest_node_xp_min > self.chest_node_xp_max:
             raise ValueError("CHEST_NODE_XP_MIN es mayor que CHEST_NODE_XP_MAX")
         if len({a.id for a in self.achievements}) != len(self.achievements):

@@ -58,6 +58,7 @@ class Chest(CreatedAtMixin, Base):
     opened_at: Mapped[datetime | None]
     reward_xp: Mapped[int | None]
     reward_energy: Mapped[int | None]
+    reward_coins: Mapped[int | None]
 
 
 class Badge(Base):
@@ -143,3 +144,29 @@ class LeagueMember(Base):
     result: Mapped[str | None] = mapped_column(String(10))
     # Cuándo vio el alumno su resultado (la app lo anuncia una sola vez).
     result_seen_at: Mapped[datetime | None]
+
+
+class Purchase(CreatedAtMixin, Base):
+    """Una compra en la tienda (historial). `item` es el id del artículo en la configuración."""
+
+    __tablename__ = "purchases"
+    __table_args__ = (CheckConstraint("price > 0", name="price_positive"),)
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), index=True
+    )
+    item: Mapped[str] = mapped_column(String(30))
+    price: Mapped[int]
+
+
+class StreakFreezeUse(Base):
+    """Un día sin práctica que un protector de racha cubrió (para mostrarlo al alumno)."""
+
+    __tablename__ = "streak_freeze_uses"
+
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    day: Mapped[date] = mapped_column(primary_key=True)
+    used_at: Mapped[datetime]

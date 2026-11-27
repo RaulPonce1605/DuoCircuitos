@@ -36,6 +36,8 @@ def user_read(user: User, now: datetime | None = None) -> UserRead:
         profile_public=user.profile_public,
         league_tier=min(user.league_tier or 0, len(tiers) - 1),
         league_tier_id=tiers[min(user.league_tier or 0, len(tiers) - 1)],
+        coins=user.coins or 0,
+        streak_freezes=user.streak_freezes or 0,
     )
 
 

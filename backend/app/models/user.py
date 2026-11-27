@@ -15,6 +15,8 @@ class User(CreatedAtMixin, Base):
         CheckConstraint("streak_longest >= streak_current", name="streak_longest_gte_current"),
         CheckConstraint("energy_used >= 0", name="energy_used_non_negative"),
         CheckConstraint("league_tier >= 0", name="league_tier_non_negative"),
+        CheckConstraint("coins >= 0", name="coins_non_negative"),
+        CheckConstraint("streak_freezes >= 0", name="streak_freezes_non_negative"),
     )
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
@@ -44,3 +46,7 @@ class User(CreatedAtMixin, Base):
 
     # Nivel de liga (índice en LEAGUE_TIERS). Cambia al cerrar cada semana.
     league_tier: Mapped[int] = mapped_column(default=0, server_default="0")
+
+    # Tienda (docs/diseno/tienda.md).
+    coins: Mapped[int] = mapped_column(default=0, server_default="0")
+    streak_freezes: Mapped[int] = mapped_column(default=0, server_default="0")

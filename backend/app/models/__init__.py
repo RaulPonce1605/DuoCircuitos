@@ -9,6 +9,8 @@ from app.models.gamification import (
     Chest,
     LeagueGroup,
     LeagueMember,
+    Purchase,
+    StreakFreezeUse,
     XpEvent,
 )
 from app.models.progress import NodeProgress
@@ -29,9 +31,11 @@ __all__ = [
     "LessonAttempt",
     "Node",
     "NodeProgress",
+    "Purchase",
     "RefreshToken",
     "Section",
     "Stage",
+    "StreakFreezeUse",
     "TutorMessage",
     "Unit",
     "User",

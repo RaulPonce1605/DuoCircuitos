@@ -39,6 +39,7 @@ class AchievementsRead(BaseModel):
 class ChestRewardRead(BaseModel):
     xp: int
     energy: int
+    coins: int
 
 
 class ChestRead(BaseModel):
