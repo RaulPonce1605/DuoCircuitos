@@ -21,6 +21,7 @@ from sqlalchemy.orm import selectinload
 
 from app.core.config import get_settings
 from app.models import (
+    Chest,
     Exercise,
     ExerciseInstance,
     Lesson,
@@ -39,7 +40,7 @@ from app.schemas.lessons import (
     LessonRefRead,
     NodeRefRead,
 )
-from app.services import energy, gamification
+from app.services import achievements, chests, energy, gamification
 from app.services import path as path_service
 from app.services.errors import (
     AlreadyAnswered,
@@ -137,7 +138,7 @@ async def _mistakes_by_exercise(
         )
         .group_by(ExerciseInstance.exercise_id)
     )
-    return {exercise_id: int(count) for exercise_id, count in rows.tuples()}
+    return {exercise_id: int(count) for exercise_id, count in rows}
 
 
 def _node_ref(node: Node) -> NodeRefRead:
@@ -244,6 +245,8 @@ async def get_summary(
         concepts=await _concepts(db, attempt),
         streak=gamification.effective_streak(user, datetime.now(UTC)),
         streak_extended=bool(attempt.streak_extended),
+        chest_id=await db.scalar(select(Chest.id).where(Chest.lesson_attempt_id == attempt.id)),
+        new_badges=await achievements.badges_of_attempt(db, attempt.id),
     )
 
 
@@ -345,4 +348,7 @@ async def _complete(db: AsyncSession, user: User, attempt: LessonAttempt, now: d
         progress.last_completed_at = now
         progress.times_completed += 1
         progress.best_accuracy = max(progress.best_accuracy or 0, rewards.accuracy)
+    # Cada intento terminado deja un cofre cerrado (resumen → cofre → racha, CLAUDE.md 1.2).
+    chests.create_for_attempt(db, user, attempt)
     await db.flush()
+    await achievements.evaluate(db, user, now, attempt_id=attempt.id)

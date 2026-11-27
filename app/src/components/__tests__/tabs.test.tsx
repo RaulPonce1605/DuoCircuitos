@@ -6,7 +6,6 @@ import type { ComponentType } from "react";
 
 import ChallengesScreen from "@/app/(tabs)/desafios";
 import LeaguesScreen from "@/app/(tabs)/ligas";
-import MoreScreen from "@/app/(tabs)/mas";
 import ProfileScreen from "@/app/(tabs)/perfil";
 import { AppProviders } from "@/components/app-providers";
 import { TAB_ROUTES } from "@/components/tab-routes";
@@ -47,8 +46,7 @@ describe("pestañas", () => {
     ["Desafíos", ChallengesScreen, "challenges"],
     ["Ligas", LeaguesScreen, "leagues"],
     ["Perfil", ProfileScreen, "profile"],
-    ["Más", MoreScreen, "more"],
-  ])("la pantalla %s muestra su título y su estado vacío (Inicio se prueba en path.test)", async (_, ScreenComponent, key) => {
+  ])("la pantalla %s muestra su título y su estado vacío (Inicio y Más tienen sus propias pruebas)", async (_, ScreenComponent, key) => {
     await render(
       <AppProviders>
         <ScreenComponent />

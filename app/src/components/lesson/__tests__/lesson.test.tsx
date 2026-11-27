@@ -161,6 +161,8 @@ const SUMMARY: LessonSummary = {
   concepts: ["Voltaje", "Corriente eléctrica"],
   streak: 3,
   streak_extended: true,
+  chest_id: "c-1",
+  new_badges: [{ achievement_id: "lessons", level: 1, threshold: 1, earned_at: "2026-11-26T12:00:00Z" }],
 };
 
 describe("SummaryView", () => {
@@ -178,11 +180,31 @@ describe("SummaryView", () => {
     expect(screen.getByText("Al primer intento: 4 de 5")).toBeOnTheScreen();
     expect(screen.getByText("Voltaje")).toBeOnTheScreen();
     expect(screen.getByText("Corriente eléctrica")).toBeOnTheScreen();
-    expect(screen.getByText("Racha de 3 días")).toBeOnTheScreen();
-    expect(screen.getByText(es.summary.streakUp)).toBeOnTheScreen();
+    expect(screen.getByText("¡Ganaste una medalla!")).toBeOnTheScreen();
+    expect(screen.getByText("Aprendiz de circuitos: Bronce")).toBeOnTheScreen();
 
+    // Resumen → cofre (y después racha).
     await fireEvent.press(screen.getByRole("button", { name: es.summary.continue }));
-    expect(mockRouter.replace).toHaveBeenCalledWith("/");
+    expect(mockRouter.replace).toHaveBeenCalledWith({
+      pathname: "/leccion/cofre/[chestId]",
+      params: { chestId: "c-1", attemptId: "a-1" },
+    });
+  });
+
+  it("sin cofre pasa directo a la racha", async () => {
+    mockSummary.mockResolvedValue({ ...SUMMARY, chest_id: null, new_badges: [] });
+    await render(
+      <AppProviders>
+        <SummaryView attemptId="a-1" />
+      </AppProviders>,
+    );
+
+    await fireEvent.press(await screen.findByRole("button", { name: es.summary.continue }));
+    expect(screen.queryByTestId("new-badges")).toBeNull();
+    expect(mockRouter.replace).toHaveBeenCalledWith({
+      pathname: "/leccion/racha/[attemptId]",
+      params: { attemptId: "a-1" },
+    });
   });
 
   it("en un repaso el título sale de la unidad", async () => {
@@ -198,17 +220,5 @@ describe("SummaryView", () => {
     );
 
     expect(await screen.findByText("Repaso: Ley de Ohm")).toBeOnTheScreen();
-  });
-
-  it("si la racha no subió lo dice, en singular", async () => {
-    mockSummary.mockResolvedValue({ ...SUMMARY, streak: 1, streak_extended: false });
-    await render(
-      <AppProviders>
-        <SummaryView attemptId="a-1" />
-      </AppProviders>,
-    );
-
-    expect(await screen.findByText("Racha de 1 día")).toBeOnTheScreen();
-    expect(screen.getByText(es.summary.streakKept)).toBeOnTheScreen();
   });
 });

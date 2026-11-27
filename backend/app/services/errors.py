@@ -81,3 +81,9 @@ class NodeNotPlayable(DomainError):
     """El nodo no tiene ejercicios (un cofre se abre, no se juega)."""
 
     code = "node_not_playable"
+
+
+class NotAChest(DomainError):
+    """Se intentó abrir como cofre un nodo que no es cofre."""
+
+    code = "not_a_chest"

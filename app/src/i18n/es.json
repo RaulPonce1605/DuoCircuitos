@@ -110,6 +110,29 @@
       "chest": "Cofre de {{unit}}"
     }
   },
+  "chest": {
+    "title": "¡Ganaste un cofre!",
+    "nodeTitle": "Cofre del camino",
+    "tapToOpen": "Pulsa para abrir",
+    "open": "Abrir el cofre",
+    "opening": "Abriendo el cofre",
+    "opened": "Esto había adentro",
+    "xp": "+{{count}} EXP",
+    "energy_one": "+{{count}} de energía",
+    "energy_other": "+{{count}} de energía",
+    "noEnergy": "Tu energía ya estaba llena",
+    "continue": "Continuar"
+  },
+  "streak": {
+    "loading": "Cargando tu racha",
+    "days_one": "{{count}} día de racha",
+    "days_other": "{{count}} días de racha",
+    "up": "¡Tu racha creció! Vuelve mañana para mantenerla.",
+    "kept": "Ya practicaste hoy: tu racha está a salvo.",
+    "start": "¡Empezaste una racha! Practica mañana para que crezca.",
+    "longest": "Tu mejor racha: {{count}}",
+    "continue": "Continuar"
+  },
   "exercise": {
     "fillLabel": "Tu respuesta",
     "numericLabel": "Resultado",
@@ -132,7 +155,9 @@
   },
   "more": {
     "title": "Más",
-    "empty": "Configuración y ayuda, muy pronto."
+    "achievements": "Logros",
+    "badges": "Medallas",
+    "settings": "Configuración"
   },
   "errors": {
     "unknown": "Algo salió mal. Intenta de nuevo.",
@@ -150,6 +175,66 @@
     "tutor_rate_limited": "Pediste mucha ayuda en la última hora. Descansa un poco e intenta más tarde.",
     "tutor_exercise_limit": "Ya usaste toda la ayuda para este ejercicio.",
     "not_enough_energy": "Te quedaste sin energía. Se recarga sola con el tiempo: vuelve en un rato.",
-    "node_not_playable": "Este paso del camino no se juega: se abre."
+    "node_not_playable": "Este paso del camino no se juega: se abre.",
+    "not_a_chest": "Ese paso del camino no es un cofre."
+  },
+  "achievements": {
+    "title": "Logros",
+    "subtitle": "Cada nivel que alcanzas te da una medalla.",
+    "loading": "Cargando tus logros",
+    "progress": "{{value}} de {{goal}}",
+    "progressLabel": "Progreso de {{name}}",
+    "completed": "¡Completaste todos los niveles!",
+    "level": "Nivel {{level}} de {{total}}",
+    "unknown": "Logro",
+    "items": {
+      "lessons": {
+        "title": "Aprendiz de circuitos",
+        "goal_one": "Completa {{count}} lección",
+        "goal_other": "Completa {{count}} lecciones"
+      },
+      "streak": {
+        "title": "Constancia",
+        "goal_one": "Llega a una racha de {{count}} día",
+        "goal_other": "Llega a una racha de {{count}} días"
+      },
+      "xp": {
+        "title": "Acumulador de EXP",
+        "goal_one": "Gana {{count}} EXP",
+        "goal_other": "Gana {{count}} EXP"
+      },
+      "perfect": {
+        "title": "Sin errores",
+        "goal_one": "Termina {{count}} lección perfecta",
+        "goal_other": "Termina {{count}} lecciones perfectas"
+      },
+      "units": {
+        "title": "Dominio",
+        "goal_one": "Aprueba {{count}} evaluación de unidad",
+        "goal_other": "Aprueba {{count}} evaluaciones de unidad"
+      },
+      "chests": {
+        "title": "Cazatesoros",
+        "goal_one": "Abre {{count}} cofre",
+        "goal_other": "Abre {{count}} cofres"
+      }
+    }
+  },
+  "badges": {
+    "title": "Medallas",
+    "subtitle": "Gánalas al subir de nivel en tus logros.",
+    "loading": "Cargando tus medallas",
+    "earnedCount": "{{earned}} de {{total}} ganadas",
+    "earnedOn": "Ganada el {{date}}",
+    "locked": "Aún no la ganas",
+    "new_one": "¡Ganaste una medalla!",
+    "new_other": "¡Ganaste {{count}} medallas!",
+    "level": {
+      "1": "Bronce",
+      "2": "Plata",
+      "3": "Oro",
+      "other": "Nivel {{level}}"
+    },
+    "name": "{{achievement}}: {{level}}"
   }
 }

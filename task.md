@@ -87,12 +87,12 @@ Al terminar la fase 2, el alumno puede pedir ayuda en cualquier ejercicio, y la 
 ### Gamificación
 
 - [x] **E** — Backend de energía: se gasta al fallar y se recarga con el tiempo
-- [ ] **E** — Backend de cofres, logros y medallas
+- [x] **E** — Backend de cofres, logros y medallas
 - [ ] **E** — Desafíos diarios y mensual: se generan cada día y se actualizan al ganar EXP
 - [x] **E** — Nodos de repaso y evaluación de unidad: mezclan ejercicios de toda la unidad
 - [x] **Ali** — Contador de energía en la app
-- [ ] **Ali** — Pantalla de cofre ("Pulsa para abrir") y pantalla de racha al terminar la lección
-- [ ] **Ali** — Pantallas de logros y medallas
+- [x] **Ali** — Pantalla de cofre ("Pulsa para abrir") y pantalla de racha al terminar la lección
+- [x] **Ali** — Pantallas de logros y medallas
 - [ ] **Alex** — Pantalla de Desafíos con barras de progreso
 - [ ] **Alex** — Perfil: resumen (racha, EXP total, liga), logros y medallas
 - [ ] **Alex** — Configuración: preferencias, notificaciones, privacidad, cerrar sesión

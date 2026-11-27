@@ -2,11 +2,47 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Literal, Self
 
-from pydantic import Field, SecretStr, computed_field, model_validator
+from pydantic import BaseModel, Field, SecretStr, computed_field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy.engine import URL
 
 BACKEND_DIR = Path(__file__).resolve().parents[2]
+
+
+AchievementMetric = Literal[
+    "lessons_completed",
+    "streak_longest",
+    "xp_total",
+    "perfect_lessons",
+    "units_completed",
+    "chests_opened",
+]
+
+
+class AchievementDefinition(BaseModel):
+    """Un logro con niveles: cada umbral alcanzado entrega una medalla
+    (docs/diseno/cofres-y-logros.md). El nombre y la descripción viven en la app (i18n)."""
+
+    id: str = Field(pattern=r"^[a-z][a-z0-9_]*$")
+    metric: AchievementMetric
+    thresholds: list[int] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def _thresholds_increase(self) -> Self:
+        pairs = zip(self.thresholds, self.thresholds[1:], strict=False)
+        if self.thresholds[0] <= 0 or any(a >= b for a, b in pairs):
+            raise ValueError(f"los umbrales de {self.id} deben ser positivos y crecientes")
+        return self
+
+
+DEFAULT_ACHIEVEMENTS = [
+    AchievementDefinition(id="lessons", metric="lessons_completed", thresholds=[1, 5, 10]),
+    AchievementDefinition(id="streak", metric="streak_longest", thresholds=[3, 7, 30]),
+    AchievementDefinition(id="xp", metric="xp_total", thresholds=[100, 500, 1500]),
+    AchievementDefinition(id="perfect", metric="perfect_lessons", thresholds=[1, 5, 15]),
+    AchievementDefinition(id="units", metric="units_completed", thresholds=[1, 3, 5]),
+    AchievementDefinition(id="chests", metric="chests_opened", thresholds=[1, 10, 25]),
+]
 
 
 class Settings(BaseSettings):
@@ -60,6 +96,28 @@ class Settings(BaseSettings):
     # unidad mezclan.
     review_exercise_count: int = Field(default=6, ge=1)
     assessment_exercise_count: int = Field(default=8, ge=1)
+    # Cofres (docs/diseno/cofres-y-logros.md). El de lección sale al terminar cualquier nodo
+    # jugable; el del camino es el nodo cofre.
+    chest_lesson_xp_min: int = Field(default=2, ge=0)
+    chest_lesson_xp_max: int = Field(default=10, ge=0)
+    chest_lesson_energy: int = Field(default=1, ge=0)
+    chest_node_xp_min: int = Field(default=15, ge=0)
+    chest_node_xp_max: int = Field(default=30, ge=0)
+    chest_node_energy: int = Field(default=5, ge=0)
+    # Logros y sus medallas. Se pueden cambiar con ACHIEVEMENTS (JSON).
+    achievements: list[AchievementDefinition] = Field(
+        default_factory=lambda: list(DEFAULT_ACHIEVEMENTS)
+    )
+
+    @model_validator(mode="after")
+    def _rewards_are_consistent(self) -> Self:
+        if self.chest_lesson_xp_min > self.chest_lesson_xp_max:
+            raise ValueError("CHEST_LESSON_XP_MIN es mayor que CHEST_LESSON_XP_MAX")
+        if self.chest_node_xp_min > self.chest_node_xp_max:
+            raise ValueError("CHEST_NODE_XP_MIN es mayor que CHEST_NODE_XP_MAX")
+        if len({a.id for a in self.achievements}) != len(self.achievements):
+            raise ValueError("hay logros con el mismo id")
+        return self
 
     @model_validator(mode="after")
     def _llm_is_complete(self) -> Self:

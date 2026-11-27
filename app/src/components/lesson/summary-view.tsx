@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { ActivityIndicator, View } from "react-native";
 
 import { attemptTitle } from "@/components/lesson/attempt-title";
+import { NewBadges } from "@/components/rewards/new-badges";
 import { AppText, Button, Card, Screen } from "@/components/ui";
 import { useLessonSummary } from "@/hooks/use-lesson-summary";
 import { useTheme } from "@/hooks/use-theme";
@@ -42,7 +43,7 @@ function Stat({ icon, color, label, value, testID }: StatProps) {
   );
 }
 
-/** Resumen al terminar (CLAUDE.md 1.2): EXP, precisión, conceptos y racha. Todo del backend. */
+/** Resumen al terminar (CLAUDE.md 1.2): EXP, precisión, conceptos y medallas. Todo del backend. */
 export function SummaryView({ attemptId }: { attemptId: string }) {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -62,6 +63,17 @@ export function SummaryView({ attemptId }: { attemptId: string }) {
   }
 
   const goHome = () => router.replace("/");
+  // Resumen → cofre → racha (CLAUDE.md 1.2).
+  const goNext = () => {
+    if (summary.data?.chest_id) {
+      router.replace({
+        pathname: "/leccion/cofre/[chestId]",
+        params: { chestId: summary.data.chest_id, attemptId },
+      });
+    } else {
+      router.replace({ pathname: "/leccion/racha/[attemptId]", params: { attemptId } });
+    }
+  };
 
   if (summary.isError) {
     return (
@@ -77,7 +89,7 @@ export function SummaryView({ attemptId }: { attemptId: string }) {
 
   const data = summary.data;
   return (
-    <Screen scroll footer={<Button label={t("summary.continue")} onPress={goHome} />}>
+    <Screen scroll footer={<Button label={t("summary.continue")} onPress={goNext} />}>
       <View style={{ alignItems: "center", gap: theme.spacing.sm, marginTop: theme.spacing.lg }}>
         <Ionicons name="trophy" size={theme.sizes.iconLg * 2} color={theme.colors.accent} />
         <AppText variant="display" align="center" accessibilityRole="header">
@@ -111,19 +123,7 @@ export function SummaryView({ attemptId }: { attemptId: string }) {
         })}`}
       </AppText>
 
-      <Card borderTone="streak" testID="summary-streak">
-        <View style={{ flexDirection: "row", alignItems: "center", gap: theme.spacing.md }}>
-          <Ionicons name="flame" size={theme.sizes.iconLg} color={theme.colors.streak} />
-          <View style={{ flex: 1, gap: theme.spacing.xxs }}>
-            <AppText variant="subtitle" color="streak">
-              {t("summary.streak", { count: data.streak })}
-            </AppText>
-            <AppText color="textMuted">
-              {data.streak_extended ? t("summary.streakUp") : t("summary.streakKept")}
-            </AppText>
-          </View>
-        </View>
-      </Card>
+      <NewBadges badges={data.new_badges} />
 
       <Card>
         <AppText variant="subtitle" accessibilityRole="header" style={{ marginBottom: theme.spacing.sm }}>

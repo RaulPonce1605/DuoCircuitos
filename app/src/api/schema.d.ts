@@ -72,6 +72,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/chests/{chest_id}/open": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Open Chest
+         * @description Abre el cofre de un intento terminado. Abrirlo otra vez devuelve el mismo premio.
+         */
+        post: operations["openChest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/exercise-instances/{instance_id}/check": {
         parameters: {
             query?: never;
@@ -174,6 +194,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/me/achievements": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Achievements
+         * @description Los logros con su progreso y las medallas ganadas.
+         */
+        get: operations["getAchievements"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/nodes/{node_key}/attempts": {
         parameters: {
             query?: never;
@@ -188,6 +228,26 @@ export interface paths {
          * @description Inicia cualquier nodo jugable: lección (su clave es el slug), repaso o evaluación.
          */
         post: operations["startNode"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/nodes/{node_key}/chest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Open Node Chest
+         * @description Abre el nodo cofre del camino (una vez por alumno) y lo marca como completado.
+         */
+        post: operations["openNodeChest"];
         delete?: never;
         options?: never;
         head?: never;
@@ -215,6 +275,31 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AchievementRead */
+        AchievementRead: {
+            /** Id */
+            id: string;
+            /** Level */
+            level: number;
+            /**
+             * Metric
+             * @enum {string}
+             */
+            metric: "lessons_completed" | "streak_longest" | "xp_total" | "perfect_lessons" | "units_completed" | "chests_opened";
+            /** Next Threshold */
+            next_threshold: number | null;
+            /** Thresholds */
+            thresholds: number[];
+            /** Value */
+            value: number;
+        };
+        /** AchievementsRead */
+        AchievementsRead: {
+            /** Achievements */
+            achievements: components["schemas"]["AchievementRead"][];
+            /** Badges */
+            badges: components["schemas"]["BadgeRead"][];
+        };
         /** AuthRead */
         AuthRead: {
             /** Access Token */
@@ -230,6 +315,23 @@ export interface components {
              */
             token_type: "bearer";
             user: components["schemas"]["UserRead"];
+        };
+        /**
+         * BadgeRead
+         * @description Una medalla ganada. La app la nombra con i18n: `achievements.<achievement_id>`.
+         */
+        BadgeRead: {
+            /** Achievement Id */
+            achievement_id: string;
+            /**
+             * Earned At
+             * Format: date-time
+             */
+            earned_at: string;
+            /** Level */
+            level: number;
+            /** Threshold */
+            threshold: number;
         };
         /** CheckRequest */
         CheckRequest: {
@@ -249,6 +351,30 @@ export interface components {
             explanation: string;
             next_exercise: components["schemas"]["ExerciseInstanceRead"] | null;
             progress: components["schemas"]["LessonProgressRead"];
+        };
+        /** ChestRead */
+        ChestRead: {
+            energy: components["schemas"]["EnergyRead"];
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** New Badges */
+            new_badges: components["schemas"]["BadgeRead"][];
+            reward: components["schemas"]["ChestRewardRead"] | null;
+            /**
+             * Source
+             * @enum {string}
+             */
+            source: "lesson" | "node";
+        };
+        /** ChestRewardRead */
+        ChestRewardRead: {
+            /** Energy */
+            energy: number;
+            /** Xp */
+            xp: number;
         };
         /** EnergyRead */
         EnergyRead: {
@@ -327,6 +453,8 @@ export interface components {
              * Format: uuid
              */
             attempt_id: string;
+            /** Chest Id */
+            chest_id: string | null;
             /** Concepts */
             concepts: string[];
             /** Exercise Count */
@@ -334,6 +462,8 @@ export interface components {
             /** First Try Correct */
             first_try_correct: number;
             lesson: components["schemas"]["LessonRefRead"] | null;
+            /** New Badges */
+            new_badges: components["schemas"]["BadgeRead"][];
             node: components["schemas"]["NodeRefRead"];
             /** Streak */
             streak: number;
@@ -779,6 +909,55 @@ export interface operations {
             };
         };
     };
+    openChest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                chest_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChestRead"];
+                };
+            };
+            /** @description invalid_token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description not_found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description validation_error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorRead"];
+                };
+            };
+        };
+    };
     checkExercise: {
         parameters: {
             query?: never;
@@ -1077,6 +1256,35 @@ export interface operations {
             };
         };
     };
+    getAchievements: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AchievementsRead"];
+                };
+            };
+            /** @description invalid_token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+        };
+    };
     startNode: {
         parameters: {
             query?: never;
@@ -1116,6 +1324,64 @@ export interface operations {
                 };
             };
             /** @description node_locked, node_not_playable, not_enough_energy */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description validation_error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorRead"];
+                };
+            };
+        };
+    };
+    openNodeChest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                node_key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChestRead"];
+                };
+            };
+            /** @description invalid_token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description not_found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description node_locked, not_a_chest */
             409: {
                 headers: {
                     [name: string]: unknown;

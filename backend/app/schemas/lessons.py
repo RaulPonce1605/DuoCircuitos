@@ -2,6 +2,7 @@ import uuid
 
 from pydantic import BaseModel
 
+from app.schemas.achievements import BadgeRead
 from app.schemas.exercises import ExerciseAnswer, ExercisePublic
 from app.schemas.path import NodeType
 from app.schemas.user import EnergyRead
@@ -69,3 +70,7 @@ class LessonAttemptSummaryRead(BaseModel):
     concepts: list[str]
     streak: int
     streak_extended: bool
+    # El cofre que dejó este intento (se abre en la pantalla "Pulsa para abrir").
+    chest_id: uuid.UUID | None
+    # Medallas que se ganaron al terminar este intento.
+    new_badges: list[BadgeRead]

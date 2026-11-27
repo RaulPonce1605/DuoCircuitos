@@ -65,7 +65,10 @@ describe("UnitCard", () => {
     await fireEvent.press(screen.getByRole("button", { name: /Ley de Ohm y potencia/ }));
     await fireEvent.press(screen.getByRole("button", { name: /Voltaje, corriente/ }));
 
-    expect(onOpenNode.mock.calls).toEqual([["ohm-02"], ["ohm-01"]]);
+    expect(onOpenNode.mock.calls).toEqual([
+      ["ohm-02", "lesson"],
+      ["ohm-01", "lesson"],
+    ]);
   });
 
   it("abre una evaluación disponible por su clave", async () => {
@@ -75,18 +78,23 @@ describe("UnitCard", () => {
       screen.getByRole("button", { name: `${es.path.nodeType.assessment}, ${es.path.status.available}` }),
     );
 
-    expect(onOpenNode).toHaveBeenCalledWith("u01:assessment:1");
+    expect(onOpenNode).toHaveBeenCalledWith("u01:assessment:1", "assessment");
   });
 
-  it("los nodos bloqueados y los que aún no se juegan no responden", async () => {
+  it("el cofre disponible se abre con su tipo", async () => {
+    const onOpenNode = await renderUnit();
+
+    await fireEvent.press(screen.getByRole("button", { name: `${es.path.nodeType.chest}, ${es.path.status.available}` }));
+
+    expect(onOpenNode).toHaveBeenCalledWith("u01:chest:1", "chest");
+  });
+
+  it("los nodos bloqueados no responden", async () => {
     const onOpenNode = await renderUnit();
 
     const locked = screen.getByRole("button", { name: `${es.path.nodeType.review}, ${es.path.status.locked}` });
-    const chest = screen.getByRole("button", { name: `${es.path.nodeType.chest}, ${es.common.comingSoon}` });
     expect(locked).toBeDisabled();
-    expect(chest).toBeDisabled();
     await fireEvent.press(locked);
-    await fireEvent.press(chest);
     expect(onOpenNode).not.toHaveBeenCalled();
   });
 
