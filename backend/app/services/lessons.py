@@ -40,7 +40,7 @@ from app.schemas.lessons import (
     LessonRefRead,
     NodeRefRead,
 )
-from app.services import achievements, chests, energy, gamification
+from app.services import achievements, challenges, chests, energy, gamification
 from app.services import path as path_service
 from app.services.errors import (
     AlreadyAnswered,
@@ -351,4 +351,17 @@ async def _complete(db: AsyncSession, user: User, attempt: LessonAttempt, now: d
     # Cada intento terminado deja un cofre cerrado (resumen → cofre → racha, CLAUDE.md 1.2).
     chests.create_for_attempt(db, user, attempt)
     await db.flush()
+    is_lesson = attempt.lesson_id is not None
+    await challenges.record(
+        db,
+        user,
+        now,
+        {
+            "earn_xp": rewards.xp,
+            "complete_lessons": int(is_lesson),
+            "first_try_correct": int(first_try_correct or 0),
+            "perfect_lessons": int(is_lesson and rewards.accuracy == 100),
+        },
+    )
+    # Después de los desafíos: su EXP también cuenta para los logros de EXP.
     await achievements.evaluate(db, user, now, attempt_id=attempt.id)

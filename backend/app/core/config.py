@@ -35,6 +35,30 @@ class AchievementDefinition(BaseModel):
         return self
 
 
+ChallengeKind = Literal[
+    "earn_xp", "complete_lessons", "first_try_correct", "perfect_lessons", "open_chests"
+]
+
+
+class ChallengeTemplate(BaseModel):
+    """Una meta posible para un desafío (docs/diseno/desafios.md). El texto vive en la app
+    (i18n: `challenges.kind.<kind>`)."""
+
+    kind: ChallengeKind
+    goal: int = Field(gt=0)
+    reward_xp: int = Field(ge=0)
+
+
+DEFAULT_DAILY_CHALLENGES = [
+    ChallengeTemplate(kind="earn_xp", goal=50, reward_xp=10),
+    ChallengeTemplate(kind="complete_lessons", goal=2, reward_xp=10),
+    ChallengeTemplate(kind="first_try_correct", goal=12, reward_xp=10),
+    ChallengeTemplate(kind="perfect_lessons", goal=1, reward_xp=15),
+    ChallengeTemplate(kind="open_chests", goal=2, reward_xp=5),
+]
+DEFAULT_MONTHLY_CHALLENGES = [ChallengeTemplate(kind="earn_xp", goal=1500, reward_xp=100)]
+
+
 DEFAULT_ACHIEVEMENTS = [
     AchievementDefinition(id="lessons", metric="lessons_completed", thresholds=[1, 5, 10]),
     AchievementDefinition(id="streak", metric="streak_longest", thresholds=[3, 7, 30]),
@@ -104,6 +128,15 @@ class Settings(BaseSettings):
     chest_node_xp_min: int = Field(default=15, ge=0)
     chest_node_xp_max: int = Field(default=30, ge=0)
     chest_node_energy: int = Field(default=5, ge=0)
+    # Desafíos (docs/diseno/desafios.md): cada día se eligen DAILY_CHALLENGE_COUNT metas al azar
+    # de la lista diaria; cada mes, todas las de la lista mensual.
+    daily_challenge_count: int = Field(default=3, ge=1)
+    daily_challenges: list[ChallengeTemplate] = Field(
+        default_factory=lambda: list(DEFAULT_DAILY_CHALLENGES), min_length=1
+    )
+    monthly_challenges: list[ChallengeTemplate] = Field(
+        default_factory=lambda: list(DEFAULT_MONTHLY_CHALLENGES)
+    )
     # Logros y sus medallas. Se pueden cambiar con ACHIEVEMENTS (JSON).
     achievements: list[AchievementDefinition] = Field(
         default_factory=lambda: list(DEFAULT_ACHIEVEMENTS)
@@ -117,6 +150,12 @@ class Settings(BaseSettings):
             raise ValueError("CHEST_NODE_XP_MIN es mayor que CHEST_NODE_XP_MAX")
         if len({a.id for a in self.achievements}) != len(self.achievements):
             raise ValueError("hay logros con el mismo id")
+        for name, templates in [
+            ("DAILY_CHALLENGES", self.daily_challenges),
+            ("MONTHLY_CHALLENGES", self.monthly_challenges),
+        ]:
+            if len({t.kind for t in templates}) != len(templates):
+                raise ValueError(f"{name} repite un tipo de desafío")
         return self
 
     @model_validator(mode="after")

@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import date, datetime
 
 from sqlalchemy import CheckConstraint, ForeignKey, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
@@ -77,3 +77,28 @@ class Badge(Base):
     lesson_attempt_id: Mapped[uuid.UUID | None] = mapped_column(
         ForeignKey("lesson_attempts.id", ondelete="SET NULL"), index=True
     )
+
+
+class Challenge(CreatedAtMixin, Base):
+    """Un desafío del alumno en un periodo: diario (`period_start` = su día local) o mensual
+    (el día 1 del mes). Se generan solos al leerlos o al ganar EXP; nunca se editan a mano."""
+
+    __tablename__ = "challenges"
+    __table_args__ = (
+        CheckConstraint("period IN ('daily', 'monthly')", name="period_valid"),
+        CheckConstraint("goal > 0", name="goal_positive"),
+        CheckConstraint("progress >= 0 AND progress <= goal", name="progress_range"),
+        UniqueConstraint("user_id", "period", "period_start", "kind"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), index=True
+    )
+    period: Mapped[str] = mapped_column(String(10))
+    period_start: Mapped[date]
+    kind: Mapped[str] = mapped_column(String(30))
+    goal: Mapped[int]
+    progress: Mapped[int] = mapped_column(default=0, server_default="0")
+    reward_xp: Mapped[int]
+    completed_at: Mapped[datetime | None]
