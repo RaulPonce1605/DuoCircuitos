@@ -40,6 +40,8 @@ const USER: User = {
   notify_streak_reminder: true,
   notify_challenges: false,
   profile_public: true,
+  league_tier: 1,
+  league_tier_id: "capacitor",
 };
 
 const ACHIEVEMENTS: Achievements = {
@@ -73,7 +75,7 @@ describe("ProfileSummary", () => {
     expect(screen.getByLabelText("Racha: 1 día")).toBeOnTheScreen();
     expect(screen.getByLabelText("Mejor racha: 8 días")).toBeOnTheScreen();
     expect(screen.getByLabelText("EXP total: 340")).toBeOnTheScreen();
-    expect(screen.getByLabelText(`Liga: ${es.profile.noLeague}`)).toBeOnTheScreen();
+    expect(screen.getByLabelText("Liga: Capacitor")).toBeOnTheScreen();
     expect(await screen.findByText("4 de 6 niveles alcanzados")).toBeOnTheScreen();
     // Solo las 3 más recientes.
     expect(screen.getByText("Constancia: Plata")).toBeOnTheScreen();

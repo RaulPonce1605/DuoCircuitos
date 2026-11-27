@@ -528,6 +528,164 @@
         "title": "HealthRead",
         "type": "object"
       },
+      "LeagueMemberRead": {
+        "properties": {
+          "display_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Display Name"
+          },
+          "is_me": {
+            "title": "Is Me",
+            "type": "boolean"
+          },
+          "rank": {
+            "title": "Rank",
+            "type": "integer"
+          },
+          "xp": {
+            "title": "Xp",
+            "type": "integer"
+          },
+          "zone": {
+            "anyOf": [
+              {
+                "enum": [
+                  "promotion",
+                  "demotion"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Zone"
+          }
+        },
+        "required": [
+          "rank",
+          "display_name",
+          "xp",
+          "is_me",
+          "zone"
+        ],
+        "title": "LeagueMemberRead",
+        "type": "object"
+      },
+      "LeagueRead": {
+        "properties": {
+          "ends_at": {
+            "format": "date-time",
+            "title": "Ends At",
+            "type": "string"
+          },
+          "group_size": {
+            "title": "Group Size",
+            "type": "integer"
+          },
+          "joined": {
+            "title": "Joined",
+            "type": "boolean"
+          },
+          "last_result": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LeagueResultRead"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "members": {
+            "items": {
+              "$ref": "#/components/schemas/LeagueMemberRead"
+            },
+            "title": "Members",
+            "type": "array"
+          },
+          "tier": {
+            "title": "Tier",
+            "type": "integer"
+          },
+          "tier_id": {
+            "title": "Tier Id",
+            "type": "string"
+          },
+          "tiers": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Tiers",
+            "type": "array"
+          },
+          "week_start": {
+            "format": "date",
+            "title": "Week Start",
+            "type": "string"
+          }
+        },
+        "required": [
+          "tier",
+          "tier_id",
+          "tiers",
+          "week_start",
+          "ends_at",
+          "joined",
+          "members",
+          "group_size",
+          "last_result"
+        ],
+        "title": "LeagueRead",
+        "type": "object"
+      },
+      "LeagueResultRead": {
+        "description": "Cómo le fue en la última semana cerrada. Se anuncia una sola vez.",
+        "properties": {
+          "final_rank": {
+            "title": "Final Rank",
+            "type": "integer"
+          },
+          "final_xp": {
+            "title": "Final Xp",
+            "type": "integer"
+          },
+          "result": {
+            "enum": [
+              "promoted",
+              "stayed",
+              "demoted"
+            ],
+            "title": "Result",
+            "type": "string"
+          },
+          "tier": {
+            "title": "Tier",
+            "type": "integer"
+          },
+          "week_start": {
+            "format": "date",
+            "title": "Week Start",
+            "type": "string"
+          }
+        },
+        "required": [
+          "week_start",
+          "tier",
+          "result",
+          "final_rank",
+          "final_xp"
+        ],
+        "title": "LeagueResultRead",
+        "type": "object"
+      },
       "LessonAttemptRead": {
         "properties": {
           "attempt_id": {
@@ -1187,6 +1345,14 @@
             "title": "Id",
             "type": "string"
           },
+          "league_tier": {
+            "title": "League Tier",
+            "type": "integer"
+          },
+          "league_tier_id": {
+            "title": "League Tier Id",
+            "type": "string"
+          },
           "notify_challenges": {
             "title": "Notify Challenges",
             "type": "boolean"
@@ -1228,7 +1394,9 @@
           "energy",
           "notify_streak_reminder",
           "notify_challenges",
-          "profile_public"
+          "profile_public",
+          "league_tier",
+          "league_tier_id"
         ],
         "title": "UserRead",
         "type": "object"
@@ -1872,6 +2040,43 @@
         "summary": "Get Health",
         "tags": [
           "health"
+        ]
+      }
+    },
+    "/leagues/current": {
+      "get": {
+        "description": "La liga de esta semana con su ranking. Cierra las semanas pasadas que sigan abiertas y\nanuncia (una vez) cómo le fue al alumno en la última.",
+        "operationId": "getCurrentLeague",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeagueRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "invalid_token"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Current League",
+        "tags": [
+          "leagues"
         ]
       }
     },

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Pressable, View } from "react-native";
 
 import { achievementGoal, badgeName, levelColor } from "@/components/achievements/names";
+import { tierName } from "@/components/leagues/tier-name";
 import { AppText, Button, Card } from "@/components/ui";
 import { useAchievements } from "@/hooks/use-achievements";
 import { useCurrentUser } from "@/hooks/use-current-user";
@@ -130,8 +131,13 @@ export function ProfileSummary() {
             value={t("profile.days", { count: user.streak_longest })}
           />
           <Stat testID="profile-xp" icon="flash" color="xp" label={t("profile.xp")} value={String(user.xp_total)} />
-          {/* Las ligas llegan en la fase 3: mientras, el alumno no tiene liga. */}
-          <Stat testID="profile-league" icon="podium" color="primary" label={t("profile.league")} value={t("profile.noLeague")} />
+          <Stat
+            testID="profile-league"
+            icon="podium"
+            color="primary"
+            label={t("profile.league")}
+            value={tierName(user.league_tier_id, user.league_tier)}
+          />
         </View>
       </View>
 

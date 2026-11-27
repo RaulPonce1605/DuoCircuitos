@@ -163,6 +163,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/leagues/current": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Current League
+         * @description La liga de esta semana con su ranking. Cierra las semanas pasadas que sigan abiertas y
+         *     anuncia (una vez) cómo le fue al alumno en la última.
+         */
+        get: operations["getCurrentLeague"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/lesson-attempts/{attempt_id}/summary": {
         parameters: {
             query?: never;
@@ -501,6 +522,67 @@ export interface components {
              */
             status: "ok";
         };
+        /** LeagueMemberRead */
+        LeagueMemberRead: {
+            /** Display Name */
+            display_name: string | null;
+            /** Is Me */
+            is_me: boolean;
+            /** Rank */
+            rank: number;
+            /** Xp */
+            xp: number;
+            /** Zone */
+            zone: ("promotion" | "demotion") | null;
+        };
+        /** LeagueRead */
+        LeagueRead: {
+            /**
+             * Ends At
+             * Format: date-time
+             */
+            ends_at: string;
+            /** Group Size */
+            group_size: number;
+            /** Joined */
+            joined: boolean;
+            last_result: components["schemas"]["LeagueResultRead"] | null;
+            /** Members */
+            members: components["schemas"]["LeagueMemberRead"][];
+            /** Tier */
+            tier: number;
+            /** Tier Id */
+            tier_id: string;
+            /** Tiers */
+            tiers: string[];
+            /**
+             * Week Start
+             * Format: date
+             */
+            week_start: string;
+        };
+        /**
+         * LeagueResultRead
+         * @description Cómo le fue en la última semana cerrada. Se anuncia una sola vez.
+         */
+        LeagueResultRead: {
+            /** Final Rank */
+            final_rank: number;
+            /** Final Xp */
+            final_xp: number;
+            /**
+             * Result
+             * @enum {string}
+             */
+            result: "promoted" | "stayed" | "demoted";
+            /** Tier */
+            tier: number;
+            /**
+             * Week Start
+             * Format: date
+             */
+            week_start: string;
+        };
         /** LessonAttemptRead */
         LessonAttemptRead: {
             /**
@@ -779,6 +861,10 @@ export interface components {
              * Format: uuid
              */
             id: string;
+            /** League Tier */
+            league_tier: number;
+            /** League Tier Id */
+            league_tier_id: string;
             /** Notify Challenges */
             notify_challenges: boolean;
             /** Notify Streak Reminder */
@@ -1228,6 +1314,35 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HealthRead"];
+                };
+            };
+        };
+    };
+    getCurrentLeague: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LeagueRead"];
+                };
+            };
+            /** @description invalid_token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
                 };
             };
         };

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import auth, challenges, chests, health, lessons, path, tutor, users
+from app.api import auth, challenges, chests, health, leagues, lessons, path, tutor, users
 from app.api.errors import register_error_handlers
 from app.core.config import get_settings
 
@@ -25,6 +25,7 @@ def create_app() -> FastAPI:
     app.include_router(tutor.router)
     app.include_router(chests.router)
     app.include_router(challenges.router)
+    app.include_router(leagues.router)
     return app
 
 

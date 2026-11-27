@@ -1,14 +1,9 @@
 import { readdirSync } from "node:fs";
 import { join } from "node:path";
 
-import { render, screen } from "@testing-library/react-native";
-import type { ComponentType } from "react";
 
-import LeaguesScreen from "@/app/(tabs)/ligas";
-import { AppProviders } from "@/components/app-providers";
 import { TAB_ROUTES } from "@/components/tab-routes";
 import i18n from "@/i18n";
-import es from "@/i18n/es.json";
 
 jest.mock("@/hooks/use-session", () => ({
   useSession: () => ({
@@ -38,18 +33,5 @@ describe("pestañas", () => {
       .map((file) => file.replace(/\.tsx$/, ""))
       .sort();
     expect(routeFiles).toEqual(TAB_ROUTES.map((tab) => tab.name).sort());
-  });
-
-  it.each<[string, ComponentType, keyof typeof es]>([
-    ["Ligas", LeaguesScreen, "leagues"],
-  ])("la pantalla %s muestra su título y su estado vacío (las demás tienen sus propias pruebas)", async (_, ScreenComponent, key) => {
-    await render(
-      <AppProviders>
-        <ScreenComponent />
-      </AppProviders>,
-    );
-    const section = es[key] as { title: string; empty: string };
-    expect(screen.getByRole("header", { name: section.title })).toBeOnTheScreen();
-    expect(screen.getByText(section.empty)).toBeOnTheScreen();
   });
 });

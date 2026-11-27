@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import type { ExerciseAnswer } from "@/components/exercises/types";
 import { CHALLENGES_QUERY_KEY } from "@/hooks/use-challenges";
+import { LEAGUE_QUERY_KEY } from "@/hooks/use-league";
 import { CURRENT_USER_QUERY_KEY } from "@/hooks/use-current-user";
 import { PATH_QUERY_KEY } from "@/hooks/use-path";
 import type { Energy } from "@/services/auth-service";
@@ -54,6 +55,7 @@ export function useLessonSession(lessonSlug: string) {
       if (result.attempt_completed) {
         void queryClient.invalidateQueries({ queryKey: PATH_QUERY_KEY });
         void queryClient.invalidateQueries({ queryKey: CHALLENGES_QUERY_KEY });
+        void queryClient.invalidateQueries({ queryKey: LEAGUE_QUERY_KEY });
       }
     },
   });

@@ -31,6 +31,8 @@ const USER: User = {
   notify_streak_reminder: true,
   notify_challenges: true,
   profile_public: true,
+  league_tier: 1,
+  league_tier_id: "capacitor",
 };
 
 function auth(access: string, refresh: string | null = `refresh-${access}`) {

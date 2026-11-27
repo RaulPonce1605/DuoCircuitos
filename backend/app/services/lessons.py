@@ -40,7 +40,7 @@ from app.schemas.lessons import (
     LessonRefRead,
     NodeRefRead,
 )
-from app.services import achievements, challenges, chests, energy, gamification
+from app.services import achievements, challenges, chests, energy, gamification, leagues
 from app.services import path as path_service
 from app.services.errors import (
     AlreadyAnswered,
@@ -363,5 +363,6 @@ async def _complete(db: AsyncSession, user: User, attempt: LessonAttempt, now: d
             "perfect_lessons": int(is_lesson and rewards.accuracy == 100),
         },
     )
+    await leagues.join(db, user, now)  # ganar EXP mete al alumno a la liga de la semana
     # Después de los desafíos: su EXP también cuenta para los logros de EXP.
     await achievements.evaluate(db, user, now, attempt_id=attempt.id)

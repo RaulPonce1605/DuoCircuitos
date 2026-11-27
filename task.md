@@ -101,8 +101,8 @@ Al terminar la fase 2, el alumno puede pedir ayuda en cualquier ejercicio, y la 
 
 Nada de esta fase entra si algo de la fase 1 o 2 sigue fallando. Ordenadas de más a menos valor para la demo.
 
-- [ ] **E** — Ligas semanales: grupos, ranking por EXP y cierre automático cada semana
-- [ ] **Alex** — Pantalla de Ligas con ranking y tiempo restante
+- [x] **E** — Ligas semanales: grupos, ranking por EXP y cierre automático cada semana
+- [x] **Alex** — Pantalla de Ligas con ranking y tiempo restante
 - [ ] **R** — Ejercicio de identificar en un diagrama: formato en el temario y validador
 - [ ] **D** — Ejercicios de diagrama para cada unidad
 - [ ] **Alex** — Componente que dibuja el circuito y deja tocar sus elementos
