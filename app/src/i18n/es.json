@@ -168,7 +168,34 @@
   },
   "leagues": {
     "title": "Ligas",
-    "empty": "Compite cada semana con otros estudiantes. Muy pronto."
+    "loading": "Cargando tu liga",
+    "tierLabel": "Liga {{tier}}",
+    "tiers": {
+      "resistor": "Resistor",
+      "capacitor": "Capacitor",
+      "inductor": "Inductor",
+      "transistor": "Transistor",
+      "superconductor": "Superconductor",
+      "unknown": "Nivel {{level}}"
+    },
+    "endsIn_one": "Termina en {{count}} hora",
+    "endsIn_other": "Termina en {{count}} horas",
+    "endsInDays_one": "Termina en {{count}} día",
+    "endsInDays_other": "Termina en {{count}} días",
+    "notJoinedTitle": "Aún no entras a la liga de esta semana",
+    "notJoined": "Termina una lección para entrar. Compite con otros alumnos por EXP y sube de liga.",
+    "rules": "Los primeros suben de liga y los últimos bajan al terminar la semana.",
+    "anonymous": "Alumno anónimo",
+    "you": "{{name}} (tú)",
+    "xp": "{{count}} EXP",
+    "rankLabel": "Lugar {{rank}}: {{name}}, {{xp}}",
+    "promotionZone": "Zona de ascenso",
+    "demotionZone": "Zona de descenso",
+    "result": {
+      "promoted": "¡Subiste de liga! Quedaste en el lugar {{rank}} con {{xp}} EXP.",
+      "stayed": "Te quedaste en tu liga: lugar {{rank}} con {{xp}} EXP.",
+      "demoted": "Bajaste de liga: lugar {{rank}} con {{xp}} EXP. ¡Esta semana puedes recuperarla!"
+    }
   },
   "profile": {
     "title": "Perfil",

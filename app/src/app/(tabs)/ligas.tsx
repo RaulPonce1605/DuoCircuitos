@@ -1,13 +1,10 @@
-import { useTranslation } from "react-i18next";
-
-import { EmptyState } from "@/components/empty-state";
+import { LeagueView } from "@/components/leagues/league-view";
 import { Screen } from "@/components/ui";
 
 export default function LeaguesScreen() {
-  const { t } = useTranslation();
   return (
-    <Screen>
-      <EmptyState icon="podium" title={t("leagues.title")} message={t("leagues.empty")} />
+    <Screen scroll>
+      <LeagueView />
     </Screen>
   );
 }
