@@ -224,10 +224,20 @@ export interface components {
             correct: boolean;
             /** Correct Answer */
             correct_answer: string;
+            energy: components["schemas"]["EnergyRead"];
             /** Explanation */
             explanation: string;
             next_exercise: components["schemas"]["ExerciseInstanceRead"] | null;
             progress: components["schemas"]["LessonProgressRead"];
+        };
+        /** EnergyRead */
+        EnergyRead: {
+            /** Current */
+            current: number;
+            /** Max */
+            max: number;
+            /** Next Refill At */
+            next_refill_at: string | null;
         };
         /**
          * ErrorRead
@@ -283,6 +293,7 @@ export interface components {
              */
             attempt_id: string;
             current_exercise: components["schemas"]["ExerciseInstanceRead"];
+            energy: components["schemas"]["EnergyRead"];
             lesson: components["schemas"]["LessonRefRead"];
             progress: components["schemas"]["LessonProgressRead"];
         };
@@ -525,6 +536,7 @@ export interface components {
             display_name: string;
             /** Email */
             email: string;
+            energy: components["schemas"]["EnergyRead"];
             /**
              * Id
              * Format: uuid
@@ -772,7 +784,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorRead"];
                 };
             };
-            /** @description already_answered, not_current_exercise */
+            /** @description already_answered, not_current_exercise, not_enough_energy */
             409: {
                 headers: {
                     [name: string]: unknown;
@@ -979,7 +991,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorRead"];
                 };
             };
-            /** @description node_locked */
+            /** @description node_locked, not_enough_energy */
             409: {
                 headers: {
                     [name: string]: unknown;

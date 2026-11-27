@@ -52,6 +52,10 @@ class Settings(BaseSettings):
     xp_per_exercise_first_try: int = Field(default=10, ge=0)
     xp_per_exercise_retry: int = Field(default=5, ge=0)
     xp_perfect_lesson_bonus: int = Field(default=5, ge=0)
+    # Energía (docs/diseno/energia.md): se gasta al fallar y se recarga una unidad cada N minutos.
+    energy_max: int = Field(default=5, ge=1)
+    energy_cost_per_mistake: int = Field(default=1, ge=0)
+    energy_refill_minutes: int = Field(default=30, ge=1)
 
     @model_validator(mode="after")
     def _llm_is_complete(self) -> Self:

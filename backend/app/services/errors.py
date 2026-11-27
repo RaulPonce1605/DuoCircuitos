@@ -69,3 +69,9 @@ class TutorExerciseLimit(DomainError):
     """El alumno ya pidió ayuda el máximo de veces para este ejercicio."""
 
     code = "tutor_exercise_limit"
+
+
+class NotEnoughEnergy(DomainError):
+    """El alumno se quedó sin energía: debe esperar a que se recargue."""
+
+    code = "not_enough_energy"
