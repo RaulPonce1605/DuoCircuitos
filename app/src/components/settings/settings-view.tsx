@@ -4,6 +4,7 @@ import { ActivityIndicator, Switch, View } from "react-native";
 
 import { AppText, Button, Card, ListRow, Screen, TextField } from "@/components/ui";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import { useNotificationPermission } from "@/hooks/use-reminders";
 import { useSession } from "@/hooks/use-session";
 import { useTheme } from "@/hooks/use-theme";
 import { useUpdateUser } from "@/hooks/use-update-user";
@@ -30,6 +31,7 @@ function SettingsForm({ user }: { user: User }) {
   const theme = useTheme();
   const { signOut } = useSession();
   const update = useUpdateUser();
+  const permission = useNotificationPermission();
   const [name, setName] = useState(user.display_name);
   const device = deviceTimezone();
   const trimmed = name.trim();
@@ -89,6 +91,11 @@ function SettingsForm({ user }: { user: User }) {
         <AppText variant="caption" color="textMuted">
           {t("settings.notificationsNote")}
         </AppText>
+        {permission === "denied" ? (
+          <AppText variant="caption" color="warning">
+            {t("settings.notificationsDenied")}
+          </AppText>
+        ) : null}
       </Section>
 
       <Section title={t("settings.privacy")}>

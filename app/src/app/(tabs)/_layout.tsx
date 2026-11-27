@@ -2,6 +2,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Redirect, Tabs } from "expo-router";
 import { useTranslation } from "react-i18next";
 
+import { RemindersManager } from "@/components/reminders-manager";
 import { TAB_ROUTES } from "@/components/tab-routes";
 import { useSession } from "@/hooks/use-session";
 import { useTheme } from "@/hooks/use-theme";
@@ -16,6 +17,8 @@ export default function TabsLayout() {
     return <Redirect href="/login" />;
   }
   return (
+    <>
+    <RemindersManager />
     <Tabs
       screenOptions={{
         headerShown: false,
@@ -45,5 +48,6 @@ export default function TabsLayout() {
         />
       ))}
     </Tabs>
+    </>
   );
 }
