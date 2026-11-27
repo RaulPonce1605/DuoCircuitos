@@ -658,6 +658,30 @@
         "title": "FillPatternPublic",
         "type": "object"
       },
+      "FriendsRead": {
+        "properties": {
+          "followers": {
+            "items": {
+              "$ref": "#/components/schemas/UserCardRead"
+            },
+            "title": "Followers",
+            "type": "array"
+          },
+          "following": {
+            "items": {
+              "$ref": "#/components/schemas/UserCardRead"
+            },
+            "title": "Following",
+            "type": "array"
+          }
+        },
+        "required": [
+          "following",
+          "followers"
+        ],
+        "title": "FriendsRead",
+        "type": "object"
+      },
       "GridPoint": {
         "description": "Punto de la cuadrícula del diagrama: x a la derecha, y hacia abajo.",
         "properties": {
@@ -1560,6 +1584,63 @@
         "title": "UnitRead",
         "type": "object"
       },
+      "UserCardRead": {
+        "description": "Otro alumno como lo ve el que pregunta. Un perfil privado sale sin nombre.",
+        "properties": {
+          "display_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Display Name"
+          },
+          "follows_me": {
+            "title": "Follows Me",
+            "type": "boolean"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "is_following": {
+            "title": "Is Following",
+            "type": "boolean"
+          },
+          "league_tier": {
+            "title": "League Tier",
+            "type": "integer"
+          },
+          "league_tier_id": {
+            "title": "League Tier Id",
+            "type": "string"
+          },
+          "streak": {
+            "title": "Streak",
+            "type": "integer"
+          },
+          "xp_total": {
+            "title": "Xp Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "display_name",
+          "xp_total",
+          "streak",
+          "league_tier",
+          "league_tier_id",
+          "is_following",
+          "follows_me"
+        ],
+        "title": "UserCardRead",
+        "type": "object"
+      },
       "UserRead": {
         "properties": {
           "coins": {
@@ -2270,6 +2351,53 @@
         ]
       }
     },
+    "/friends": {
+      "get": {
+        "description": "A quiénes sigo y quiénes me siguen.",
+        "operationId": "getFriends",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FriendsRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "invalid_token"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorRead"
+                }
+              }
+            },
+            "description": "validation_error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Friends",
+        "tags": [
+          "social"
+        ]
+      }
+    },
     "/health": {
       "get": {
         "operationId": "getHealth",
@@ -2939,6 +3067,213 @@
         "summary": "Buy Shop Item",
         "tags": [
           "shop"
+        ]
+      }
+    },
+    "/users/search": {
+      "get": {
+        "description": "Busca perfiles públicos por nombre (mínimo 2 letras).",
+        "operationId": "searchUsers",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "required": true,
+            "schema": {
+              "maxLength": 50,
+              "title": "Q",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/UserCardRead"
+                  },
+                  "title": "Response Searchusers",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "invalid_token"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorRead"
+                }
+              }
+            },
+            "description": "validation_error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Search Users",
+        "tags": [
+          "social"
+        ]
+      }
+    },
+    "/users/{user_id}/follow": {
+      "delete": {
+        "operationId": "unfollowUser",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "User Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserCardRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "invalid_token"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "not_found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorRead"
+                }
+              }
+            },
+            "description": "validation_error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Unfollow User",
+        "tags": [
+          "social"
+        ]
+      },
+      "post": {
+        "operationId": "followUser",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "User Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserCardRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "invalid_token"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "not_found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "cannot_follow_self"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorRead"
+                }
+              }
+            },
+            "description": "validation_error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Follow User",
+        "tags": [
+          "social"
         ]
       }
     }

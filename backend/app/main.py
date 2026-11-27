@@ -10,6 +10,7 @@ from app.api import (
     lessons,
     path,
     shop,
+    social,
     tutor,
     users,
 )
@@ -38,6 +39,7 @@ def create_app() -> FastAPI:
     app.include_router(challenges.router)
     app.include_router(leagues.router)
     app.include_router(shop.router)
+    app.include_router(social.router)
     return app
 
 

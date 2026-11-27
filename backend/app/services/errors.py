@@ -103,3 +103,7 @@ class StreakFreezeLimit(DomainError):
     """Ya tiene guardados todos los protectores de racha que se permiten."""
 
     code = "streak_freeze_limit"
+
+
+class CannotFollowSelf(DomainError):
+    code = "cannot_follow_self"

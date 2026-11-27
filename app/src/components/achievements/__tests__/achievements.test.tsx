@@ -81,10 +81,11 @@ describe("MoreMenu", () => {
       </AppProviders>,
     );
 
+    await fireEvent.press(screen.getByRole("button", { name: es.more.friends }));
     await fireEvent.press(screen.getByRole("button", { name: es.more.achievements }));
     await fireEvent.press(screen.getByRole("button", { name: es.more.badges }));
     await fireEvent.press(screen.getByRole("button", { name: es.more.shop }));
     await fireEvent.press(screen.getByRole("button", { name: es.more.settings }));
-    expect(mockPush.mock.calls).toEqual([["/logros"], ["/medallas"], ["/tienda"], ["/configuracion"]]);
+    expect(mockPush.mock.calls).toEqual([["/amigos"], ["/logros"], ["/medallas"], ["/tienda"], ["/configuracion"]]);
   });
 });

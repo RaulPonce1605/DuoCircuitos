@@ -241,7 +241,8 @@
     "achievements": "Logros",
     "badges": "Medallas",
     "settings": "Configuración",
-    "shop": "Tienda"
+    "shop": "Tienda",
+    "friends": "Amigos"
   },
   "errors": {
     "unknown": "Algo salió mal. Intenta de nuevo.",
@@ -263,7 +264,8 @@
     "not_a_chest": "Ese paso del camino no es un cofre.",
     "not_enough_coins": "No te alcanzan las monedas.",
     "energy_already_full": "Tu energía ya está llena.",
-    "streak_freeze_limit": "Ya tienes el máximo de protectores de racha."
+    "streak_freeze_limit": "Ya tienes el máximo de protectores de racha.",
+    "cannot_follow_self": "No puedes seguirte a ti mismo."
   },
   "achievements": {
     "title": "Logros",
@@ -369,5 +371,21 @@
       "energy_already_full": "Tu energía ya está llena.",
       "streak_freeze_limit": "Ya tienes el máximo guardado."
     }
+  },
+  "friends": {
+    "title": "Amigos",
+    "loading": "Cargando tus amigos",
+    "searchLabel": "Buscar alumnos",
+    "searchHint": "Escribe al menos 2 letras del nombre. Solo aparecen los perfiles públicos.",
+    "noResults": "No encontramos a nadie con ese nombre.",
+    "following": "Siguiendo",
+    "followers": "Seguidores",
+    "emptyFollowing": "Aún no sigues a nadie. Busca a tus compañeros arriba.",
+    "emptyFollowers": "Aún nadie te sigue.",
+    "follow": "Seguir",
+    "unfollow": "Dejar de seguir",
+    "mutual": "Amigos",
+    "followsYou": "Te sigue",
+    "stats": "{{xp}} EXP · racha de {{streak}} · Liga {{tier}}"
   }
 }
