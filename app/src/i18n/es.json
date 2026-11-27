@@ -141,7 +141,30 @@
   },
   "challenges": {
     "title": "Desafíos",
-    "empty": "Los desafíos diarios y mensuales llegan pronto."
+    "loading": "Cargando tus desafíos",
+    "daily": "Desafíos de hoy",
+    "monthly": "Desafío del mes",
+    "dailyEnds_one": "Cambian en {{count}} hora",
+    "dailyEnds_other": "Cambian en {{count}} horas",
+    "monthlyEnds_one": "Termina en {{count}} día",
+    "monthlyEnds_other": "Termina en {{count}} días",
+    "progress": "{{progress}} de {{goal}}",
+    "progressLabel": "Progreso: {{name}}",
+    "reward": "+{{count}} EXP",
+    "done": "¡Cumplido!",
+    "empty": "Hoy no hay desafíos. Vuelve mañana.",
+    "kind": {
+      "earn_xp_one": "Gana {{count}} EXP",
+      "earn_xp_other": "Gana {{count}} EXP",
+      "complete_lessons_one": "Termina {{count}} lección",
+      "complete_lessons_other": "Termina {{count}} lecciones",
+      "first_try_correct_one": "Acierta {{count}} ejercicio al primer intento",
+      "first_try_correct_other": "Acierta {{count}} ejercicios al primer intento",
+      "perfect_lessons_one": "Termina {{count}} lección sin errores",
+      "perfect_lessons_other": "Termina {{count}} lecciones sin errores",
+      "open_chests_one": "Abre {{count}} cofre",
+      "open_chests_other": "Abre {{count}} cofres"
+    }
   },
   "leagues": {
     "title": "Ligas",
