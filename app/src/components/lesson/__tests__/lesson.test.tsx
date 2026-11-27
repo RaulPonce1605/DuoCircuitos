@@ -34,6 +34,7 @@ const ATTEMPT: LessonAttempt = {
   lesson: { slug: "ohm-01", title: "Voltaje, corriente y resistencia" },
   progress: { completed: 0, total: 2 },
   current_exercise: MC,
+  energy: { current: 5, max: 5, next_refill_at: null },
 };
 
 function result(overrides: Partial<CheckResult>): CheckResult {
@@ -44,6 +45,7 @@ function result(overrides: Partial<CheckResult>): CheckResult {
     progress: { completed: 1, total: 2 },
     next_exercise: NUM,
     attempt_completed: false,
+    energy: { current: 5, max: 5, next_refill_at: null },
     ...overrides,
   };
 }

@@ -27,6 +27,7 @@ const USER: User = {
   streak_current: 0,
   streak_longest: 0,
   created_at: "2026-11-23T00:00:00Z",
+  energy: { current: 5, max: 5, next_refill_at: null },
 };
 
 function auth(access: string, refresh: string | null = `refresh-${access}`) {

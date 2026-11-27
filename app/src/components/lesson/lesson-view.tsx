@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Pressable, View } from "react-native";
 
 import { ExerciseRenderer } from "@/components/exercises/registry";
+import { EnergyCounter } from "@/components/gamification/energy-counter";
 import { FeedbackPanel } from "@/components/lesson/feedback-panel";
 import { TutorPanel } from "@/components/lesson/tutor-panel";
 import { AppText, Button, ProgressBar, Screen } from "@/components/ui";
@@ -17,7 +18,7 @@ export function LessonView({ lessonSlug }: { lessonSlug: string }) {
   const theme = useTheme();
   const router = useRouter();
   const session = useLessonSession(lessonSlug);
-  const { attempt, exercise, progress, feedback } = session;
+  const { attempt, exercise, progress, feedback, energy } = session;
   // Se guarda para qué ejercicio se abrió: al pasar al siguiente, el panel se cierra solo.
   const [helpFor, setHelpFor] = useState<string | null>(null);
 
@@ -47,6 +48,7 @@ export function LessonView({ lessonSlug }: { lessonSlug: string }) {
           accessibilityLabel={t("lesson.progress")}
         />
       </View>
+      {energy ? <EnergyCounter energy={energy} /> : null}
     </View>
   );
 
