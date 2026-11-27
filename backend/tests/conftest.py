@@ -23,7 +23,7 @@ if not (Path(__file__).resolve().parents[1] / ".env").exists():
     os.environ.setdefault("POSTGRES_DB", "circuitos")
     os.environ.setdefault("JWT_SECRET", "solo-para-pruebas")
 
-from app.core.config import get_settings
+from app.core.config import ChallengeTemplate, get_settings
 from app.core.db import get_db
 from app.main import app
 from app.models import Base
@@ -150,3 +150,25 @@ def use_tutor_provider() -> Iterator[Callable[[TutorProvider | None], None]]:
 
     yield _use
     app.dependency_overrides.pop(get_tutor_provider, None)
+
+
+# --- Desafíos: que no repartan EXP sin que la prueba lo pida -------------------------------
+
+
+@pytest.fixture(autouse=True)
+def _unreachable_challenges(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Los desafíos diarios se eligen al azar y dan EXP al cumplirse; eso cambiaría las cuentas
+    exactas de EXP de otras pruebas. Aquí nunca se cumplen. Las pruebas de desafíos ponen sus
+    propias metas."""
+    from app.core.config import (
+        DEFAULT_DAILY_CHALLENGES,
+        DEFAULT_MONTHLY_CHALLENGES,
+        get_settings,
+    )
+
+    def unreachable(templates: list[ChallengeTemplate]) -> list[ChallengeTemplate]:
+        return [template.model_copy(update={"goal": 10**9}) for template in templates]
+
+    settings = get_settings()
+    monkeypatch.setattr(settings, "daily_challenges", unreachable(DEFAULT_DAILY_CHALLENGES))
+    monkeypatch.setattr(settings, "monthly_challenges", unreachable(DEFAULT_MONTHLY_CHALLENGES))

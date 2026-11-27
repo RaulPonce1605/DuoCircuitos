@@ -151,6 +151,106 @@
         "title": "BadgeRead",
         "type": "object"
       },
+      "ChallengeRead": {
+        "description": "Un desafío. La app arma el texto con i18n: `challenges.kind.<kind>` y `goal`.",
+        "properties": {
+          "completed_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          },
+          "goal": {
+            "title": "Goal",
+            "type": "integer"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "earn_xp",
+              "complete_lessons",
+              "first_try_correct",
+              "perfect_lessons",
+              "open_chests"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "period": {
+            "enum": [
+              "daily",
+              "monthly"
+            ],
+            "title": "Period",
+            "type": "string"
+          },
+          "progress": {
+            "title": "Progress",
+            "type": "integer"
+          },
+          "reward_xp": {
+            "title": "Reward Xp",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "period",
+          "kind",
+          "goal",
+          "progress",
+          "reward_xp",
+          "completed_at"
+        ],
+        "title": "ChallengeRead",
+        "type": "object"
+      },
+      "ChallengesRead": {
+        "properties": {
+          "daily": {
+            "items": {
+              "$ref": "#/components/schemas/ChallengeRead"
+            },
+            "title": "Daily",
+            "type": "array"
+          },
+          "daily_ends_at": {
+            "format": "date-time",
+            "title": "Daily Ends At",
+            "type": "string"
+          },
+          "monthly": {
+            "items": {
+              "$ref": "#/components/schemas/ChallengeRead"
+            },
+            "title": "Monthly",
+            "type": "array"
+          },
+          "monthly_ends_at": {
+            "format": "date-time",
+            "title": "Monthly Ends At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "daily",
+          "monthly",
+          "daily_ends_at",
+          "monthly_ends_at"
+        ],
+        "title": "ChallengesRead",
+        "type": "object"
+      },
       "CheckRequest": {
         "properties": {
           "answer": {
@@ -1378,6 +1478,43 @@
         "summary": "Register",
         "tags": [
           "auth"
+        ]
+      }
+    },
+    "/challenges": {
+      "get": {
+        "description": "Los desafíos de hoy y del mes, con su avance. Se crean solos si aún no existen.",
+        "operationId": "getChallenges",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChallengesRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "invalid_token"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Challenges",
+        "tags": [
+          "challenges"
         ]
       }
     },

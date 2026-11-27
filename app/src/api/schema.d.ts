@@ -72,6 +72,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/challenges": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Challenges
+         * @description Los desafíos de hoy y del mes, con su avance. Se crean solos si aún no existen.
+         */
+        get: operations["getChallenges"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/chests/{chest_id}/open": {
         parameters: {
             query?: never;
@@ -332,6 +352,52 @@ export interface components {
             level: number;
             /** Threshold */
             threshold: number;
+        };
+        /**
+         * ChallengeRead
+         * @description Un desafío. La app arma el texto con i18n: `challenges.kind.<kind>` y `goal`.
+         */
+        ChallengeRead: {
+            /** Completed At */
+            completed_at: string | null;
+            /** Goal */
+            goal: number;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "earn_xp" | "complete_lessons" | "first_try_correct" | "perfect_lessons" | "open_chests";
+            /**
+             * Period
+             * @enum {string}
+             */
+            period: "daily" | "monthly";
+            /** Progress */
+            progress: number;
+            /** Reward Xp */
+            reward_xp: number;
+        };
+        /** ChallengesRead */
+        ChallengesRead: {
+            /** Daily */
+            daily: components["schemas"]["ChallengeRead"][];
+            /**
+             * Daily Ends At
+             * Format: date-time
+             */
+            daily_ends_at: string;
+            /** Monthly */
+            monthly: components["schemas"]["ChallengeRead"][];
+            /**
+             * Monthly Ends At
+             * Format: date-time
+             */
+            monthly_ends_at: string;
         };
         /** CheckRequest */
         CheckRequest: {
@@ -905,6 +971,35 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ValidationErrorRead"];
+                };
+            };
+        };
+    };
+    getChallenges: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChallengesRead"];
+                };
+            };
+            /** @description invalid_token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
                 };
             };
         };

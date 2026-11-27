@@ -17,7 +17,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import get_settings
 from app.models import Chest, LessonAttempt, NodeProgress, User, XpEvent
 from app.schemas.achievements import BadgeRead, ChestRead, ChestRewardRead
-from app.services import achievements, energy
+from app.services import achievements, challenges, energy
 from app.services import path as path_service
 from app.services.errors import NotAChest, NotFound
 from app.services.users import energy_read
@@ -76,6 +76,7 @@ async def _open(db: AsyncSession, user: User, chest: Chest, now: datetime) -> Ch
             db.add(XpEvent(user_id=user.id, amount=xp, source="chest"))
         energy.refill(user, energy_reward, now)
         await db.flush()
+        await challenges.record(db, user, now, {"earn_xp": xp, "open_chests": 1})
         new_badges = await achievements.evaluate(db, user, now)
     read = _chest_read(chest, user, now, new_badges)
     await db.commit()
