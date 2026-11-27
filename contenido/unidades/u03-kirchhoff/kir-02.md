@@ -82,6 +82,27 @@ ejercicios:
     pistas:
       - "En un nodo se juntan varias ramas: ¿qué magnitud entra y sale por ellas?"
       - "Es la ley que dice que lo que entra a un nodo tiene que salir."
+
+  - id: kir-02-diagrama-malla
+    tipo: circuit_diagram
+    enunciado: "Toca los tres elementos que forman la malla de la izquierda."
+    diagrama:
+      elementos:
+        - { id: v1, tipo: fuente_voltaje, desde: [0, 2], hasta: [0, 0], etiqueta: "V1" }
+        - { id: w1, tipo: cable, desde: [0, 0], hasta: [1, 0] }
+        - { id: r1, tipo: resistor, desde: [1, 0], hasta: [3, 0], etiqueta: "R1" }
+        - { id: r2, tipo: resistor, desde: [3, 0], hasta: [3, 2], etiqueta: "R2" }
+        - { id: w2, tipo: cable, desde: [3, 0], hasta: [4, 0] }
+        - { id: r3, tipo: resistor, desde: [4, 0], hasta: [6, 0], etiqueta: "R3" }
+        - { id: v2, tipo: fuente_voltaje, desde: [6, 0], hasta: [6, 2], etiqueta: "V2" }
+        - { id: w3, tipo: cable, desde: [6, 2], hasta: [3, 2] }
+        - { id: w4, tipo: cable, desde: [3, 2], hasta: [0, 2] }
+    correctos: [v1, r1, r2]
+    explicacion: "Una malla es un camino cerrado que no tiene otro camino cerrado adentro. La de la izquierda pasa por la fuente de la izquierda, por R1 y regresa por R2, que es la rama que comparten las dos mallas."
+    pistas:
+      - "Una malla es un camino cerrado del circuito que no encierra a otro."
+      - "La rama del centro pertenece a las dos mallas."
+
 ---
 
 El **análisis de nodos** y el **análisis de mallas** son métodos ordenados para resolver circuitos que no se reducen solo con serie y paralelo. En los dos se obtiene un sistema de ecuaciones.

@@ -79,6 +79,28 @@ ejercicios:
     pistas:
       - "Vth se mide sin conectar ninguna carga entre a y b."
       - "Sin carga, no circula corriente entre a y b."
+
+  - id: thev-01-diagrama-apagar
+    tipo: circuit_diagram
+    enunciado: "Para calcular la resistencia de Thévenin vista desde a y b, ¿qué elemento se reemplaza por un cable (un corto)? Tócalo."
+    diagrama:
+      elementos:
+        - { id: v1, tipo: fuente_voltaje, desde: [0, 2], hasta: [0, 0], etiqueta: "V1" }
+        - { id: w1, tipo: cable, desde: [0, 0], hasta: [1, 0] }
+        - { id: r1, tipo: resistor, desde: [1, 0], hasta: [3, 0], etiqueta: "R1" }
+        - { id: r2, tipo: resistor, desde: [3, 0], hasta: [3, 2], etiqueta: "R2" }
+        - { id: w2, tipo: cable, desde: [3, 0], hasta: [5, 0] }
+        - { id: w3, tipo: cable, desde: [3, 2], hasta: [5, 2] }
+        - { id: w4, tipo: cable, desde: [3, 2], hasta: [0, 2] }
+      nodos:
+        - { punto: [5, 0], etiqueta: "a" }
+        - { punto: [5, 2], etiqueta: "b" }
+    correctos: [v1]
+    explicacion: "Para Rth se apagan las fuentes independientes: una fuente de voltaje apagada vale 0 V, así que se reemplaza por un cable. Los resistores se quedan donde están."
+    pistas:
+      - "Para Rth se apagan las fuentes independientes."
+      - "Una fuente de voltaje apagada vale 0 V: ¿qué elemento tiene 0 V entre sus extremos?"
+
 ---
 
 El **teorema de Thévenin** dice que cualquier circuito lineal, visto desde dos terminales a y b, se comporta igual que una sola fuente de voltaje **Vth** en serie con una sola resistencia **Rth**. Ese par es el **equivalente de Thévenin**.
