@@ -1,15 +1,16 @@
 from fastapi import APIRouter
 
 from app.api.deps import CurrentUser
-from app.api.errors import error_responses
+from app.api.errors import VALIDATION_ERROR_RESPONSES, error_responses
 from app.core.db import DbSession
 from app.schemas.achievements import AchievementsRead
-from app.schemas.user import UserRead
+from app.schemas.user import UserRead, UserUpdate
 from app.services import achievements as achievement_service
+from app.services import users as user_service
 from app.services.errors import InvalidToken
 from app.services.users import user_read
 
-router = APIRouter(tags=["users"])
+router = APIRouter(tags=["users"], responses=VALIDATION_ERROR_RESPONSES)
 
 
 @router.get(
@@ -20,6 +21,17 @@ router = APIRouter(tags=["users"])
 )
 async def get_me(user: CurrentUser) -> UserRead:
     return user_read(user)
+
+
+@router.patch(
+    "/me",
+    response_model=UserRead,
+    operation_id="updateCurrentUser",
+    responses=error_responses(InvalidToken),
+)
+async def update_me(body: UserUpdate, db: DbSession, user: CurrentUser) -> UserRead:
+    """Configuración: nombre, zona horaria, notificaciones y privacidad."""
+    return await user_service.update(db, user, body)
 
 
 @router.get(

@@ -1187,6 +1187,18 @@
             "title": "Id",
             "type": "string"
           },
+          "notify_challenges": {
+            "title": "Notify Challenges",
+            "type": "boolean"
+          },
+          "notify_streak_reminder": {
+            "title": "Notify Streak Reminder",
+            "type": "boolean"
+          },
+          "profile_public": {
+            "title": "Profile Public",
+            "type": "boolean"
+          },
           "streak_current": {
             "title": "Streak Current",
             "type": "integer"
@@ -1213,9 +1225,78 @@
           "streak_current",
           "streak_longest",
           "created_at",
-          "energy"
+          "energy",
+          "notify_streak_reminder",
+          "notify_challenges",
+          "profile_public"
         ],
         "title": "UserRead",
+        "type": "object"
+      },
+      "UserUpdate": {
+        "additionalProperties": false,
+        "description": "Lo que el alumno puede cambiar en Configuración. Solo se cambia lo que se manda.",
+        "properties": {
+          "display_name": {
+            "anyOf": [
+              {
+                "maxLength": 50,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Display Name"
+          },
+          "notify_challenges": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notify Challenges"
+          },
+          "notify_streak_reminder": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notify Streak Reminder"
+          },
+          "profile_public": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profile Public"
+          },
+          "timezone": {
+            "anyOf": [
+              {
+                "maxLength": 64,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone"
+          }
+        },
+        "title": "UserUpdate",
         "type": "object"
       },
       "ValidationErrorRead": {
@@ -1972,6 +2053,16 @@
               }
             },
             "description": "invalid_token"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorRead"
+                }
+              }
+            },
+            "description": "validation_error"
           }
         },
         "security": [
@@ -1980,6 +2071,61 @@
           }
         ],
         "summary": "Get Me",
+        "tags": [
+          "users"
+        ]
+      },
+      "patch": {
+        "description": "Configuración: nombre, zona horaria, notificaciones y privacidad.",
+        "operationId": "updateCurrentUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "invalid_token"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorRead"
+                }
+              }
+            },
+            "description": "validation_error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Update Me",
         "tags": [
           "users"
         ]
@@ -2009,6 +2155,16 @@
               }
             },
             "description": "invalid_token"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorRead"
+                }
+              }
+            },
+            "description": "validation_error"
           }
         },
         "security": [
