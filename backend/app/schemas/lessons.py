@@ -3,6 +3,7 @@ import uuid
 from pydantic import BaseModel
 
 from app.schemas.exercises import ExerciseAnswer, ExercisePublic
+from app.schemas.user import EnergyRead
 
 
 class LessonRefRead(BaseModel):
@@ -26,6 +27,7 @@ class LessonAttemptRead(BaseModel):
     lesson: LessonRefRead
     progress: LessonProgressRead
     current_exercise: ExerciseInstanceRead
+    energy: EnergyRead
 
 
 class CheckRequest(BaseModel):
@@ -41,6 +43,8 @@ class CheckResultRead(BaseModel):
     # El siguiente ejercicio de la cola; null si la lección terminó.
     next_exercise: ExerciseInstanceRead | None
     attempt_completed: bool
+    # La energía después de esta respuesta (un fallo gasta).
+    energy: EnergyRead
 
 
 class LessonAttemptSummaryRead(BaseModel):

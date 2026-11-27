@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { ExerciseAnswer } from "@/components/exercises/types";
 import { CURRENT_USER_QUERY_KEY } from "@/hooks/use-current-user";
 import { PATH_QUERY_KEY } from "@/hooks/use-path";
+import type { Energy } from "@/services/auth-service";
 import {
   type CheckResult,
   type ExerciseInstance,
@@ -36,6 +37,7 @@ export function useLessonSession(lessonSlug: string) {
   const [progress, setProgress] = useState<Progress | null>(null);
   const [answer, setAnswer] = useState<ExerciseAnswer | null>(null);
   const [feedback, setFeedback] = useState<CheckResult | null>(null);
+  const [energy, setEnergy] = useState<Energy | null>(null);
 
   const exercise = current ?? attempt.data?.current_exercise ?? null;
 
@@ -45,10 +47,11 @@ export function useLessonSession(lessonSlug: string) {
     onSuccess: (result) => {
       setFeedback(result);
       setProgress(result.progress);
+      setEnergy(result.energy);
+      // La energía (al fallar) o la EXP y la racha (al terminar) cambiaron en el backend.
+      void queryClient.invalidateQueries({ queryKey: CURRENT_USER_QUERY_KEY });
       if (result.attempt_completed) {
-        // EXP, racha y nodos desbloqueados cambiaron en el backend.
         void queryClient.invalidateQueries({ queryKey: PATH_QUERY_KEY });
-        void queryClient.invalidateQueries({ queryKey: CURRENT_USER_QUERY_KEY });
       }
     },
   });
@@ -57,6 +60,7 @@ export function useLessonSession(lessonSlug: string) {
     attempt,
     exercise,
     progress: progress ?? attempt.data?.progress ?? null,
+    energy: energy ?? attempt.data?.energy ?? null,
     answer,
     feedback,
     checkError: check.error,

@@ -16,6 +16,7 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
+from app.core.config import get_settings
 from app.models import Exercise, ExerciseInstance, LessonAttempt, Node, NodeProgress, User
 from app.schemas.exercises import ExerciseAnswer
 from app.schemas.lessons import (
@@ -26,7 +27,7 @@ from app.schemas.lessons import (
     LessonProgressRead,
     LessonRefRead,
 )
-from app.services import gamification
+from app.services import energy, gamification
 from app.services import path as path_service
 from app.services.errors import (
     AlreadyAnswered,
@@ -35,10 +36,13 @@ from app.services.errors import (
     NotFound,
 )
 from app.services.exercises import get_validator
+from app.services.users import energy_read
 
 
 async def start_attempt(db: AsyncSession, user: User, lesson_slug: str) -> LessonAttemptRead:
     lesson = await path_service.get_unlocked_lesson(db, user, lesson_slug)
+    now = datetime.now(UTC)
+    energy.require(user, now)
     exercises = list(
         await db.scalars(
             select(Exercise)
@@ -51,7 +55,7 @@ async def start_attempt(db: AsyncSession, user: User, lesson_slug: str) -> Lesso
     attempt = LessonAttempt(
         user_id=user.id,
         lesson_id=lesson.id,
-        started_at=datetime.now(UTC),
+        started_at=now,
         exercise_count=len(exercises),
     )
     db.add(attempt)
@@ -67,6 +71,7 @@ async def start_attempt(db: AsyncSession, user: User, lesson_slug: str) -> Lesso
         lesson=LessonRefRead(slug=lesson.slug, title=lesson.title),
         progress=LessonProgressRead(completed=0, total=attempt.exercise_count),
         current_exercise=_instance_read(instances[0], exercises[0]),
+        energy=energy_read(user, now),
     )
 
 
@@ -97,15 +102,20 @@ async def check_answer(
     if current is None or current.id != instance.id:
         raise NotCurrentExercise
 
+    now = datetime.now(UTC)
+    # Bloquea al usuario antes de tocar su energía (mismo orden que _complete: intento, usuario).
+    await db.refresh(user, with_for_update=True)
+    energy.require(user, now)
+
     exercise = instance.exercise
     validator = get_validator(exercise.type)
     outcome = validator.check(validator.parse_spec(exercise.spec), instance.state, answer)
 
-    now = datetime.now(UTC)
     instance.answer = answer.model_dump(mode="json")
     instance.is_correct = outcome.correct
     instance.answered_at = now
     if not outcome.correct:
+        energy.spend(user, get_settings().energy_cost_per_mistake, now)
         retry_position = await _next_position(db, attempt.id)
         db.add(_new_instance(attempt, exercise, retry_position, is_retry=True))
     await db.flush()
@@ -126,6 +136,7 @@ async def check_answer(
             _instance_read(next_instance, next_instance.exercise) if next_instance else None
         ),
         attempt_completed=next_instance is None,
+        energy=energy_read(user, now),
     )
 
 

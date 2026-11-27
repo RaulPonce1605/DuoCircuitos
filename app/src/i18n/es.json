@@ -40,6 +40,11 @@
     "xp_one": "{{count}} punto de EXP",
     "xp_other": "{{count}} puntos de EXP"
   },
+  "energy": {
+    "full": "Energía llena: {{current}} de {{max}}",
+    "refilling_one": "Energía: {{current}} de {{max}}. La siguiente llega en {{count}} minuto",
+    "refilling_other": "Energía: {{current}} de {{max}}. La siguiente llega en {{count}} minutos"
+  },
   "path": {
     "nodeType": {
       "lesson": "Lección",
@@ -137,6 +142,7 @@
     "attempt_not_completed": "La lección aún no termina.",
     "invalid_answer": "Esa respuesta no es válida para este ejercicio.",
     "tutor_rate_limited": "Pediste mucha ayuda en la última hora. Descansa un poco e intenta más tarde.",
-    "tutor_exercise_limit": "Ya usaste toda la ayuda para este ejercicio."
+    "tutor_exercise_limit": "Ya usaste toda la ayuda para este ejercicio.",
+    "not_enough_energy": "Te quedaste sin energía. Se recarga sola con el tiempo: vuelve en un rato."
   }
 }

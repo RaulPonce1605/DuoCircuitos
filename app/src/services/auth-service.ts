@@ -4,6 +4,7 @@ import { sessionStore } from "@/services/session-store";
 import { tokenStore } from "@/services/token-store";
 
 export type User = components["schemas"]["UserRead"];
+export type Energy = components["schemas"]["EnergyRead"];
 type AuthRead = components["schemas"]["AuthRead"];
 type SessionListener = (user: User | null) => void;
 

@@ -42,4 +42,4 @@ Se calcula **una sola vez**, al terminar la lección:
 
 ## 5. Fuera de la fase 1
 
-Energía, desafíos, ligas, cofres y logros (fases 2 y 3). Este documento se actualiza cuando lleguen.
+Energía: `docs/diseno/energia.md`. Desafíos, ligas, cofres y logros (fases 2 y 3): en sus propios documentos de `docs/diseno/`.

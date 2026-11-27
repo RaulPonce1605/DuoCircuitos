@@ -19,6 +19,7 @@ from app.services.errors import (
     InvalidToken,
     NodeLocked,
     NotCurrentExercise,
+    NotEnoughEnergy,
     NotFound,
 )
 
@@ -30,7 +31,7 @@ router = APIRouter(tags=["lessons"], responses=VALIDATION_ERROR_RESPONSES)
     response_model=LessonAttemptRead,
     status_code=201,
     operation_id="startLesson",
-    responses=error_responses(InvalidToken, NotFound, NodeLocked),
+    responses=error_responses(InvalidToken, NotFound, NodeLocked, NotEnoughEnergy),
 )
 async def start_lesson(lesson_slug: str, db: DbSession, user: CurrentUser) -> LessonAttemptRead:
     return await lesson_service.start_attempt(db, user, lesson_slug)
@@ -41,7 +42,7 @@ async def start_lesson(lesson_slug: str, db: DbSession, user: CurrentUser) -> Le
     response_model=CheckResultRead,
     operation_id="checkExercise",
     responses=error_responses(
-        InvalidToken, NotFound, AlreadyAnswered, NotCurrentExercise, InvalidAnswer
+        InvalidToken, NotFound, AlreadyAnswered, NotCurrentExercise, NotEnoughEnergy, InvalidAnswer
     ),
 )
 async def check_exercise(

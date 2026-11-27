@@ -26,6 +26,7 @@ export type ColorTokens = {
   // Gamificación
   xp: string;
   streak: string;
+  energy: string;
   locked: string;
 };
 
@@ -49,6 +50,7 @@ export const lightColors: ColorTokens = {
   warning: "#9A6B00",
   xp: "#8A5A00",
   streak: "#C2491D",
+  energy: "#2F5FB3",
   locked: "#A39C92",
 };
 
@@ -72,5 +74,6 @@ export const darkColors: ColorTokens = {
   warning: "#F2C14E",
   xp: "#F2C14E",
   streak: "#FF8A57",
+  energy: "#82AEF5",
   locked: "#5E676D",
 };

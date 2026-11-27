@@ -2,6 +2,7 @@ import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, View } from "react-native";
 
+import { EnergyCounter } from "@/components/gamification/energy-counter";
 import { UnitCard } from "@/components/path/unit-card";
 import { AppText, Button, Counter } from "@/components/ui";
 import { useCurrentUser } from "@/hooks/use-current-user";
@@ -40,6 +41,7 @@ export function PathView() {
               value={me.data.xp_total}
               accessibilityLabel={t("home.xp", { count: me.data.xp_total })}
             />
+            <EnergyCounter energy={me.data.energy} />
           </View>
         ) : null}
       </View>

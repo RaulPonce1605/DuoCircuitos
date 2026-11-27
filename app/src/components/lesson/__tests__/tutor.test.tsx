@@ -31,6 +31,7 @@ const ATTEMPT: LessonAttempt = {
     instance_id: "i-1",
     exercise: { type: "numeric", prompt: "Un resistor de 220 Ω a 5 V. ¿Corriente?", unit: "A" },
   },
+  energy: { current: 5, max: 5, next_refill_at: null },
 };
 
 beforeEach(() => {

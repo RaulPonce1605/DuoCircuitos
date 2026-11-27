@@ -43,7 +43,9 @@ const PATH: LearningPath = {
 
 beforeEach(() => {
   mockPush.mockReset();
-  mockUseCurrentUser.mockReturnValue({ data: { streak_current: 3, xp_total: 120 } });
+  mockUseCurrentUser.mockReturnValue({
+    data: { streak_current: 3, xp_total: 120, energy: { current: 5, max: 5, next_refill_at: null } },
+  });
 });
 
 async function renderUnit(onOpenLesson = jest.fn()) {
@@ -104,7 +106,9 @@ describe("PathView", () => {
 
   it("usa singular con 1 día de racha", async () => {
     mockUsePath.mockReturnValue({ isPending: false, isError: false, data: PATH });
-    mockUseCurrentUser.mockReturnValue({ data: { streak_current: 1, xp_total: 1 } });
+    mockUseCurrentUser.mockReturnValue({
+      data: { streak_current: 1, xp_total: 1, energy: { current: 2, max: 5, next_refill_at: "2099-01-01T00:00:00Z" } },
+    });
     await render(
       <AppProviders>
         <PathView />

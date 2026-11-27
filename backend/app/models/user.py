@@ -1,5 +1,5 @@
 import uuid
-from datetime import date
+from datetime import date, datetime
 
 from sqlalchemy import CheckConstraint, String
 from sqlalchemy.orm import Mapped, mapped_column
@@ -13,6 +13,7 @@ class User(CreatedAtMixin, Base):
         CheckConstraint("xp_total >= 0", name="xp_total_non_negative"),
         CheckConstraint("streak_current >= 0", name="streak_current_non_negative"),
         CheckConstraint("streak_longest >= streak_current", name="streak_longest_gte_current"),
+        CheckConstraint("energy_used >= 0", name="energy_used_non_negative"),
     )
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
@@ -28,3 +29,9 @@ class User(CreatedAtMixin, Base):
     streak_longest: Mapped[int] = mapped_column(default=0, server_default="0")
     # Último día local en que terminó una lección (para calcular la racha).
     streak_last_date: Mapped[date | None]
+
+    # Energía gastada que aún no se recarga (0 = llena). Se guarda lo gastado, no lo que queda,
+    # para que cambiar ENERGY_MAX no deje a nadie con más energía que el máximo.
+    energy_used: Mapped[int] = mapped_column(default=0, server_default="0")
+    # Desde cuándo corre la recarga de la siguiente unidad. Solo importa si energy_used > 0.
+    energy_updated_at: Mapped[datetime | None]

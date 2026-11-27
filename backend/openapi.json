@@ -86,6 +86,9 @@
             "title": "Correct Answer",
             "type": "string"
           },
+          "energy": {
+            "$ref": "#/components/schemas/EnergyRead"
+          },
           "explanation": {
             "title": "Explanation",
             "type": "string"
@@ -110,9 +113,41 @@
           "explanation",
           "progress",
           "next_exercise",
-          "attempt_completed"
+          "attempt_completed",
+          "energy"
         ],
         "title": "CheckResultRead",
+        "type": "object"
+      },
+      "EnergyRead": {
+        "properties": {
+          "current": {
+            "title": "Current",
+            "type": "integer"
+          },
+          "max": {
+            "title": "Max",
+            "type": "integer"
+          },
+          "next_refill_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Refill At"
+          }
+        },
+        "required": [
+          "current",
+          "max",
+          "next_refill_at"
+        ],
+        "title": "EnergyRead",
         "type": "object"
       },
       "ErrorRead": {
@@ -229,6 +264,9 @@
           "current_exercise": {
             "$ref": "#/components/schemas/ExerciseInstanceRead"
           },
+          "energy": {
+            "$ref": "#/components/schemas/EnergyRead"
+          },
           "lesson": {
             "$ref": "#/components/schemas/LessonRefRead"
           },
@@ -240,7 +278,8 @@
           "attempt_id",
           "lesson",
           "progress",
-          "current_exercise"
+          "current_exercise",
+          "energy"
         ],
         "title": "LessonAttemptRead",
         "type": "object"
@@ -793,6 +832,9 @@
             "title": "Email",
             "type": "string"
           },
+          "energy": {
+            "$ref": "#/components/schemas/EnergyRead"
+          },
           "id": {
             "format": "uuid",
             "title": "Id",
@@ -823,7 +865,8 @@
           "xp_total",
           "streak_current",
           "streak_longest",
-          "created_at"
+          "created_at",
+          "energy"
         ],
         "title": "UserRead",
         "type": "object"
@@ -1155,7 +1198,7 @@
                 }
               }
             },
-            "description": "already_answered, not_current_exercise"
+            "description": "already_answered, not_current_exercise, not_enough_energy"
           },
           "422": {
             "content": {
@@ -1429,7 +1472,7 @@
                 }
               }
             },
-            "description": "node_locked"
+            "description": "node_locked, not_enough_energy"
           },
           "422": {
             "content": {
