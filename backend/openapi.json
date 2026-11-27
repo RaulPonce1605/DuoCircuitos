@@ -459,18 +459,7 @@
       "DiagramElementPublic": {
         "properties": {
           "end": {
-            "maxItems": 2,
-            "minItems": 2,
-            "prefixItems": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "integer"
-              }
-            ],
-            "title": "End",
-            "type": "array"
+            "$ref": "#/components/schemas/GridPoint"
           },
           "id": {
             "title": "Id",
@@ -504,18 +493,7 @@
             "title": "Label"
           },
           "start": {
-            "maxItems": 2,
-            "minItems": 2,
-            "prefixItems": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "integer"
-              }
-            ],
-            "title": "Start",
-            "type": "array"
+            "$ref": "#/components/schemas/GridPoint"
           }
         },
         "required": [
@@ -535,18 +513,7 @@
             "type": "string"
           },
           "point": {
-            "maxItems": 2,
-            "minItems": 2,
-            "prefixItems": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "integer"
-              }
-            ],
-            "title": "Point",
-            "type": "array"
+            "$ref": "#/components/schemas/GridPoint"
           }
         },
         "required": [
@@ -679,6 +646,25 @@
           "prompt"
         ],
         "title": "FillPatternPublic",
+        "type": "object"
+      },
+      "GridPoint": {
+        "description": "Punto de la cuadrícula del diagrama: x a la derecha, y hacia abajo.",
+        "properties": {
+          "x": {
+            "title": "X",
+            "type": "integer"
+          },
+          "y": {
+            "title": "Y",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "x",
+          "y"
+        ],
+        "title": "GridPoint",
         "type": "object"
       },
       "HealthRead": {

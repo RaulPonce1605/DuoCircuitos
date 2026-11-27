@@ -493,11 +493,7 @@ export interface components {
         };
         /** DiagramElementPublic */
         DiagramElementPublic: {
-            /** End */
-            end: [
-                number,
-                number
-            ];
+            end: components["schemas"]["GridPoint"];
             /** Id */
             id: string;
             /**
@@ -507,21 +503,13 @@ export interface components {
             kind: "wire" | "resistor" | "capacitor" | "inductor" | "voltage_source" | "current_source" | "ammeter" | "voltmeter" | "switch" | "lamp";
             /** Label */
             label: string | null;
-            /** Start */
-            start: [
-                number,
-                number
-            ];
+            start: components["schemas"]["GridPoint"];
         };
         /** DiagramNodePublic */
         DiagramNodePublic: {
             /** Label */
             label: string;
-            /** Point */
-            point: [
-                number,
-                number
-            ];
+            point: components["schemas"]["GridPoint"];
         };
         /** EnergyRead */
         EnergyRead: {
@@ -569,6 +557,16 @@ export interface components {
              * @enum {string}
              */
             type: "fill_pattern";
+        };
+        /**
+         * GridPoint
+         * @description Punto de la cuadrícula del diagrama: x a la derecha, y hacia abajo.
+         */
+        GridPoint: {
+            /** X */
+            x: number;
+            /** Y */
+            y: number;
         };
         /** HealthRead */
         HealthRead: {

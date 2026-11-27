@@ -46,18 +46,26 @@ DiagramElementKind = Literal[
 ]
 
 
+class GridPoint(BaseModel):
+    """Punto de la cuadrícula del diagrama: x a la derecha, y hacia abajo."""
+
+    x: int
+    y: int
+
+
 class DiagramElementPublic(BaseModel):
     id: str
     kind: DiagramElementKind
-    # Puntos de una cuadrícula (x a la derecha, y hacia abajo). Siempre horizontal o vertical.
-    start: tuple[int, int]
-    end: tuple[int, int]
+    # Siempre horizontal o vertical. En las fuentes, `end` es el lado + (o hacia donde va la
+    # corriente).
+    start: GridPoint
+    end: GridPoint
     # Null solo en los cables, que no se pueden tocar.
     label: str | None
 
 
 class DiagramNodePublic(BaseModel):
-    point: tuple[int, int]
+    point: GridPoint
     label: str
 
 

@@ -16,11 +16,17 @@ from app.schemas.exercises import (
     DiagramElementPublic,
     DiagramNodePublic,
     ExerciseAnswer,
+    GridPoint,
 )
 from app.services.errors import InvalidAnswer
 from app.services.exercises.base import CheckOutcome, ExerciseValidator
 from app.services.exercises.registry import register
 from app.services.exercises.text_match import phrase_spans
+
+
+def _point(point: tuple[int, int]) -> GridPoint:
+    return GridPoint(x=point[0], y=point[1])
+
 
 # El temario usa nombres en español; la API, en inglés (CLAUDE.md 5.1).
 KIND_IN_API: dict[DiagramKind, DiagramElementKind] = {
@@ -54,14 +60,15 @@ class CircuitDiagramValidator(ExerciseValidator[CircuitDiagramExercise]):
                 DiagramElementPublic(
                     id=element.id,
                     kind=KIND_IN_API[element.kind],
-                    start=element.start,
-                    end=element.end,
+                    start=_point(element.start),
+                    end=_point(element.end),
                     label=element.label,
                 )
                 for element in spec.diagram.elements
             ],
             nodes=[
-                DiagramNodePublic(point=node.point, label=node.label) for node in spec.diagram.nodes
+                DiagramNodePublic(point=_point(node.point), label=node.label)
+                for node in spec.diagram.nodes
             ],
         )
 
