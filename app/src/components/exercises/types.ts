@@ -6,7 +6,8 @@ type Schemas = components["schemas"];
 export type ExercisePublic =
   | Schemas["MultipleChoicePublic"]
   | Schemas["FillPatternPublic"]
-  | Schemas["NumericPublic"];
+  | Schemas["NumericPublic"]
+  | Schemas["CircuitDiagramPublic"];
 export type ExerciseAnswer = Schemas["CheckRequest"]["answer"];
 export type ExerciseType = ExercisePublic["type"];
 

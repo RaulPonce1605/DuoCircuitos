@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 
+import { CircuitDiagram } from "@/components/exercises/circuit_diagram/circuit-diagram";
 import { FillPattern } from "@/components/exercises/fill_pattern/fill-pattern";
 import { MultipleChoice } from "@/components/exercises/multiple_choice/multiple-choice";
 import { NumericAnswer } from "@/components/exercises/numeric/numeric-answer";
@@ -13,6 +14,7 @@ export const exerciseRegistry: { [T in ExerciseType]: ComponentType<ExerciseComp
   multiple_choice: MultipleChoice,
   fill_pattern: FillPattern,
   numeric: NumericAnswer,
+  circuit_diagram: CircuitDiagram,
 };
 
 /** Renderiza el componente que corresponde al tipo del ejercicio. */
