@@ -31,6 +31,7 @@ STATUS_BY_ERROR: dict[type[errors.DomainError], int] = {
     errors.NodeNotPlayable: 409,
     errors.NotAChest: 409,
     errors.NotEnoughCoins: 409,
+    errors.CannotFollowSelf: 409,
     errors.EnergyAlreadyFull: 409,
     errors.StreakFreezeLimit: 409,
     errors.TutorExerciseLimit: 429,
