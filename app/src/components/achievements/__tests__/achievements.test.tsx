@@ -74,7 +74,7 @@ describe("BadgesView", () => {
 });
 
 describe("MoreMenu", () => {
-  it("lleva a logros y medallas", async () => {
+  it("lleva a logros, medallas y configuración", async () => {
     await render(
       <AppProviders>
         <MoreMenu />
@@ -83,6 +83,7 @@ describe("MoreMenu", () => {
 
     await fireEvent.press(screen.getByRole("button", { name: es.more.achievements }));
     await fireEvent.press(screen.getByRole("button", { name: es.more.badges }));
-    expect(mockPush.mock.calls).toEqual([["/logros"], ["/medallas"]]);
+    await fireEvent.press(screen.getByRole("button", { name: es.more.settings }));
+    expect(mockPush.mock.calls).toEqual([["/logros"], ["/medallas"], ["/configuracion"]]);
   });
 });

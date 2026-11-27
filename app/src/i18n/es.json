@@ -172,9 +172,23 @@
   },
   "profile": {
     "title": "Perfil",
-    "empty": "Tu racha, tu EXP y tus logros aparecerán aquí.",
-    "greeting": "Hola, {{name}}",
-    "logout": "Cerrar sesión"
+    "loading": "Cargando tu perfil",
+    "since": "Aprendiendo desde {{date}}",
+    "settings": "Configuración",
+    "stats": "Resumen",
+    "streak": "Racha",
+    "longestStreak": "Mejor racha",
+    "days_one": "{{count}} día",
+    "days_other": "{{count}} días",
+    "xp": "EXP total",
+    "league": "Liga",
+    "noLeague": "Sin liga aún",
+    "achievements": "Logros",
+    "achievementsProgress": "{{levels}} de {{total}} niveles alcanzados",
+    "seeAchievements": "Ver logros",
+    "badges": "Medallas recientes",
+    "noBadges": "Todavía no tienes medallas. ¡Termina tu primera lección!",
+    "seeBadges": "Ver todas las medallas"
   },
   "more": {
     "title": "Más",
@@ -259,5 +273,26 @@
       "other": "Nivel {{level}}"
     },
     "name": "{{achievement}}: {{level}}"
+  },
+  "settings": {
+    "title": "Configuración",
+    "preferences": "Preferencias",
+    "displayName": "Tu nombre",
+    "save": "Guardar",
+    "saved": "Cambios guardados",
+    "timezone": "Zona horaria",
+    "timezoneHint": "Define cuándo empieza tu día para la racha y los desafíos.",
+    "useDeviceTimezone": "Usar la de este dispositivo ({{timezone}})",
+    "notifications": "Notificaciones",
+    "streakReminder": "Recordatorio de racha",
+    "streakReminderHint": "Un aviso si aún no practicas en el día.",
+    "challengeAlerts": "Avisos de desafíos",
+    "challengeAlertsHint": "Cuando haya desafíos nuevos o estés por cumplir uno.",
+    "notificationsNote": "Guardamos tu preferencia. Los avisos llegan en una próxima versión.",
+    "privacy": "Privacidad",
+    "publicProfile": "Perfil público",
+    "publicProfileHint": "Otros alumnos pueden ver tu nombre y tu EXP en las ligas.",
+    "account": "Cuenta",
+    "logout": "Cerrar sesión"
   }
 }
