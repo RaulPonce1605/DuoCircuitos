@@ -321,20 +321,30 @@ async def test_repeating_a_lesson_counts_again_but_streak_once_per_day(
 async def test_whole_path_can_be_completed_in_order(
     client: AsyncClient, db: AsyncSession, auth_headers: dict[str, str]
 ) -> None:
-    """Recorre el temario real en orden: lecciones, repasos y evaluaciones. Cada nodo se
-    desbloquea al terminar el anterior y todos se pueden completar respondiendo bien."""
+    """Recorre el temario real en orden: lecciones, repasos, cofres y evaluaciones. Cada nodo se
+    desbloquea al terminar el anterior y todos se pueden completar."""
     path = (await client.get("/path", headers=auth_headers)).json()
-    playable = [
+    nodes = [
         node
         for stage in path["stages"]
         for section in stage["sections"]
         for unit in section["units"]
         for node in unit["nodes"]
-        if node["type"] != "chest"
     ]
-    assert [node["type"] for node in playable[:4]] == ["lesson", "lesson", "review", "assessment"]
+    assert [node["type"] for node in nodes[:5]] == [
+        "lesson",
+        "lesson",
+        "review",
+        "chest",
+        "assessment",
+    ]
     xp = 0
-    for node in playable:
+    for node in nodes:
+        if node["type"] == "chest":
+            opened = await client.post(f"/nodes/{node['key']}/chest", headers=auth_headers)
+            assert opened.status_code == 200, opened.text
+            xp += opened.json()["reward"]["xp"]
+            continue
         played = await _play(client, db, auth_headers, node["key"])
         assert played["node"]["type"] == node["type"]
         xp += 10 * played["progress"]["total"] + 5  # todo al primer intento + bono perfecto
@@ -343,11 +353,10 @@ async def test_whole_path_can_be_completed_in_order(
     assert me["xp_total"] == xp
     path = (await client.get("/path", headers=auth_headers)).json()
     statuses = {
-        node["type"]: node["status"]
+        node["status"]
         for stage in path["stages"]
         for section in stage["sections"]
         for unit in section["units"]
         for node in unit["nodes"]
-        if node["type"] != "chest"
     }
-    assert statuses == {"lesson": "completed", "review": "completed", "assessment": "completed"}
+    assert statuses == {"completed"}

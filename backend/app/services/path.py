@@ -3,8 +3,7 @@
 Regla: un nodo se desbloquea cuando están completos todos los nodos **obligatorios** anteriores
 en el orden global del camino (etapa → sección → unidad → nodo).
 
-Lecciones, repasos y evaluaciones son obligatorios. El cofre se desbloquea con la misma regla
-pero no frena el avance hasta que se pueda abrir.
+Todos los nodos son obligatorios: lección, repaso y evaluación se juegan; el cofre se abre.
 """
 
 import uuid
@@ -26,7 +25,7 @@ from app.schemas.path import (
 )
 from app.services.errors import NodeLocked, NotFound
 
-REQUIRED_NODE_TYPES = frozenset({"lesson", "review", "assessment"})
+REQUIRED_NODE_TYPES = frozenset({"lesson", "review", "chest", "assessment"})
 
 
 @dataclass(frozen=True)

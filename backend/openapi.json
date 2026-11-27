@@ -1,6 +1,86 @@
 {
   "components": {
     "schemas": {
+      "AchievementRead": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "level": {
+            "title": "Level",
+            "type": "integer"
+          },
+          "metric": {
+            "enum": [
+              "lessons_completed",
+              "streak_longest",
+              "xp_total",
+              "perfect_lessons",
+              "units_completed",
+              "chests_opened"
+            ],
+            "title": "Metric",
+            "type": "string"
+          },
+          "next_threshold": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Threshold"
+          },
+          "thresholds": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Thresholds",
+            "type": "array"
+          },
+          "value": {
+            "title": "Value",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "metric",
+          "value",
+          "thresholds",
+          "level",
+          "next_threshold"
+        ],
+        "title": "AchievementRead",
+        "type": "object"
+      },
+      "AchievementsRead": {
+        "properties": {
+          "achievements": {
+            "items": {
+              "$ref": "#/components/schemas/AchievementRead"
+            },
+            "title": "Achievements",
+            "type": "array"
+          },
+          "badges": {
+            "items": {
+              "$ref": "#/components/schemas/BadgeRead"
+            },
+            "title": "Badges",
+            "type": "array"
+          }
+        },
+        "required": [
+          "achievements",
+          "badges"
+        ],
+        "title": "AchievementsRead",
+        "type": "object"
+      },
       "AuthRead": {
         "properties": {
           "access_token": {
@@ -39,6 +119,36 @@
           "user"
         ],
         "title": "AuthRead",
+        "type": "object"
+      },
+      "BadgeRead": {
+        "description": "Una medalla ganada. La app la nombra con i18n: `achievements.<achievement_id>`.",
+        "properties": {
+          "achievement_id": {
+            "title": "Achievement Id",
+            "type": "string"
+          },
+          "earned_at": {
+            "format": "date-time",
+            "title": "Earned At",
+            "type": "string"
+          },
+          "level": {
+            "title": "Level",
+            "type": "integer"
+          },
+          "threshold": {
+            "title": "Threshold",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "achievement_id",
+          "level",
+          "threshold",
+          "earned_at"
+        ],
+        "title": "BadgeRead",
         "type": "object"
       },
       "CheckRequest": {
@@ -117,6 +227,70 @@
           "energy"
         ],
         "title": "CheckResultRead",
+        "type": "object"
+      },
+      "ChestRead": {
+        "properties": {
+          "energy": {
+            "$ref": "#/components/schemas/EnergyRead"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "new_badges": {
+            "items": {
+              "$ref": "#/components/schemas/BadgeRead"
+            },
+            "title": "New Badges",
+            "type": "array"
+          },
+          "reward": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ChestRewardRead"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source": {
+            "enum": [
+              "lesson",
+              "node"
+            ],
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "source",
+          "reward",
+          "new_badges",
+          "energy"
+        ],
+        "title": "ChestRead",
+        "type": "object"
+      },
+      "ChestRewardRead": {
+        "properties": {
+          "energy": {
+            "title": "Energy",
+            "type": "integer"
+          },
+          "xp": {
+            "title": "Xp",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "xp",
+          "energy"
+        ],
+        "title": "ChestRewardRead",
         "type": "object"
       },
       "EnergyRead": {
@@ -306,6 +480,18 @@
             "title": "Attempt Id",
             "type": "string"
           },
+          "chest_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chest Id"
+          },
           "concepts": {
             "items": {
               "type": "string"
@@ -330,6 +516,13 @@
                 "type": "null"
               }
             ]
+          },
+          "new_badges": {
+            "items": {
+              "$ref": "#/components/schemas/BadgeRead"
+            },
+            "title": "New Badges",
+            "type": "array"
           },
           "node": {
             "$ref": "#/components/schemas/NodeRefRead"
@@ -357,7 +550,9 @@
           "xp_awarded",
           "concepts",
           "streak",
-          "streak_extended"
+          "streak_extended",
+          "chest_id",
+          "new_badges"
         ],
         "title": "LessonAttemptSummaryRead",
         "type": "object"
@@ -1186,6 +1381,75 @@
         ]
       }
     },
+    "/chests/{chest_id}/open": {
+      "post": {
+        "description": "Abre el cofre de un intento terminado. Abrirlo otra vez devuelve el mismo premio.",
+        "operationId": "openChest",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "chest_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Chest Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChestRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "invalid_token"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "not_found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorRead"
+                }
+              }
+            },
+            "description": "validation_error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Open Chest",
+        "tags": [
+          "chests"
+        ]
+      }
+    },
     "/exercise-instances/{instance_id}/check": {
       "post": {
         "operationId": "checkExercise",
@@ -1584,6 +1848,43 @@
         ]
       }
     },
+    "/me/achievements": {
+      "get": {
+        "description": "Los logros con su progreso y las medallas ganadas.",
+        "operationId": "getAchievements",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AchievementsRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "invalid_token"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Achievements",
+        "tags": [
+          "users"
+        ]
+      }
+    },
     "/nodes/{node_key}/attempts": {
       "post": {
         "description": "Inicia cualquier nodo jugable: lección (su clave es el slug), repaso o evaluación.",
@@ -1659,6 +1960,84 @@
         "summary": "Start Node",
         "tags": [
           "lessons"
+        ]
+      }
+    },
+    "/nodes/{node_key}/chest": {
+      "post": {
+        "description": "Abre el nodo cofre del camino (una vez por alumno) y lo marca como completado.",
+        "operationId": "openNodeChest",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "node_key",
+            "required": true,
+            "schema": {
+              "title": "Node Key",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChestRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "invalid_token"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "not_found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "node_locked, not_a_chest"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorRead"
+                }
+              }
+            },
+            "description": "validation_error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Open Node Chest",
+        "tags": [
+          "chests"
         ]
       }
     },

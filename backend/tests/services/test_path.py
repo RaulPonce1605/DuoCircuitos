@@ -84,8 +84,12 @@ async def test_finishing_unit_lessons_opens_extras_and_next_unit(
 
     await _complete(db, user_session.user, "u01-ley-de-ohm:review:1")
     status = _status(await path_service.get_path(db, user_session.user))
-    # El cofre aún no frena el avance; la evaluación sí.
+    # El cofre también es obligatorio: hay que abrirlo para llegar a la evaluación.
     assert status["u01-ley-de-ohm:chest:1"] == "available"
+    assert status["u01-ley-de-ohm:assessment:1"] == "locked"
+
+    await _complete(db, user_session.user, "u01-ley-de-ohm:chest:1")
+    status = _status(await path_service.get_path(db, user_session.user))
     assert status["u01-ley-de-ohm:assessment:1"] == "available"
     assert status["sp-01"] == "locked"
 
