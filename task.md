@@ -109,7 +109,7 @@ Nada de esta fase entra si algo de la fase 1 o 2 sigue fallando. Ordenadas de m�
 - [x] **E** — Backend de la tienda: recargas de energía y protector de racha
 - [x] **Ali** — Pantalla de la tienda
 - [x] **E** — Amigos y seguidores
-- [ ] **Ali** — Notificaciones para recordar la racha
+- [x] **Ali** — Notificaciones para recordar la racha
 
 ## Cierre — Pulido y demo
 
