@@ -137,7 +137,21 @@
     "fillLabel": "Tu respuesta",
     "numericLabel": "Resultado",
     "numericHint": "Usa punto o coma decimal. Puedes escribir 2.2e-3.",
-    "unitLabel": "Unidad"
+    "unitLabel": "Unidad",
+    "diagramHint": "Toca los elementos en el dibujo o aquí abajo. Puedes elegir más de uno.",
+    "diagramElement": "{{label}} ({{kind}})",
+    "diagramKinds": {
+      "wire": "cable",
+      "resistor": "resistor",
+      "capacitor": "capacitor",
+      "inductor": "inductor",
+      "voltage_source": "fuente de voltaje",
+      "current_source": "fuente de corriente",
+      "ammeter": "amperímetro",
+      "voltmeter": "voltímetro",
+      "switch": "interruptor",
+      "lamp": "foco"
+    }
   },
   "challenges": {
     "title": "Desafíos",

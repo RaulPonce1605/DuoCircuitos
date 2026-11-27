@@ -75,6 +75,24 @@ ejercicios:
     pistas:
       - "Volts por esta magnitud dan watts."
       - "Es la magnitud que se mide en amperes."
+
+  - id: ohm-02-diagrama-foco
+    tipo: circuit_diagram
+    enunciado: "En este circuito, ¿qué elemento convierte la energía eléctrica en luz? Tócalo."
+    diagrama:
+      elementos:
+        - { id: v1, tipo: fuente_voltaje, desde: [0, 2], hasta: [0, 0], etiqueta: "V1" }
+        - { id: w1, tipo: cable, desde: [0, 0], hasta: [1, 0] }
+        - { id: r1, tipo: resistor, desde: [1, 0], hasta: [3, 0], etiqueta: "R1" }
+        - { id: w2, tipo: cable, desde: [3, 0], hasta: [4, 0] }
+        - { id: f1, tipo: foco, desde: [4, 0], hasta: [4, 2], etiqueta: "F1" }
+        - { id: w3, tipo: cable, desde: [4, 2], hasta: [0, 2] }
+    correctos: [f1]
+    explicacion: "El foco convierte la energía eléctrica en luz (y algo de calor). El resistor la convierte en calor y la fuente es la que entrega la energía. La potencia de cada elemento es P = V · I."
+    pistas:
+      - "Piensa qué hace cada elemento con la energía que recibe."
+      - "Busca el símbolo de un círculo con una cruz adentro."
+
 ---
 
 La **Ley de Ohm** dice que la corriente en un resistor es proporcional al voltaje aplicado: V = I · R. Si el voltaje sube, la corriente sube en la misma proporción; si la resistencia sube con el mismo voltaje, la corriente baja.

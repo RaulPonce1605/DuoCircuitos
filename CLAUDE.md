@@ -36,7 +36,7 @@ Sistema **extensible**: cada tipo tiene **un componente** en la app y **un valid
 | `multiple_choice` | Teoría: opción múltiple | MVP |
 | `fill_pattern` | Teoría: completar el patrón | MVP |
 | `numeric` | Cálculo práctico: valores parametrizados al azar, respuesta con unidad y tolerancia, validación en backend | MVP |
-| `circuit_diagram` | Identificar elementos en un diagrama de circuito | Para después |
+| `circuit_diagram` | Identificar elementos en un diagrama de circuito | Fase 3 |
 
 - Componente: `app/src/components/exercises/<tipo>/`
 - Validador: `backend/app/services/exercises/`

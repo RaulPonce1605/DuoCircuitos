@@ -127,8 +127,105 @@ class NumericExercise(ExerciseBase):
         return value
 
 
+# Lo que se puede dibujar en un diagrama. "cable" une puntos y no se puede tocar.
+DiagramKind = Literal[
+    "cable",
+    "resistor",
+    "capacitor",
+    "inductor",
+    "fuente_voltaje",
+    "fuente_corriente",
+    "amperimetro",
+    "voltimetro",
+    "interruptor",
+    "foco",
+]
+DIAGRAM_MAX_COORD = 12
+ELEMENT_ID_PATTERN = r"^[a-z][a-z0-9]*$"
+Point = tuple[int, int]
+
+
+def _check_point(point: Point) -> Point:
+    if not all(0 <= value <= DIAGRAM_MAX_COORD for value in point):
+        raise ValueError(f"el punto {list(point)} sale de la cuadrícula 0..{DIAGRAM_MAX_COORD}")
+    return point
+
+
+class DiagramElement(SyllabusModel):
+    id: Annotated[str, Field(pattern=ELEMENT_ID_PATTERN)]
+    kind: DiagramKind = Field(alias="tipo")
+    start: Point = Field(alias="desde")
+    end: Point = Field(alias="hasta")
+    label: NonEmptyStr | None = Field(default=None, alias="etiqueta")
+
+    @model_validator(mode="after")
+    def _valid_segment(self) -> Self:
+        _check_point(self.start)
+        _check_point(self.end)
+        if self.start == self.end:
+            raise ValueError(f"'{self.id}' empieza y termina en el mismo punto")
+        if self.start[0] != self.end[0] and self.start[1] != self.end[1]:
+            raise ValueError(f"'{self.id}' debe ser horizontal o vertical")
+        if self.kind != "cable" and self.label is None:
+            raise ValueError(f"'{self.id}' necesita 'etiqueta' (solo los cables van sin ella)")
+        return self
+
+
+class DiagramNode(SyllabusModel):
+    point: Point = Field(alias="punto")
+    label: NonEmptyStr = Field(alias="etiqueta")
+
+    @field_validator("point")
+    @classmethod
+    def _inside(cls, value: Point) -> Point:
+        return _check_point(value)
+
+
+class Diagram(SyllabusModel):
+    elements: list[DiagramElement] = Field(alias="elementos", min_length=2)
+    nodes: list[DiagramNode] = Field(default_factory=list, alias="nodos")
+
+    @model_validator(mode="after")
+    def _unique(self) -> Self:
+        ids = [element.id for element in self.elements]
+        if len(set(ids)) != len(ids):
+            raise ValueError("hay elementos con el mismo id")
+        labels = [element.label.casefold() for element in self.elements if element.label]
+        if len(set(labels)) != len(labels):
+            raise ValueError("hay elementos con la misma etiqueta")
+        return self
+
+
+class CircuitDiagramExercise(ExerciseBase):
+    """Tocar en un diagrama los elementos que piden (uno o varios)."""
+
+    type: Literal["circuit_diagram"] = Field(alias="tipo")
+    diagram: Diagram = Field(alias="diagrama")
+    correct: list[Annotated[str, Field(pattern=ELEMENT_ID_PATTERN)]] = Field(
+        alias="correctos", min_length=1
+    )
+
+    @model_validator(mode="after")
+    def _correct_are_touchable(self) -> Self:
+        if len(set(self.correct)) != len(self.correct):
+            raise ValueError("'correctos' repite elementos")
+        by_id = {element.id: element for element in self.diagram.elements}
+        for element_id in self.correct:
+            element = by_id.get(element_id)
+            if element is None:
+                raise ValueError(f"'correctos' tiene '{element_id}', que no está en el diagrama")
+            if element.kind == "cable":
+                raise ValueError(f"'{element_id}' es un cable: los cables no se pueden tocar")
+        return self
+
+    def correct_labels(self) -> list[str]:
+        """Las etiquetas de los elementos correctos, en el orden del diagrama."""
+        chosen = set(self.correct)
+        return [e.label for e in self.diagram.elements if e.id in chosen and e.label]
+
+
 Exercise = Annotated[
-    MultipleChoiceExercise | FillPatternExercise | NumericExercise,
+    MultipleChoiceExercise | FillPatternExercise | NumericExercise | CircuitDiagramExercise,
     Field(discriminator="type"),
 ]
 

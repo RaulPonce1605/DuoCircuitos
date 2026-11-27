@@ -256,6 +256,7 @@
           "answer": {
             "discriminator": {
               "mapping": {
+                "circuit_diagram": "#/components/schemas/CircuitDiagramAnswer",
                 "fill_pattern": "#/components/schemas/FillPatternAnswer",
                 "multiple_choice": "#/components/schemas/MultipleChoiceAnswer",
                 "numeric": "#/components/schemas/NumericAnswer"
@@ -271,6 +272,9 @@
               },
               {
                 "$ref": "#/components/schemas/NumericAnswer"
+              },
+              {
+                "$ref": "#/components/schemas/CircuitDiagramAnswer"
               }
             ],
             "title": "Answer"
@@ -393,6 +397,132 @@
         "title": "ChestRewardRead",
         "type": "object"
       },
+      "CircuitDiagramAnswer": {
+        "properties": {
+          "elements": {
+            "items": {
+              "maxLength": 40,
+              "type": "string"
+            },
+            "maxItems": 30,
+            "title": "Elements",
+            "type": "array"
+          },
+          "type": {
+            "const": "circuit_diagram",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "elements"
+        ],
+        "title": "CircuitDiagramAnswer",
+        "type": "object"
+      },
+      "CircuitDiagramPublic": {
+        "properties": {
+          "elements": {
+            "items": {
+              "$ref": "#/components/schemas/DiagramElementPublic"
+            },
+            "title": "Elements",
+            "type": "array"
+          },
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/DiagramNodePublic"
+            },
+            "title": "Nodes",
+            "type": "array"
+          },
+          "prompt": {
+            "title": "Prompt",
+            "type": "string"
+          },
+          "type": {
+            "const": "circuit_diagram",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "prompt",
+          "elements",
+          "nodes"
+        ],
+        "title": "CircuitDiagramPublic",
+        "type": "object"
+      },
+      "DiagramElementPublic": {
+        "properties": {
+          "end": {
+            "$ref": "#/components/schemas/GridPoint"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "wire",
+              "resistor",
+              "capacitor",
+              "inductor",
+              "voltage_source",
+              "current_source",
+              "ammeter",
+              "voltmeter",
+              "switch",
+              "lamp"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          },
+          "start": {
+            "$ref": "#/components/schemas/GridPoint"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "start",
+          "end",
+          "label"
+        ],
+        "title": "DiagramElementPublic",
+        "type": "object"
+      },
+      "DiagramNodePublic": {
+        "properties": {
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "point": {
+            "$ref": "#/components/schemas/GridPoint"
+          }
+        },
+        "required": [
+          "point",
+          "label"
+        ],
+        "title": "DiagramNodePublic",
+        "type": "object"
+      },
       "EnergyRead": {
         "properties": {
           "current": {
@@ -443,6 +573,7 @@
           "exercise": {
             "discriminator": {
               "mapping": {
+                "circuit_diagram": "#/components/schemas/CircuitDiagramPublic",
                 "fill_pattern": "#/components/schemas/FillPatternPublic",
                 "multiple_choice": "#/components/schemas/MultipleChoicePublic",
                 "numeric": "#/components/schemas/NumericPublic"
@@ -458,6 +589,9 @@
               },
               {
                 "$ref": "#/components/schemas/NumericPublic"
+              },
+              {
+                "$ref": "#/components/schemas/CircuitDiagramPublic"
               }
             ],
             "title": "Exercise"
@@ -512,6 +646,25 @@
           "prompt"
         ],
         "title": "FillPatternPublic",
+        "type": "object"
+      },
+      "GridPoint": {
+        "description": "Punto de la cuadrícula del diagrama: x a la derecha, y hacia abajo.",
+        "properties": {
+          "x": {
+            "title": "X",
+            "type": "integer"
+          },
+          "y": {
+            "title": "Y",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "x",
+          "y"
+        ],
+        "title": "GridPoint",
         "type": "object"
       },
       "HealthRead": {

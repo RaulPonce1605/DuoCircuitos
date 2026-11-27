@@ -26,7 +26,7 @@ async function renderWith(node: React.ReactElement) {
 
 describe("registro", () => {
   it("tiene un componente para cada tipo del backend", () => {
-    expect(Object.keys(exerciseRegistry).sort()).toEqual(["fill_pattern", "multiple_choice", "numeric"]);
+    expect(Object.keys(exerciseRegistry).sort()).toEqual(["circuit_diagram", "fill_pattern", "multiple_choice", "numeric"]);
   });
 
   it.each<ExercisePublic>([MC, FILL, NUM])("renderiza $type con su componente", async (exercise) => {

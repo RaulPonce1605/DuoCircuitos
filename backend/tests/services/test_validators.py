@@ -57,13 +57,13 @@ NUM = NumericExercise.model_validate(
 )
 
 
-def test_registry_has_the_three_mvp_types() -> None:
-    assert registered_types() == {"multiple_choice", "fill_pattern", "numeric"}
+def test_registry_has_every_type() -> None:
+    assert registered_types() == {"multiple_choice", "fill_pattern", "numeric", "circuit_diagram"}
 
 
 def test_unknown_type_raises() -> None:
     with pytest.raises(UnknownExerciseType):
-        get_validator("circuit_diagram")
+        get_validator("no_existe")
 
 
 def test_cannot_register_a_type_twice() -> None:

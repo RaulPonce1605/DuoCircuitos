@@ -6,6 +6,7 @@ from typing import Any
 import pytest
 
 from app.content_import.schema import (
+    CircuitDiagramExercise,
     FillPatternExercise,
     MultipleChoiceExercise,
     NumericExercise,
@@ -163,3 +164,62 @@ def test_empty_or_huge_replies_fall_back_to_the_hint(raw: str | None) -> None:
     )
     assert reply.text == FALLBACK
     assert reply.source == "hint"
+
+
+DIAGRAM = CircuitDiagramExercise.model_validate(
+    {
+        "id": "paralelo",
+        "tipo": "circuit_diagram",
+        "enunciado": "Toca los dos resistores que están en paralelo entre sí.",
+        "diagrama": {
+            "elementos": [
+                {
+                    "id": "v1",
+                    "tipo": "fuente_voltaje",
+                    "desde": [0, 2],
+                    "hasta": [0, 0],
+                    "etiqueta": "V1",
+                },
+                {
+                    "id": "r1",
+                    "tipo": "resistor",
+                    "desde": [0, 0],
+                    "hasta": [2, 0],
+                    "etiqueta": "R1",
+                },
+                {
+                    "id": "r2",
+                    "tipo": "resistor",
+                    "desde": [2, 0],
+                    "hasta": [2, 2],
+                    "etiqueta": "R2",
+                },
+                {
+                    "id": "r3",
+                    "tipo": "resistor",
+                    "desde": [4, 0],
+                    "hasta": [4, 2],
+                    "etiqueta": "R3",
+                },
+                {"id": "w1", "tipo": "cable", "desde": [2, 0], "hasta": [4, 0]},
+                {"id": "w2", "tipo": "cable", "desde": [4, 2], "hasta": [0, 2]},
+            ]
+        },
+        "correctos": ["r2", "r3"],
+        "explicacion": "R2 y R3 comparten nodos.",
+        "pistas": ["Busca los nodos.", "Mira dónde se reparte la corriente."],
+    }
+).model_dump(mode="json", by_alias=True)
+
+
+@pytest.mark.parametrize("leak", ["Son R2 y R3", "toca r3", "La respuesta: R2."])
+def test_blocks_the_diagram_answer(leak: str) -> None:
+    assert _guard(leak, "circuit_diagram", DIAGRAM, {}) == FALLBACK
+
+
+@pytest.mark.parametrize(
+    "hint",
+    ["R1 está en serie con la fuente: esa no es.", "Fíjate en dónde se reparte la corriente."],
+)
+def test_lets_diagram_hints_through(hint: str) -> None:
+    assert _guard(hint, "circuit_diagram", DIAGRAM, {}) == hint

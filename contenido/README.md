@@ -61,7 +61,7 @@ Comunes a todos los tipos:
 | Campo | Obligatorio | Descripción |
 |---|---|---|
 | `id` | sí | Único dentro de la lección. |
-| `tipo` | sí | `multiple_choice`, `fill_pattern`, `numeric` (`circuit_diagram`, para después). |
+| `tipo` | sí | `multiple_choice`, `fill_pattern`, `numeric` o `circuit_diagram`. |
 | `enunciado` | sí | Texto de la pregunta. En `numeric` usa `{param}` para insertar valores. |
 | `explicacion` | sí | Se muestra después de Comprobar. |
 | `pistas` | sí | Mínimo 2, de general a concreta. Nunca contienen la respuesta. |
@@ -73,6 +73,7 @@ Por tipo:
 | `multiple_choice` | `opciones` (lista), `correcta` (índice desde 0) |
 | `fill_pattern` | `respuestas_aceptadas` (lista; se comparan sin distinguir mayúsculas ni espacios) |
 | `numeric` | `parametros`, `solucion`, `unidad`, `tolerancia` |
+| `circuit_diagram` | `diagrama` (elementos y nodos), `correctos` (ids de los elementos que hay que tocar) |
 
 Detalle de `numeric`:
 
@@ -80,6 +81,31 @@ Detalle de `numeric`:
 - **`solucion`**: fórmula con los nombres de los parámetros. Permitido: `+ - * / ^ ( )`, `sqrt`, `abs`, `sin`, `cos`, `tan`, `atan`, `log10`, `ln`, `exp`, `pi`. Nada más. Se permiten números con notación científica (`1.72e-8`).
 - **`unidad`**: unidad SI base del resultado (`A`, `V`, `Ω`, `W`...). El estudiante puede responder con prefijo SI (`mA`, `kΩ`) y el backend lo convierte.
 - **`tolerancia`**: `{ tipo: relativa, valor: 0.02 }` (±2 %) o `{ tipo: absoluta, valor: 0.01 }` (± en la unidad base).
+
+Detalle de `circuit_diagram`:
+
+El alumno ve un diagrama y toca uno o varios elementos. Es correcto si tocó **exactamente** los de `correctos`.
+
+```yaml
+  - id: sp-01-diagrama-paralelo
+    tipo: circuit_diagram
+    enunciado: "Toca los dos resistores que están en paralelo entre sí."
+    diagrama:
+      elementos:
+        - { id: v1, tipo: fuente_voltaje, desde: [0, 2], hasta: [0, 0], etiqueta: "V1" }
+        - { id: w1, tipo: cable, desde: [0, 0], hasta: [1, 0] }
+        - { id: r1, tipo: resistor, desde: [1, 0], hasta: [3, 0], etiqueta: "R1" }
+        # ...
+      nodos:                                   # opcional: puntos con nombre (a, b)
+        - { punto: [5, 0], etiqueta: "a" }
+    correctos: [r2, r3]
+```
+
+- **Cuadrícula:** `desde` y `hasta` son puntos `[x, y]` con x a la derecha, y hacia abajo y valores de 0 a 12. Cada elemento va **horizontal o vertical**. Los elementos se conectan cuando comparten un punto, y la app dibuja un punto de unión donde se juntan 3 o más.
+- **`tipo` de elemento:** `cable`, `resistor`, `capacitor`, `inductor`, `fuente_voltaje`, `fuente_corriente`, `amperimetro`, `voltimetro`, `interruptor`, `foco`.
+- **`etiqueta`:** obligatoria en todo lo que no sea cable ("R1", "V1"). No se repite. Los cables no llevan etiqueta y no se pueden tocar.
+- **`correctos`:** ids de elementos que existen y no son cables. Ni el enunciado ni las pistas pueden decir sus etiquetas: el validador lo revisa.
+- Para que el elemento se vea completo, dale una longitud de 2 en la cuadrícula. Uno de longitud 1 también se dibuja, pero queda más chico.
 
 ### 2.3 Cuerpo
 

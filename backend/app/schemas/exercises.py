@@ -32,8 +32,53 @@ class NumericPublic(BaseModel):
     unit: str
 
 
+DiagramElementKind = Literal[
+    "wire",
+    "resistor",
+    "capacitor",
+    "inductor",
+    "voltage_source",
+    "current_source",
+    "ammeter",
+    "voltmeter",
+    "switch",
+    "lamp",
+]
+
+
+class GridPoint(BaseModel):
+    """Punto de la cuadrícula del diagrama: x a la derecha, y hacia abajo."""
+
+    x: int
+    y: int
+
+
+class DiagramElementPublic(BaseModel):
+    id: str
+    kind: DiagramElementKind
+    # Siempre horizontal o vertical. En las fuentes, `end` es el lado + (o hacia donde va la
+    # corriente).
+    start: GridPoint
+    end: GridPoint
+    # Null solo en los cables, que no se pueden tocar.
+    label: str | None
+
+
+class DiagramNodePublic(BaseModel):
+    point: GridPoint
+    label: str
+
+
+class CircuitDiagramPublic(BaseModel):
+    type: Literal["circuit_diagram"]
+    prompt: str
+    elements: list[DiagramElementPublic]
+    nodes: list[DiagramNodePublic]
+
+
 ExercisePublic = Annotated[
-    MultipleChoicePublic | FillPatternPublic | NumericPublic, Field(discriminator="type")
+    MultipleChoicePublic | FillPatternPublic | NumericPublic | CircuitDiagramPublic,
+    Field(discriminator="type"),
 ]
 
 
@@ -59,6 +104,13 @@ class NumericAnswer(BaseModel):
     unit: str = Field(default="", max_length=10)
 
 
+class CircuitDiagramAnswer(BaseModel):
+    type: Literal["circuit_diagram"]
+    # Los ids de los elementos que tocó el alumno (el orden no importa).
+    elements: list[Annotated[str, Field(max_length=40)]] = Field(max_length=30)
+
+
 ExerciseAnswer = Annotated[
-    MultipleChoiceAnswer | FillPatternAnswer | NumericAnswer, Field(discriminator="type")
+    MultipleChoiceAnswer | FillPatternAnswer | NumericAnswer | CircuitDiagramAnswer,
+    Field(discriminator="type"),
 ]

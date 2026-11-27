@@ -427,7 +427,7 @@ export interface components {
         /** CheckRequest */
         CheckRequest: {
             /** Answer */
-            answer: components["schemas"]["MultipleChoiceAnswer"] | components["schemas"]["FillPatternAnswer"] | components["schemas"]["NumericAnswer"];
+            answer: components["schemas"]["MultipleChoiceAnswer"] | components["schemas"]["FillPatternAnswer"] | components["schemas"]["NumericAnswer"] | components["schemas"]["CircuitDiagramAnswer"];
         };
         /** CheckResultRead */
         CheckResultRead: {
@@ -467,6 +467,50 @@ export interface components {
             /** Xp */
             xp: number;
         };
+        /** CircuitDiagramAnswer */
+        CircuitDiagramAnswer: {
+            /** Elements */
+            elements: string[];
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "circuit_diagram";
+        };
+        /** CircuitDiagramPublic */
+        CircuitDiagramPublic: {
+            /** Elements */
+            elements: components["schemas"]["DiagramElementPublic"][];
+            /** Nodes */
+            nodes: components["schemas"]["DiagramNodePublic"][];
+            /** Prompt */
+            prompt: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "circuit_diagram";
+        };
+        /** DiagramElementPublic */
+        DiagramElementPublic: {
+            end: components["schemas"]["GridPoint"];
+            /** Id */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "wire" | "resistor" | "capacitor" | "inductor" | "voltage_source" | "current_source" | "ammeter" | "voltmeter" | "switch" | "lamp";
+            /** Label */
+            label: string | null;
+            start: components["schemas"]["GridPoint"];
+        };
+        /** DiagramNodePublic */
+        DiagramNodePublic: {
+            /** Label */
+            label: string;
+            point: components["schemas"]["GridPoint"];
+        };
         /** EnergyRead */
         EnergyRead: {
             /** Current */
@@ -487,7 +531,7 @@ export interface components {
         /** ExerciseInstanceRead */
         ExerciseInstanceRead: {
             /** Exercise */
-            exercise: components["schemas"]["MultipleChoicePublic"] | components["schemas"]["FillPatternPublic"] | components["schemas"]["NumericPublic"];
+            exercise: components["schemas"]["MultipleChoicePublic"] | components["schemas"]["FillPatternPublic"] | components["schemas"]["NumericPublic"] | components["schemas"]["CircuitDiagramPublic"];
             /**
              * Instance Id
              * Format: uuid
@@ -513,6 +557,16 @@ export interface components {
              * @enum {string}
              */
             type: "fill_pattern";
+        };
+        /**
+         * GridPoint
+         * @description Punto de la cuadrícula del diagrama: x a la derecha, y hacia abajo.
+         */
+        GridPoint: {
+            /** X */
+            x: number;
+            /** Y */
+            y: number;
         };
         /** HealthRead */
         HealthRead: {

@@ -22,6 +22,7 @@ import yaml
 from pydantic import ValidationError
 
 from app.content_import.schema import (
+    CircuitDiagramExercise,
     FillPatternExercise,
     LearningPath,
     Lesson,
@@ -156,6 +157,12 @@ def _check_lesson(lesson: Lesson, where: str, report: ValidationReport) -> None:
                 _check_hints_hide(
                     exercise.hints, [exercise.options[exercise.correct]], exercise_where, report
                 )
+            elif isinstance(exercise, CircuitDiagramExercise):
+                labels = exercise.correct_labels()
+                _check_hints_hide(exercise.hints, labels, exercise_where, report)
+                for label in labels:
+                    if _contains_word(exercise.prompt, label):
+                        report.add(exercise_where, f"el enunciado ya dice la respuesta '{label}'")
             elif isinstance(exercise, FillPatternExercise):
                 _check_hints_hide(exercise.hints, exercise.accepted_answers, exercise_where, report)
                 for answer in exercise.accepted_answers:
