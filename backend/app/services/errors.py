@@ -57,3 +57,15 @@ class UnknownExerciseType(DomainError):
     """Hay un ejercicio en la base cuyo tipo no tiene validador (error de despliegue)."""
 
     code = "unknown_exercise_type"
+
+
+class TutorRateLimited(DomainError):
+    """El alumno ya usó todas las peticiones al tutor de la última hora."""
+
+    code = "tutor_rate_limited"
+
+
+class TutorExerciseLimit(DomainError):
+    """El alumno ya pidió ayuda el máximo de veces para este ejercicio."""
+
+    code = "tutor_exercise_limit"

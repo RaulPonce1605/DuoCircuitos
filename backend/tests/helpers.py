@@ -2,6 +2,7 @@
 base, como lo haría el backend. La app nunca tiene esta información."""
 
 import uuid
+from collections.abc import Callable
 from typing import Any
 
 from sqlalchemy import select
@@ -14,6 +15,7 @@ from app.schemas.exercises import MultipleChoicePublic
 from app.services.exercises import get_validator
 from app.services.exercises.numeric import correct_value
 from app.services.exercises.units import format_quantity
+from app.services.tutor import TutorPrompt
 
 
 async def answer_for(
@@ -41,3 +43,15 @@ async def answer_for(
     value = correct_value(spec, instance.state) * (1 if correct else 3)
     number, unit = format_quantity(value, spec.unit).split(" ")
     return {"type": "numeric", "value": number, "unit": unit}
+
+
+class FakeTutorProvider:
+    """Proveedor de LLM falso: responde con `reply(prompt)` y guarda los prompts recibidos."""
+
+    def __init__(self, reply: Callable[[TutorPrompt], str]) -> None:
+        self._reply = reply
+        self.prompts: list[TutorPrompt] = []
+
+    async def complete(self, prompt: TutorPrompt) -> str:
+        self.prompts.append(prompt)
+        return self._reply(prompt)

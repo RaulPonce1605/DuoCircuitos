@@ -16,6 +16,7 @@ from app.services.errors import InvalidAnswer
 from app.services.exercises.base import CheckOutcome, ExerciseValidator
 from app.services.exercises.formula import Formula
 from app.services.exercises.registry import register
+from app.services.exercises.text_match import quantity_spans
 from app.services.exercises.units import (
     InvalidQuantity,
     format_number,
@@ -72,4 +73,13 @@ class NumericValidator(ExerciseValidator[NumericExercise]):
             return CheckOutcome(correct=False, correct_answer=display)
         return CheckOutcome(
             correct=is_within_tolerance(given, expected, spec), correct_answer=display
+        )
+
+    def solution_spans(
+        self, spec: NumericExercise, state: dict[str, Any], text: str
+    ) -> list[tuple[int, int]]:
+        """El resultado en cualquier prefijo SI y dentro de la tolerancia ("0.024 A", "24 mA")."""
+        expected = correct_value(spec, state)
+        return quantity_spans(
+            text, spec.unit, lambda value: is_within_tolerance(value, expected, spec)
         )

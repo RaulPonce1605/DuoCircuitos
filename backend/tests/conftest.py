@@ -8,7 +8,7 @@
 """
 
 import os
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Callable, Iterator
 from pathlib import Path
 
 import pytest
@@ -28,6 +28,7 @@ from app.core.db import get_db
 from app.main import app
 from app.models import Base
 from app.services import auth as auth_service
+from app.services.tutor import TutorProvider
 
 
 def _test_database_url() -> str:
@@ -121,3 +122,31 @@ async def user_session(db: AsyncSession) -> "auth_service.Session":
 @pytest.fixture
 def auth_headers(user_session: "auth_service.Session") -> dict[str, str]:
     return {"Authorization": f"Bearer {user_session.access_token}"}
+
+
+# --- Tutor: nunca un LLM real (prueba obligatoria 3, backend/CLAUDE.md 3.9) -----------------
+
+
+@pytest.fixture(autouse=True)
+def _no_real_llm(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Hace fallar cualquier prueba que llame al adaptador real, aunque el `.env` local tenga
+    una llave configurada."""
+    from app.services.tutor import TutorPrompt
+    from app.services.tutor.anthropic_provider import AnthropicTutorProvider
+
+    async def _forbidden(self: AnthropicTutorProvider, prompt: TutorPrompt) -> str:
+        raise AssertionError("una prueba intentó llamar a un LLM real")
+
+    monkeypatch.setattr(AnthropicTutorProvider, "complete", _forbidden)
+
+
+@pytest.fixture
+def use_tutor_provider() -> Iterator[Callable[[TutorProvider | None], None]]:
+    """Cambia el proveedor (falso) que usa el endpoint del tutor durante la prueba."""
+    from app.services.tutor import get_tutor_provider
+
+    def _use(provider: TutorProvider | None) -> None:
+        app.dependency_overrides[get_tutor_provider] = lambda: provider
+
+    yield _use
+    app.dependency_overrides.pop(get_tutor_provider, None)

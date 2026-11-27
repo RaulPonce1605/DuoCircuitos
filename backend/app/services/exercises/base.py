@@ -38,3 +38,13 @@ class ExerciseValidator[SpecT: BaseModel](ABC):
     @abstractmethod
     def check(self, spec: SpecT, state: dict[str, Any], answer: ExerciseAnswer) -> CheckOutcome:
         """Valida la respuesta. Lanza `InvalidAnswer` si no es del tipo esperado."""
+
+    @abstractmethod
+    def solution_spans(
+        self, spec: SpecT, state: dict[str, Any], text: str
+    ) -> list[tuple[int, int]]:
+        """Dónde revela `text` la solución de esta instancia (backend/CLAUDE.md 3.9).
+
+        El tutor lo usa para tachar la solución del material del prompt y para bloquear las
+        respuestas del LLM que la contengan. Ante la duda, mejor detectar de más.
+        """

@@ -89,6 +89,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/exercise-instances/{instance_id}/tutor": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Ask Tutor */
+        post: operations["askTutor"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/health": {
         parameters: {
             query?: never;
@@ -469,6 +486,25 @@ export interface components {
              */
             status: "ok";
         };
+        /** TutorReplyRead */
+        TutorReplyRead: {
+            /** Help Level */
+            help_level: number;
+            /** Remaining Requests */
+            remaining_requests: number;
+            /** Reply */
+            reply: string;
+            /**
+             * Source
+             * @enum {string}
+             */
+            source: "llm" | "hint";
+        };
+        /** TutorRequest */
+        TutorRequest: {
+            /** Message */
+            message?: string | null;
+        };
         /** UnitRead */
         UnitRead: {
             /** Nodes */
@@ -752,6 +788,77 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ValidationErrorRead"];
+                };
+            };
+        };
+    };
+    askTutor: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                instance_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TutorRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TutorReplyRead"];
+                };
+            };
+            /** @description invalid_token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description not_found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description already_answered */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description validation_error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorRead"];
+                };
+            };
+            /** @description tutor_rate_limited, tutor_exercise_limit */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
                 };
             };
         };
