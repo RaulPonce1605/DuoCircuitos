@@ -18,7 +18,10 @@ export function PathView() {
   const me = useCurrentUser();
 
   // La ruta de la lección también juega repasos y evaluaciones: `slug` es la clave del nodo.
-  const openNode = (key: string) => router.push({ pathname: "/leccion/[slug]", params: { slug: key } });
+  const openNode = (key: string, type: string) =>
+    type === "chest"
+      ? router.push({ pathname: "/leccion/cofre-camino/[key]", params: { key } })
+      : router.push({ pathname: "/leccion/[slug]", params: { slug: key } });
 
   return (
     <View style={{ gap: theme.spacing.lg }}>

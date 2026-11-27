@@ -19,26 +19,23 @@ const TYPE_ICON: Record<PathNodeData["type"], IconName> = {
 
 const NODE_SIZE = 64;
 
-/** Los nodos que se juegan como una lección (el cofre se abre). */
-const PLAYABLE_TYPES: ReadonlySet<PathNodeData["type"]> = new Set(["lesson", "review", "assessment"]);
 
 type Props = {
   node: PathNodeData;
-  onOpenNode: (nodeKey: string) => void;
+  /** Al tocar un nodo desbloqueado; `type` dice si se juega o (el cofre) se abre. */
+  onOpenNode: (nodeKey: string, type: PathNodeData["type"]) => void;
 };
 
 export function PathNode({ node, onOpenNode }: Props) {
   const { t } = useTranslation();
   const theme = useTheme();
-  const playable = PLAYABLE_TYPES.has(node.type) && node.status !== "locked";
+  const playable = node.status !== "locked";
 
   const title = node.lesson?.title ?? t(`path.nodeType.${node.type}`);
   const statusText =
     node.status === "locked"
       ? t("path.status.locked")
-      : !PLAYABLE_TYPES.has(node.type)
-        ? t("common.comingSoon")
-        : node.status === "completed"
+      : node.status === "completed"
           ? t("path.status.completed")
           : t("path.status.available");
 
@@ -52,7 +49,7 @@ export function PathNode({ node, onOpenNode }: Props) {
     <Pressable
       testID={`path-node-${node.key}`}
       disabled={!playable}
-      onPress={() => onOpenNode(node.key)}
+      onPress={() => onOpenNode(node.key, node.type)}
       accessibilityRole="button"
       accessibilityLabel={`${title}, ${statusText}`}
       accessibilityState={{ disabled: !playable, selected: node.is_current }}

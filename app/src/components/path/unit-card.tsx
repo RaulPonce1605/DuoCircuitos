@@ -7,7 +7,7 @@ import type { PathUnit } from "@/services/path-service";
 
 type Props = {
   unit: PathUnit;
-  onOpenNode: (nodeKey: string) => void;
+  onOpenNode: (nodeKey: string, type: PathUnit["nodes"][number]["type"]) => void;
 };
 
 /** Una unidad dibujada como un circuito: los nodos unidos por una pista de cobre. */
