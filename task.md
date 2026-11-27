@@ -94,8 +94,8 @@ Al terminar la fase 2, el alumno puede pedir ayuda en cualquier ejercicio, y la 
 - [x] **Ali** — Pantalla de cofre ("Pulsa para abrir") y pantalla de racha al terminar la lección
 - [x] **Ali** — Pantallas de logros y medallas
 - [x] **Alex** — Pantalla de Desafíos con barras de progreso
-- [ ] **Alex** — Perfil: resumen (racha, EXP total, liga), logros y medallas
-- [ ] **Alex** — Configuración: preferencias, notificaciones, privacidad, cerrar sesión
+- [x] **Alex** — Perfil: resumen (racha, EXP total, liga), logros y medallas
+- [x] **Alex** — Configuración: preferencias, notificaciones, privacidad, cerrar sesión
 
 ## Fase 3 — Extras (solo si las fases 1 y 2 están terminadas)
 
