@@ -103,9 +103,9 @@ Nada de esta fase entra si algo de la fase 1 o 2 sigue fallando. Ordenadas de m�
 
 - [x] **E** — Ligas semanales: grupos, ranking por EXP y cierre automático cada semana
 - [x] **Alex** — Pantalla de Ligas con ranking y tiempo restante
-- [ ] **R** — Ejercicio de identificar en un diagrama: formato en el temario y validador
-- [ ] **D** — Ejercicios de diagrama para cada unidad
-- [ ] **Alex** — Componente que dibuja el circuito y deja tocar sus elementos
+- [x] **R** — Ejercicio de identificar en un diagrama: formato en el temario y validador
+- [x] **D** — Ejercicios de diagrama para cada unidad
+- [x] **Alex** — Componente que dibuja el circuito y deja tocar sus elementos
 - [ ] **E** — Backend de la tienda: recargas de energía y protector de racha
 - [ ] **Ali** — Pantalla de la tienda
 - [ ] **E** — Amigos y seguidores
