@@ -2,6 +2,7 @@ from datetime import UTC, datetime
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.config import get_settings
 from app.models import User
 from app.schemas.user import EnergyRead, UserRead, UserUpdate
 from app.services import energy
@@ -19,6 +20,7 @@ def user_read(user: User, now: datetime | None = None) -> UserRead:
     """El usuario como lo ve la app: con la racha efectiva (rota si ya pasó más de un día) y la
     energía recargada hasta ahora."""
     now = now or datetime.now(UTC)
+    tiers = get_settings().league_tiers
     return UserRead(
         id=user.id,
         email=user.email,
@@ -32,6 +34,8 @@ def user_read(user: User, now: datetime | None = None) -> UserRead:
         notify_streak_reminder=user.notify_streak_reminder,
         notify_challenges=user.notify_challenges,
         profile_public=user.profile_public,
+        league_tier=min(user.league_tier or 0, len(tiers) - 1),
+        league_tier_id=tiers[min(user.league_tier or 0, len(tiers) - 1)],
     )
 
 

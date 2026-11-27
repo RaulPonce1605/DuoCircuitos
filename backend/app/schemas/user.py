@@ -29,6 +29,9 @@ class UserRead(BaseModel):
     notify_streak_reminder: bool
     notify_challenges: bool
     profile_public: bool
+    # Nivel de liga (índice en LEAGUE_TIERS) y su id para traducir el nombre.
+    league_tier: int
+    league_tier_id: str
 
 
 class UserUpdate(BaseModel):

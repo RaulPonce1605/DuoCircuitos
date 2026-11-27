@@ -14,6 +14,7 @@ class User(CreatedAtMixin, Base):
         CheckConstraint("streak_current >= 0", name="streak_current_non_negative"),
         CheckConstraint("streak_longest >= streak_current", name="streak_longest_gte_current"),
         CheckConstraint("energy_used >= 0", name="energy_used_non_negative"),
+        CheckConstraint("league_tier >= 0", name="league_tier_non_negative"),
     )
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
@@ -40,3 +41,6 @@ class User(CreatedAtMixin, Base):
     notify_streak_reminder: Mapped[bool] = mapped_column(default=True, server_default="true")
     notify_challenges: Mapped[bool] = mapped_column(default=True, server_default="true")
     profile_public: Mapped[bool] = mapped_column(default=True, server_default="true")
+
+    # Nivel de liga (índice en LEAGUE_TIERS). Cambia al cerrar cada semana.
+    league_tier: Mapped[int] = mapped_column(default=0, server_default="0")

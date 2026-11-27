@@ -102,3 +102,44 @@ class Challenge(CreatedAtMixin, Base):
     progress: Mapped[int] = mapped_column(default=0, server_default="0")
     reward_xp: Mapped[int]
     completed_at: Mapped[datetime | None]
+
+
+class LeagueGroup(CreatedAtMixin, Base):
+    """Un grupo de liga de una semana (`week_start` = lunes, UTC) en un nivel. Se cierra la
+    primera vez que alguien lo consulta después de que termina la semana."""
+
+    __tablename__ = "league_groups"
+    __table_args__ = (CheckConstraint("tier >= 0", name="tier_non_negative"),)
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    week_start: Mapped[date] = mapped_column(index=True)
+    tier: Mapped[int]
+    closed_at: Mapped[datetime | None]
+
+
+class LeagueMember(Base):
+    """Un alumno en el grupo de una semana. La EXP de la semana no se guarda aquí: se suma de
+    `xp_events`. Al cerrar el grupo se guardan el lugar final y el resultado."""
+
+    __tablename__ = "league_members"
+    __table_args__ = (
+        UniqueConstraint("user_id", "week_start"),
+        CheckConstraint(
+            "result IS NULL OR result IN ('promoted', 'stayed', 'demoted')", name="result_valid"
+        ),
+    )
+
+    group_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("league_groups.id", ondelete="CASCADE"), primary_key=True
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    # Repetido del grupo para que un alumno no esté en dos grupos la misma semana.
+    week_start: Mapped[date]
+    joined_at: Mapped[datetime]
+    final_rank: Mapped[int | None]
+    final_xp: Mapped[int | None]
+    result: Mapped[str | None] = mapped_column(String(10))
+    # Cuándo vio el alumno su resultado (la app lo anuncia una sola vez).
+    result_seen_at: Mapped[datetime | None]

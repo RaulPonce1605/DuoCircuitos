@@ -137,6 +137,20 @@ class Settings(BaseSettings):
     monthly_challenges: list[ChallengeTemplate] = Field(
         default_factory=lambda: list(DEFAULT_MONTHLY_CHALLENGES)
     )
+    # Ligas semanales (docs/diseno/ligas.md). Los nombres de los niveles viven en la app.
+    league_tiers: list[str] = Field(
+        default_factory=lambda: [
+            "resistor",
+            "capacitor",
+            "inductor",
+            "transistor",
+            "superconductor",
+        ],
+        min_length=1,
+    )
+    league_group_size: int = Field(default=20, ge=2)
+    league_promote_count: int = Field(default=5, ge=0)
+    league_demote_count: int = Field(default=5, ge=0)
     # Logros y sus medallas. Se pueden cambiar con ACHIEVEMENTS (JSON).
     achievements: list[AchievementDefinition] = Field(
         default_factory=lambda: list(DEFAULT_ACHIEVEMENTS)
