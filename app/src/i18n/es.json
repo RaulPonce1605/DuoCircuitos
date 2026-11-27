@@ -340,12 +340,13 @@
     "streakReminderHint": "Un aviso si aún no practicas en el día.",
     "challengeAlerts": "Avisos de desafíos",
     "challengeAlertsHint": "Cuando haya desafíos nuevos o estés por cumplir uno.",
-    "notificationsNote": "Guardamos tu preferencia. Los avisos llegan en una próxima versión.",
+    "notificationsNote": "Los avisos llegan a este teléfono (en la web no hay avisos).",
     "privacy": "Privacidad",
     "publicProfile": "Perfil público",
     "publicProfileHint": "Otros alumnos pueden ver tu nombre y tu EXP en las ligas.",
     "account": "Cuenta",
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "notificationsDenied": "Las notificaciones están bloqueadas en tu teléfono. Actívalas en los ajustes del sistema."
   },
   "shop": {
     "title": "Tienda",
@@ -387,5 +388,13 @@
     "mutual": "Amigos",
     "followsYou": "Te sigue",
     "stats": "{{xp}} EXP · racha de {{streak}} · Liga {{tier}}"
+  },
+  "notifications": {
+    "streakTitle": "Tu racha te espera",
+    "streakBody_one": "Llevas {{count}} día de racha. Haz una lección para no perderla.",
+    "streakBody_other": "Llevas {{count}} días de racha. Haz una lección para no perderla.",
+    "startBody": "Una lección corta hoy y empiezas una racha.",
+    "challengesTitle": "Desafíos nuevos",
+    "challengesBody": "Ya tienes los desafíos de hoy. ¿Cuántos completas?"
   }
 }

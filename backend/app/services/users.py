@@ -6,7 +6,7 @@ from app.core.config import get_settings
 from app.models import User
 from app.schemas.user import EnergyRead, UserRead, UserUpdate
 from app.services import energy
-from app.services.gamification import effective_streak
+from app.services.gamification import effective_streak, local_date
 
 
 def energy_read(user: User, now: datetime) -> EnergyRead:
@@ -38,6 +38,7 @@ def user_read(user: User, now: datetime | None = None) -> UserRead:
         league_tier_id=tiers[min(user.league_tier or 0, len(tiers) - 1)],
         coins=user.coins or 0,
         streak_freezes=user.streak_freezes or 0,
+        practiced_today=user.streak_last_date == local_date(now, user.timezone),
     )
 
 

@@ -113,6 +113,7 @@ async def test_a_freeze_saves_the_streak_when_finishing_a_lesson(
 
     me = (await client.get("/me", headers=auth_headers)).json()
     assert (me["streak_current"], me["streak_freezes"]) == (5, 0)
+    assert me["practiced_today"] is True
     used = list(await db.scalars(select(StreakFreezeUse.day)))
     assert used == [local_today - timedelta(days=1)]
     assert isinstance(used[0], date)

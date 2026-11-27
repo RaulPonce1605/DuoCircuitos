@@ -35,6 +35,8 @@ class UserRead(BaseModel):
     # Tienda: monedas y protectores de racha guardados.
     coins: int
     streak_freezes: int
+    # Si ya terminó una lección hoy (día local): la app no le recuerda la racha hoy.
+    practiced_today: bool
 
 
 class UserUpdate(BaseModel):

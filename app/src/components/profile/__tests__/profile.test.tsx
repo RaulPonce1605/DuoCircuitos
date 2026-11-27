@@ -44,6 +44,7 @@ const USER: User = {
   league_tier_id: "capacitor",
   coins: 120,
   streak_freezes: 1,
+  practiced_today: false,
 };
 
 const ACHIEVEMENTS: Achievements = {

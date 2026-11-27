@@ -2,6 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from "react";
 
 import { authService, type RegisterInput, type User } from "@/services/auth-service";
+import { remindersService } from "@/services/reminders";
 
 type SessionStatus = "loading" | "signedOut" | "signedIn";
 
@@ -26,6 +27,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       setStatus(next ? "signedIn" : "signedOut");
       if (!next) {
         queryClient.clear(); // nada de los datos del usuario anterior queda en caché
+        void remindersService.clear(); // ni sus avisos programados
       }
     });
     authService.restore().then(
