@@ -38,9 +38,16 @@ function ChallengeCard({ challenge }: { challenge: Challenge }) {
         <AppText variant="bodyStrong" style={{ flex: 1 }}>
           {name}
         </AppText>
-        <AppText variant="bodyStrong" color="xp">
-          {t("challenges.reward", { count: challenge.reward_xp })}
-        </AppText>
+        <View style={{ alignItems: "flex-end" }}>
+          <AppText variant="bodyStrong" color="xp">
+            {t("challenges.reward", { count: challenge.reward_xp })}
+          </AppText>
+          {challenge.reward_coins > 0 ? (
+            <AppText variant="caption" color="coins">
+              {t("challenges.rewardCoins", { count: challenge.reward_coins })}
+            </AppText>
+          ) : null}
+        </View>
       </View>
       <ProgressBar
         progress={challenge.progress / challenge.goal}

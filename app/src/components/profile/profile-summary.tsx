@@ -131,6 +131,14 @@ export function ProfileSummary() {
             value={t("profile.days", { count: user.streak_longest })}
           />
           <Stat testID="profile-xp" icon="flash" color="xp" label={t("profile.xp")} value={String(user.xp_total)} />
+          <Stat testID="profile-coins" icon="logo-bitcoin" color="coins" label={t("profile.coins")} value={String(user.coins)} />
+          <Stat
+            testID="profile-freezes"
+            icon="snow"
+            color="primary"
+            label={t("profile.freezes")}
+            value={String(user.streak_freezes)}
+          />
           <Stat
             testID="profile-league"
             icon="podium"

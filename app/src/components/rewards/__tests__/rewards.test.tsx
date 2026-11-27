@@ -30,7 +30,7 @@ jest.mock("@/hooks/use-current-user", () => ({
 const CHEST: Chest = {
   id: "c-1",
   source: "lesson",
-  reward: { xp: 7, energy: 1 },
+  reward: { xp: 7, energy: 1, coins: 9 },
   new_badges: [{ achievement_id: "chests", level: 1, threshold: 1, earned_at: "2026-11-26T12:00:00Z" }],
   energy: { current: 5, max: 5, next_refill_at: null },
 };
@@ -56,13 +56,14 @@ describe("ChestView", () => {
     expect(mockOpenChest).toHaveBeenCalledWith("c-1");
     expect(await screen.findByText("+7 EXP")).toBeOnTheScreen();
     expect(screen.getByText("+1 de energía")).toBeOnTheScreen();
+    expect(screen.getByText("+9 monedas")).toBeOnTheScreen();
     expect(screen.getByText("Cazatesoros: Bronce")).toBeOnTheScreen();
     await fireEvent.press(screen.getByRole("button", { name: es.chest.continue }));
     expect(onContinue).toHaveBeenCalled();
   });
 
   it("el cofre del camino se abre por su nodo", async () => {
-    mockOpenNodeChest.mockResolvedValue({ ...CHEST, source: "node", reward: { xp: 20, energy: 0 }, new_badges: [] });
+    mockOpenNodeChest.mockResolvedValue({ ...CHEST, source: "node", reward: { xp: 20, energy: 0, coins: 50 }, new_badges: [] });
     await render(
       <AppProviders>
         <ChestView target={{ kind: "node", nodeKey: "u01:chest:1" }} onContinue={jest.fn()} />

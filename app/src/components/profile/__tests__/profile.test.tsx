@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react-native";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react-native";
 
 import { AppProviders } from "@/components/app-providers";
 import { ProfileSummary } from "@/components/profile/profile-summary";
@@ -42,6 +42,8 @@ const USER: User = {
   profile_public: true,
   league_tier: 1,
   league_tier_id: "capacitor",
+  coins: 120,
+  streak_freezes: 1,
 };
 
 const ACHIEVEMENTS: Achievements = {
@@ -75,6 +77,8 @@ describe("ProfileSummary", () => {
     expect(screen.getByLabelText("Racha: 1 día")).toBeOnTheScreen();
     expect(screen.getByLabelText("Mejor racha: 8 días")).toBeOnTheScreen();
     expect(screen.getByLabelText("EXP total: 340")).toBeOnTheScreen();
+    expect(screen.getByLabelText("Monedas: 120")).toBeOnTheScreen();
+    expect(screen.getByLabelText("Protectores de racha: 1")).toBeOnTheScreen();
     expect(screen.getByLabelText("Liga: Capacitor")).toBeOnTheScreen();
     expect(await screen.findByText("4 de 6 niveles alcanzados")).toBeOnTheScreen();
     // Solo las 3 más recientes.
@@ -142,7 +146,10 @@ describe("SettingsView", () => {
     await fireEvent(screen.getByRole("switch", { name: es.settings.publicProfile }), "valueChange", false);
 
     expect(mockUpdate.mock.calls).toEqual([[{ notify_challenges: true }], [{ profile_public: false }]]);
-    expect(await screen.findByRole("switch", { name: es.settings.publicProfile })).toHaveProp("value", false);
+    // El interruptor muestra lo que guardó el backend (puede tardar un render en llegar).
+    await waitFor(() =>
+      expect(screen.getByRole("switch", { name: es.settings.publicProfile })).toHaveProp("value", false),
+    );
   });
 
   it("ofrece usar la zona horaria del dispositivo si es otra", async () => {

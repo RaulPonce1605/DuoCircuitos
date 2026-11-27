@@ -25,6 +25,7 @@ export default function AccountLayout() {
       <Stack.Screen name="logros" options={{ title: t("achievements.title") }} />
       <Stack.Screen name="medallas" options={{ title: t("badges.title") }} />
       <Stack.Screen name="configuracion" options={{ title: t("settings.title") }} />
+      <Stack.Screen name="tienda" options={{ title: t("shop.title") }} />
     </Stack>
   );
 }

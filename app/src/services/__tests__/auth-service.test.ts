@@ -33,6 +33,8 @@ const USER: User = {
   profile_public: true,
   league_tier: 1,
   league_tier_id: "capacitor",
+  coins: 120,
+  streak_freezes: 1,
 };
 
 function auth(access: string, refresh: string | null = `refresh-${access}`) {

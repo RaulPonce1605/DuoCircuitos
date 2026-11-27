@@ -66,7 +66,7 @@ export function ChestView({ target, onContinue }: Props) {
     );
   }
 
-  const reward = chest.reward ?? { xp: 0, energy: 0 };
+  const reward = chest.reward ?? { xp: 0, energy: 0, coins: 0 };
   return (
     <Screen scroll footer={<Button label={t("chest.continue")} onPress={onContinue} />}>
       <View style={{ alignItems: "center", gap: theme.spacing.sm, marginTop: theme.spacing.lg }}>
@@ -82,6 +82,14 @@ export function ChestView({ target, onContinue }: Props) {
             {t("chest.xp", { count: reward.xp })}
           </AppText>
         </Card>
+        {reward.coins > 0 ? (
+          <Card borderTone="coins" style={{ flexDirection: "row", alignItems: "center", gap: theme.spacing.md }}>
+            <Ionicons name="logo-bitcoin" size={theme.sizes.iconLg} color={theme.colors.coins} />
+            <AppText variant="subtitle" color="coins">
+              {t("chest.coins", { count: reward.coins })}
+            </AppText>
+          </Card>
+        ) : null}
         <Card borderTone="energy" style={{ flexDirection: "row", alignItems: "center", gap: theme.spacing.md }}>
           <Ionicons name="battery-charging" size={theme.sizes.iconLg} color={theme.colors.energy} />
           <AppText variant="subtitle" color="energy">

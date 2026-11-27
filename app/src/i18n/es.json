@@ -121,7 +121,9 @@
     "energy_one": "+{{count}} de energía",
     "energy_other": "+{{count}} de energía",
     "noEnergy": "Tu energía ya estaba llena",
-    "continue": "Continuar"
+    "continue": "Continuar",
+    "coins_one": "+{{count}} moneda",
+    "coins_other": "+{{count}} monedas"
   },
   "streak": {
     "loading": "Cargando tu racha",
@@ -178,7 +180,8 @@
       "perfect_lessons_other": "Termina {{count}} lecciones sin errores",
       "open_chests_one": "Abre {{count}} cofre",
       "open_chests_other": "Abre {{count}} cofres"
-    }
+    },
+    "rewardCoins": "+{{count}} monedas"
   },
   "leagues": {
     "title": "Ligas",
@@ -229,13 +232,16 @@
     "seeAchievements": "Ver logros",
     "badges": "Medallas recientes",
     "noBadges": "Todavía no tienes medallas. ¡Termina tu primera lección!",
-    "seeBadges": "Ver todas las medallas"
+    "seeBadges": "Ver todas las medallas",
+    "coins": "Monedas",
+    "freezes": "Protectores de racha"
   },
   "more": {
     "title": "Más",
     "achievements": "Logros",
     "badges": "Medallas",
-    "settings": "Configuración"
+    "settings": "Configuración",
+    "shop": "Tienda"
   },
   "errors": {
     "unknown": "Algo salió mal. Intenta de nuevo.",
@@ -254,7 +260,10 @@
     "tutor_exercise_limit": "Ya usaste toda la ayuda para este ejercicio.",
     "not_enough_energy": "Te quedaste sin energía. Se recarga sola con el tiempo: vuelve en un rato.",
     "node_not_playable": "Este paso del camino no se juega: se abre.",
-    "not_a_chest": "Ese paso del camino no es un cofre."
+    "not_a_chest": "Ese paso del camino no es un cofre.",
+    "not_enough_coins": "No te alcanzan las monedas.",
+    "energy_already_full": "Tu energía ya está llena.",
+    "streak_freeze_limit": "Ya tienes el máximo de protectores de racha."
   },
   "achievements": {
     "title": "Logros",
@@ -335,5 +344,30 @@
     "publicProfileHint": "Otros alumnos pueden ver tu nombre y tu EXP en las ligas.",
     "account": "Cuenta",
     "logout": "Cerrar sesión"
+  },
+  "shop": {
+    "title": "Tienda",
+    "loading": "Cargando la tienda",
+    "coins_one": "{{count}} moneda",
+    "coins_other": "{{count}} monedas",
+    "howToEarn": "Ganas monedas al abrir cofres y al cumplir desafíos.",
+    "buy": "Comprar por {{price}}",
+    "bought": "¡Listo! Ya es tuyo.",
+    "freezesOwned": "Tienes {{count}} de {{max}}",
+    "items": {
+      "energy_refill": {
+        "title": "Recarga de energía",
+        "description": "Llena tu energía al instante."
+      },
+      "streak_freeze": {
+        "title": "Protector de racha",
+        "description": "Si un día no practicas, tu racha no se rompe. Se usa solo."
+      }
+    },
+    "unavailable": {
+      "not_enough_coins": "Te faltan monedas.",
+      "energy_already_full": "Tu energía ya está llena.",
+      "streak_freeze_limit": "Ya tienes el máximo guardado."
+    }
   }
 }

@@ -23,6 +23,7 @@ const DATA: Challenges = {
       goal: 2,
       progress: 1,
       reward_xp: 10,
+      reward_coins: 10,
       completed_at: null,
     },
     {
@@ -32,11 +33,12 @@ const DATA: Challenges = {
       goal: 1,
       progress: 1,
       reward_xp: 15,
+      reward_coins: 10,
       completed_at: "2026-11-26T17:00:00Z",
     },
   ],
   monthly: [
-    { id: "m-1", period: "monthly", kind: "earn_xp", goal: 1500, progress: 300, reward_xp: 100, completed_at: null },
+    { id: "m-1", period: "monthly", kind: "earn_xp", goal: 1500, progress: 300, reward_xp: 100, reward_coins: 10, completed_at: null },
   ],
   daily_ends_at: "2026-11-27T06:00:00Z",
   monthly_ends_at: "2026-12-01T06:00:00Z",
