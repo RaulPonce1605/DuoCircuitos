@@ -9,6 +9,7 @@ async def test_me_includes_settings_with_defaults(
     assert me["notify_streak_reminder"] is True
     assert me["notify_challenges"] is True
     assert me["profile_public"] is True
+    assert me["practiced_today"] is False
 
 
 async def test_patch_changes_only_what_is_sent(

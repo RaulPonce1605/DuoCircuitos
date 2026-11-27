@@ -1090,6 +1090,8 @@ export interface components {
             notify_challenges: boolean;
             /** Notify Streak Reminder */
             notify_streak_reminder: boolean;
+            /** Practiced Today */
+            practiced_today: boolean;
             /** Profile Public */
             profile_public: boolean;
             /** Streak Current */

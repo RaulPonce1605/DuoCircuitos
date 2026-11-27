@@ -1684,6 +1684,10 @@
             "title": "Notify Streak Reminder",
             "type": "boolean"
           },
+          "practiced_today": {
+            "title": "Practiced Today",
+            "type": "boolean"
+          },
           "profile_public": {
             "title": "Profile Public",
             "type": "boolean"
@@ -1725,7 +1729,8 @@
           "league_tier",
           "league_tier_id",
           "coins",
-          "streak_freezes"
+          "streak_freezes",
+          "practiced_today"
         ],
         "title": "UserRead",
         "type": "object"
