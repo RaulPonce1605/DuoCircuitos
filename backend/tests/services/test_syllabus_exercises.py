@@ -10,12 +10,15 @@ from random import Random
 import pytest
 
 from app.content_import.schema import (
+    CircuitDiagramExercise,
     FillPatternExercise,
     MultipleChoiceExercise,
     NumericExercise,
 )
 from app.content_import.validate import DEFAULT_SYLLABUS_DIR, validate_syllabus
 from app.schemas.exercises import (
+    CircuitDiagramAnswer,
+    CircuitDiagramPublic,
     FillPatternAnswer,
     MultipleChoiceAnswer,
     MultipleChoicePublic,
@@ -34,12 +37,15 @@ SEEDS = range(15)
 
 def test_syllabus_is_valid_and_complete() -> None:
     assert _REPORT.ok
-    assert len(EXERCISES) == 50
+    assert len(EXERCISES) == 55
 
 
 @pytest.mark.parametrize("exercise", EXERCISES, ids=lambda e: e.id)
 def test_exercise_round_trip(
-    exercise: MultipleChoiceExercise | FillPatternExercise | NumericExercise,
+    exercise: MultipleChoiceExercise
+    | FillPatternExercise
+    | NumericExercise
+    | CircuitDiagramExercise,
 ) -> None:
     validator = get_validator(exercise.type)
     spec = validator.parse_spec(exercise.model_dump(mode="json", by_alias=True))
@@ -64,6 +70,26 @@ def test_exercise_round_trip(
                 assert validator.check(spec, state, answer).correct
             wrong_text = FillPatternAnswer(type="fill_pattern", text="respuesta-incorrecta")
             assert not validator.check(spec, state, wrong_text).correct
+
+        elif isinstance(spec, CircuitDiagramExercise):
+            assert isinstance(public, CircuitDiagramPublic)
+            # Lo público trae todos los elementos y nada que diga cuáles son los correctos.
+            assert {e.id for e in public.elements} == {e.id for e in spec.diagram.elements}
+            assert "correct" not in public.model_dump_json()
+            ok = CircuitDiagramAnswer(type="circuit_diagram", elements=list(reversed(spec.correct)))
+            assert validator.check(spec, state, ok).correct
+            touchable = [e.id for e in spec.diagram.elements if e.kind != "cable"]
+            extra = [*spec.correct, *(i for i in touchable if i not in spec.correct)][
+                : len(spec.correct) + 1
+            ]
+            assert not validator.check(
+                spec, state, CircuitDiagramAnswer(type="circuit_diagram", elements=extra)
+            ).correct
+            assert not validator.check(
+                spec,
+                state,
+                CircuitDiagramAnswer(type="circuit_diagram", elements=spec.correct[:-1]),
+            ).correct
 
         else:
             assert isinstance(spec, NumericExercise)

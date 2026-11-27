@@ -13,7 +13,12 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.content_import.schema import FillPatternExercise, MultipleChoiceExercise, NumericExercise
+from app.content_import.schema import (
+    CircuitDiagramExercise,
+    FillPatternExercise,
+    MultipleChoiceExercise,
+    NumericExercise,
+)
 from app.core.config import get_settings
 from app.models import Exercise, ExerciseInstance, LessonAttempt, Node, User
 from app.services.auth import Session
@@ -28,7 +33,7 @@ QUESTIONS: list[dict[str, Any]] = yaml.safe_load(
     (Path(__file__).parent / "preguntas_alumnos.yaml").read_text(encoding="utf-8")
 )["preguntas"]
 BENIGN = "Empieza por identificar qué magnitudes te dan y cuál te piden."
-TYPES = ["numeric", "multiple_choice", "fill_pattern"]
+TYPES = ["numeric", "multiple_choice", "fill_pattern", "circuit_diagram"]
 
 
 def test_question_list_has_both_kinds() -> None:
@@ -46,6 +51,8 @@ def _solution_text(exercise: Exercise, state: dict[str, Any]) -> str:
     if isinstance(spec, MultipleChoiceExercise):
         letter = "ABCDEFGH"[[int(i) for i in state["order"]].index(spec.correct)]
         return f"La respuesta es la {letter}: {spec.options[spec.correct]}."
+    if isinstance(spec, CircuitDiagramExercise):
+        return f"Toca {' y '.join(spec.correct_labels())}."
     assert isinstance(spec, FillPatternExercise)
     return f"Va la palabra {spec.accepted_answers[-1]}."
 

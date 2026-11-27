@@ -9,7 +9,12 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.content_import.schema import FillPatternExercise, MultipleChoiceExercise, NumericExercise
+from app.content_import.schema import (
+    CircuitDiagramExercise,
+    FillPatternExercise,
+    MultipleChoiceExercise,
+    NumericExercise,
+)
 from app.models import ExerciseInstance
 from app.schemas.exercises import MultipleChoicePublic
 from app.services.exercises import get_validator
@@ -37,6 +42,13 @@ async def answer_for(
         right = shown.options.index(spec.options[spec.correct])
         option = right if correct else (right + 1) % len(shown.options)
         return {"type": "multiple_choice", "option": option}
+    if isinstance(spec, CircuitDiagramExercise):
+        if correct:
+            return {"type": "circuit_diagram", "elements": list(spec.correct)}
+        wrong = [
+            e.id for e in spec.diagram.elements if e.kind != "cable" and e.id not in spec.correct
+        ]
+        return {"type": "circuit_diagram", "elements": wrong[:1]}
     if isinstance(spec, FillPatternExercise):
         return {"type": "fill_pattern", "text": spec.accepted_answers[0] if correct else "zzz"}
     assert isinstance(spec, NumericExercise)

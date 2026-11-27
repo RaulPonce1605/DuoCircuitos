@@ -40,8 +40,8 @@ async def test_imports_real_syllabus(db: AsyncSession) -> None:
     assert await _count(db, Unit) == 5
     assert await _count(db, Lesson) == 10
     assert await _count(db, Node) == 25
-    assert await _count(db, Exercise) == 50
-    assert summary.created["exercises"] == 50
+    assert await _count(db, Exercise) == 55
+    assert summary.created["exercises"] == 55
     assert not summary.updated and not summary.archived
 
 

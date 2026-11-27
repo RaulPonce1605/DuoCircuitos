@@ -2,12 +2,14 @@
 opción correcta, las respuestas aceptadas ni la explicación, para TODOS los ejercicios del temario
 y varias semillas."""
 
+import re
 from random import Random
 from typing import Any
 
 import pytest
 
 from app.content_import.schema import (
+    CircuitDiagramExercise,
     Exercise,
     FillPatternExercise,
     Lesson,
@@ -57,7 +59,7 @@ def _build(lesson: Lesson, exercise: Exercise, spec: dict[str, Any], state: dict
 
 def test_every_exercise_is_covered() -> None:
     assert _REPORT.ok
-    assert len(CASES) == 50
+    assert len(CASES) == 55
 
 
 @pytest.mark.parametrize(("lesson", "exercise"), CASES, ids=lambda case: getattr(case, "id", ""))
@@ -80,6 +82,10 @@ def test_prompt_never_contains_the_solution(lesson: Lesson, exercise: Exercise, 
     elif isinstance(exercise, MultipleChoiceExercise):
         # Ninguna opción va en el prompt, así que tampoco la correcta.
         assert fold(exercise.options[exercise.correct]) not in folded
+    elif isinstance(exercise, CircuitDiagramExercise):
+        # El diagrama no va en el prompt; las etiquetas correctas tampoco (ni en la teoría).
+        for label in exercise.correct_labels():
+            assert re.search(rf"(?<!\w){re.escape(fold(label))}(?!\w)", folded) is None
     else:
         assert isinstance(exercise, FillPatternExercise)
         for answer in exercise.accepted_answers:
@@ -94,6 +100,13 @@ def _with_other_solution(exercise: Exercise) -> dict[str, Any]:
         spec["solucion"] = f"({exercise.solution}) * 7"
     elif isinstance(exercise, MultipleChoiceExercise):
         spec["correcta"] = (exercise.correct + 1) % len(exercise.options)
+    elif isinstance(exercise, CircuitDiagramExercise):
+        others = [
+            e.id
+            for e in exercise.diagram.elements
+            if e.kind != "cable" and e.id not in exercise.correct
+        ]
+        spec["correctos"] = others[:1]
     else:
         spec["respuestas_aceptadas"] = ["zzzqqq"]
     return spec
