@@ -64,7 +64,24 @@
     "incorrect": "No es correcto",
     "correctAnswer": "Respuesta correcta: {{answer}}",
     "willRepeat": "Este ejercicio volverá al final de la lección.",
-    "chooseAnswer": "Elige o escribe una respuesta para comprobar."
+    "chooseAnswer": "Elige o escribe una respuesta para comprobar.",
+    "help": "Pedir ayuda",
+    "helpHint": "Un tutor te da pistas paso a paso, sin darte la respuesta."
+  },
+  "tutor": {
+    "title": "Ayuda paso a paso",
+    "name": "Tutor",
+    "you": "Tú",
+    "fromSyllabus": "Pista del temario",
+    "intro": "Te doy pistas paso a paso. No te voy a dar la respuesta, pero sí te ayudo a llegar a ella.",
+    "questionLabel": "Tu duda (opcional)",
+    "questionHint": "Escribe qué no entiendes, o solo pide una pista.",
+    "ask": "Dame una pista",
+    "askAgain": "Otra pista",
+    "close": "Cerrar el tutor",
+    "remaining_one": "Puedes pedir ayuda {{count}} vez más.",
+    "remaining_other": "Puedes pedir ayuda {{count}} veces más.",
+    "noMoreHelp": "Ya usaste toda la ayuda para este ejercicio. ¡Inténtalo con lo que llevas!"
   },
   "summary": {
     "loading": "Cargando tu resumen",
@@ -118,6 +135,8 @@
     "already_answered": "Ese ejercicio ya se respondió.",
     "not_current_exercise": "Ese no es el ejercicio actual.",
     "attempt_not_completed": "La lección aún no termina.",
-    "invalid_answer": "Esa respuesta no es válida para este ejercicio."
+    "invalid_answer": "Esa respuesta no es válida para este ejercicio.",
+    "tutor_rate_limited": "Pediste mucha ayuda en la última hora. Descansa un poco e intenta más tarde.",
+    "tutor_exercise_limit": "Ya usaste toda la ayuda para este ejercicio."
   }
 }
