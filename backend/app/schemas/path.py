@@ -15,7 +15,7 @@ class NodeRead(BaseModel):
     key: str
     type: NodeType
     status: NodeStatus
-    # El siguiente paso sugerido: la primera lección disponible que aún no se completa.
+    # El siguiente paso sugerido: el primer nodo obligatorio disponible que aún no se completa.
     is_current: bool
     lesson: LessonSummaryRead | None
 

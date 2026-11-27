@@ -3,9 +3,8 @@
 Regla: un nodo se desbloquea cuando están completos todos los nodos **obligatorios** anteriores
 en el orden global del camino (etapa → sección → unidad → nodo).
 
-En la fase 1 solo las lecciones son obligatorias. Repaso, cofre y evaluación se muestran y se
-desbloquean con la misma regla, pero no frenan el avance porque aún no se pueden jugar
-(fase 2). Cuando existan, se agregan a `REQUIRED_NODE_TYPES`.
+Lecciones, repasos y evaluaciones son obligatorios. El cofre se desbloquea con la misma regla
+pero no frena el avance hasta que se pueda abrir.
 """
 
 import uuid
@@ -15,7 +14,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.models import Lesson, Node, NodeProgress, Section, Stage, Unit, User
+from app.models import Node, NodeProgress, Section, Stage, Unit, User
 from app.schemas.path import (
     LessonSummaryRead,
     NodeRead,
@@ -27,7 +26,7 @@ from app.schemas.path import (
 )
 from app.services.errors import NodeLocked, NotFound
 
-REQUIRED_NODE_TYPES = frozenset({"lesson"})
+REQUIRED_NODE_TYPES = frozenset({"lesson", "review", "assessment"})
 
 
 @dataclass(frozen=True)
@@ -43,7 +42,7 @@ async def get_path(db: AsyncSession, user: User) -> PathRead:
         (
             node_id
             for node_id, placed in statuses.items()
-            if placed.status == "available" and placed.node.type == "lesson"
+            if placed.status == "available" and placed.node.type in REQUIRED_NODE_TYPES
         ),
         None,
     )
@@ -76,22 +75,23 @@ async def get_path(db: AsyncSession, user: User) -> PathRead:
     )
 
 
-async def get_unlocked_lesson(db: AsyncSession, user: User, lesson_slug: str) -> Lesson:
-    """La lección, si existe y el usuario la tiene desbloqueada. Si no: NotFound o NodeLocked."""
+async def get_unlocked_node(db: AsyncSession, user: User, node_key: str) -> Node:
+    """El nodo, si existe y el usuario lo tiene desbloqueado. Si no: NotFound o NodeLocked.
+
+    Para las lecciones la clave del nodo es el slug de la lección (`ohm-01`)."""
     node = await db.scalar(
         select(Node)
-        .join(Lesson, Node.lesson_id == Lesson.id)
-        .where(Lesson.slug == lesson_slug, Node.archived.is_(False), Lesson.archived.is_(False))
-        .options(selectinload(Node.lesson))
+        .where(Node.key == node_key, Node.archived.is_(False))
+        .options(selectinload(Node.lesson), selectinload(Node.unit))
     )
-    if node is None or node.lesson is None:
+    if node is None or (node.lesson is not None and node.lesson.archived):
         raise NotFound
     stages = await _load_stages(db)
     statuses = _compute_statuses(_ordered_nodes(stages), await _completed_node_ids(db, user.id))
     placed = statuses.get(node.id)
     if placed is None or placed.status == "locked":
         raise NodeLocked
-    return node.lesson
+    return node
 
 
 async def _load_stages(db: AsyncSession) -> list[Stage]:

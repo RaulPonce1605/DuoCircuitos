@@ -1,4 +1,7 @@
-"""Iniciar una lección y comprobar respuestas (CLAUDE.md 1.2 y docs/diseno/exp-y-racha.md).
+"""Iniciar una lección, repaso o evaluación y comprobar respuestas (CLAUDE.md 1.2).
+
+Reglas de EXP y racha: docs/diseno/exp-y-racha.md. Repaso y evaluación:
+docs/diseno/repaso-y-evaluacion.md.
 
 - Al iniciar se crea un intento con una instancia por ejercicio; los valores se sortean aquí.
 - Las respuestas se validan aquí con el validador del tipo; el cliente nunca recibe la solución
@@ -17,7 +20,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.core.config import get_settings
-from app.models import Exercise, ExerciseInstance, LessonAttempt, Node, NodeProgress, User
+from app.models import (
+    Exercise,
+    ExerciseInstance,
+    Lesson,
+    LessonAttempt,
+    Node,
+    NodeProgress,
+    User,
+)
 from app.schemas.exercises import ExerciseAnswer
 from app.schemas.lessons import (
     CheckResultRead,
@@ -26,12 +37,14 @@ from app.schemas.lessons import (
     LessonAttemptSummaryRead,
     LessonProgressRead,
     LessonRefRead,
+    NodeRefRead,
 )
 from app.services import energy, gamification
 from app.services import path as path_service
 from app.services.errors import (
     AlreadyAnswered,
     AttemptNotCompleted,
+    NodeNotPlayable,
     NotCurrentExercise,
     NotFound,
 )
@@ -39,22 +52,20 @@ from app.services.exercises import get_validator
 from app.services.users import energy_read
 
 
-async def start_attempt(db: AsyncSession, user: User, lesson_slug: str) -> LessonAttemptRead:
-    lesson = await path_service.get_unlocked_lesson(db, user, lesson_slug)
+async def start_attempt(db: AsyncSession, user: User, node_key: str) -> LessonAttemptRead:
+    """Inicia un nodo jugable: lección (sus ejercicios en orden), repaso o evaluación (una mezcla
+    de ejercicios de toda la unidad). Para una lección, `node_key` es su slug."""
+    node = await path_service.get_unlocked_node(db, user, node_key)
     now = datetime.now(UTC)
     energy.require(user, now)
-    exercises = list(
-        await db.scalars(
-            select(Exercise)
-            .where(Exercise.lesson_id == lesson.id, Exercise.archived.is_(False))
-            .order_by(Exercise.position)
-        )
-    )
+    rng = Random(secrets.randbits(63))  # noqa: S311 - no es criptográfico
+    exercises = await _exercises_for(db, user, node, rng)
     if not exercises:  # pragma: no cover - el validador del temario exige al menos uno
         raise NotFound
     attempt = LessonAttempt(
         user_id=user.id,
-        lesson_id=lesson.id,
+        node_id=node.id,
+        lesson_id=node.lesson_id,
         started_at=now,
         exercise_count=len(exercises),
     )
@@ -68,11 +79,73 @@ async def start_attempt(db: AsyncSession, user: User, lesson_slug: str) -> Lesso
     await db.commit()
     return LessonAttemptRead(
         attempt_id=attempt.id,
-        lesson=LessonRefRead(slug=lesson.slug, title=lesson.title),
+        node=_node_ref(node),
+        lesson=_lesson_ref(node.lesson),
         progress=LessonProgressRead(completed=0, total=attempt.exercise_count),
         current_exercise=_instance_read(instances[0], exercises[0]),
         energy=energy_read(user, now),
     )
+
+
+async def _exercises_for(db: AsyncSession, user: User, node: Node, rng: Random) -> list[Exercise]:
+    """Los ejercicios del intento según el tipo de nodo (docs/diseno/repaso-y-evaluacion.md)."""
+    settings = get_settings()
+    if node.type == "lesson":
+        return list(
+            await db.scalars(
+                select(Exercise)
+                .where(Exercise.lesson_id == node.lesson_id, Exercise.archived.is_(False))
+                .order_by(Exercise.position)
+            )
+        )
+    if node.type not in ("review", "assessment"):
+        raise NodeNotPlayable
+    unit_exercises = list(
+        await db.scalars(
+            select(Exercise)
+            .join(Lesson, Exercise.lesson_id == Lesson.id)
+            .where(
+                Lesson.unit_id == node.unit_id,
+                Lesson.archived.is_(False),
+                Exercise.archived.is_(False),
+            )
+            .order_by(Exercise.id)
+        )
+    )
+    if node.type == "assessment":
+        count = min(settings.assessment_exercise_count, len(unit_exercises))
+        return rng.sample(unit_exercises, count)
+    # Repaso: primero lo que más le ha costado al alumno; el empate se decide al azar.
+    mistakes = await _mistakes_by_exercise(db, user, [e.id for e in unit_exercises])
+    tiebreak = {exercise.id: rng.random() for exercise in unit_exercises}
+    ranked = sorted(unit_exercises, key=lambda e: (-mistakes.get(e.id, 0), tiebreak[e.id]))
+    chosen = ranked[: settings.review_exercise_count]
+    rng.shuffle(chosen)
+    return chosen
+
+
+async def _mistakes_by_exercise(
+    db: AsyncSession, user: User, exercise_ids: list[int]
+) -> dict[int, int]:
+    rows = await db.execute(
+        select(ExerciseInstance.exercise_id, func.count())
+        .join(LessonAttempt, ExerciseInstance.attempt_id == LessonAttempt.id)
+        .where(
+            LessonAttempt.user_id == user.id,
+            ExerciseInstance.exercise_id.in_(exercise_ids),
+            ExerciseInstance.is_correct.is_(False),
+        )
+        .group_by(ExerciseInstance.exercise_id)
+    )
+    return {exercise_id: int(count) for exercise_id, count in rows.tuples()}
+
+
+def _node_ref(node: Node) -> NodeRefRead:
+    return NodeRefRead(key=node.key, type=node.type, unit_title=node.unit.title)
+
+
+def _lesson_ref(lesson: Lesson | None) -> LessonRefRead | None:
+    return LessonRefRead(slug=lesson.slug, title=lesson.title) if lesson else None
 
 
 async def check_answer(
@@ -146,7 +219,10 @@ async def get_summary(
     attempt = await db.scalar(
         select(LessonAttempt)
         .where(LessonAttempt.id == attempt_id, LessonAttempt.user_id == user.id)
-        .options(selectinload(LessonAttempt.lesson))
+        .options(
+            selectinload(LessonAttempt.lesson),
+            selectinload(LessonAttempt.node).selectinload(Node.unit),
+        )
     )
     if attempt is None:
         raise NotFound
@@ -159,18 +235,35 @@ async def get_summary(
         raise AttemptNotCompleted
     return LessonAttemptSummaryRead(
         attempt_id=attempt.id,
-        lesson=LessonRefRead(slug=attempt.lesson.slug, title=attempt.lesson.title),
+        node=_node_ref(attempt.node),
+        lesson=_lesson_ref(attempt.lesson),
         exercise_count=attempt.exercise_count,
         first_try_correct=attempt.first_try_correct,
         accuracy=attempt.accuracy,
         xp_awarded=attempt.xp_awarded,
-        concepts=list(attempt.lesson.concepts),
+        concepts=await _concepts(db, attempt),
         streak=gamification.effective_streak(user, datetime.now(UTC)),
         streak_extended=bool(attempt.streak_extended),
     )
 
 
 # --- Internos --------------------------------------------------------------------------------
+
+
+async def _concepts(db: AsyncSession, attempt: LessonAttempt) -> list[str]:
+    """Los conceptos de la lección o, en un repaso o evaluación, los de las lecciones de donde
+    salieron sus ejercicios (sin repetir, en el orden de la unidad)."""
+    if attempt.lesson is not None:
+        return list(attempt.lesson.concepts)
+    lessons = await db.scalars(
+        select(Lesson)
+        .join(Exercise, Exercise.lesson_id == Lesson.id)
+        .join(ExerciseInstance, ExerciseInstance.exercise_id == Exercise.id)
+        .where(ExerciseInstance.attempt_id == attempt.id)
+        .distinct()
+        .order_by(Lesson.id)
+    )
+    return list(dict.fromkeys(concept for lesson in lessons for concept in lesson.concepts))
 
 
 def _new_instance(
@@ -236,15 +329,12 @@ async def _complete(db: AsyncSession, user: User, attempt: LessonAttempt, now: d
     rewards = await gamification.award_lesson_completion(
         db, user, attempt, int(first_try_correct or 0), now
     )
-    node = await db.scalar(select(Node).where(Node.lesson_id == attempt.lesson_id))
-    if node is None:  # pragma: no cover - toda lección del temario tiene su nodo
-        return
-    progress = await db.get(NodeProgress, (user.id, node.id), with_for_update=True)
+    progress = await db.get(NodeProgress, (user.id, attempt.node_id), with_for_update=True)
     if progress is None:
         db.add(
             NodeProgress(
                 user_id=user.id,
-                node_id=node.id,
+                node_id=attempt.node_id,
                 first_completed_at=now,
                 last_completed_at=now,
                 times_completed=1,

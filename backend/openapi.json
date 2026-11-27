@@ -268,7 +268,17 @@
             "$ref": "#/components/schemas/EnergyRead"
           },
           "lesson": {
-            "$ref": "#/components/schemas/LessonRefRead"
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LessonRefRead"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "node": {
+            "$ref": "#/components/schemas/NodeRefRead"
           },
           "progress": {
             "$ref": "#/components/schemas/LessonProgressRead"
@@ -276,6 +286,7 @@
         },
         "required": [
           "attempt_id",
+          "node",
           "lesson",
           "progress",
           "current_exercise",
@@ -311,7 +322,17 @@
             "type": "integer"
           },
           "lesson": {
-            "$ref": "#/components/schemas/LessonRefRead"
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LessonRefRead"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "node": {
+            "$ref": "#/components/schemas/NodeRefRead"
           },
           "streak": {
             "title": "Streak",
@@ -328,6 +349,7 @@
         },
         "required": [
           "attempt_id",
+          "node",
           "lesson",
           "exercise_count",
           "first_try_correct",
@@ -537,6 +559,36 @@
           "lesson"
         ],
         "title": "NodeRead",
+        "type": "object"
+      },
+      "NodeRefRead": {
+        "description": "El nodo del intento. La app arma el título de un repaso o evaluación con `unit_title`.",
+        "properties": {
+          "key": {
+            "title": "Key",
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "lesson",
+              "review",
+              "chest",
+              "assessment"
+            ],
+            "title": "Type",
+            "type": "string"
+          },
+          "unit_title": {
+            "title": "Unit Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "type",
+          "unit_title"
+        ],
+        "title": "NodeRefRead",
         "type": "object"
       },
       "NumericAnswer": {
@@ -1529,6 +1581,84 @@
         "summary": "Get Me",
         "tags": [
           "users"
+        ]
+      }
+    },
+    "/nodes/{node_key}/attempts": {
+      "post": {
+        "description": "Inicia cualquier nodo jugable: lección (su clave es el slug), repaso o evaluación.",
+        "operationId": "startNode",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "node_key",
+            "required": true,
+            "schema": {
+              "title": "Node Key",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LessonAttemptRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "invalid_token"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "not_found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "node_locked, node_not_playable, not_enough_energy"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorRead"
+                }
+              }
+            },
+            "description": "validation_error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Start Node",
+        "tags": [
+          "lessons"
         ]
       }
     },

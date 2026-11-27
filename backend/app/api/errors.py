@@ -28,6 +28,7 @@ STATUS_BY_ERROR: dict[type[errors.DomainError], int] = {
     errors.UnknownExerciseType: 500,
     errors.TutorRateLimited: 429,
     errors.NotEnoughEnergy: 409,
+    errors.NodeNotPlayable: 409,
     errors.TutorExerciseLimit: 429,
 }
 

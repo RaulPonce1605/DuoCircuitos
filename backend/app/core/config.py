@@ -56,6 +56,10 @@ class Settings(BaseSettings):
     energy_max: int = Field(default=5, ge=1)
     energy_cost_per_mistake: int = Field(default=1, ge=0)
     energy_refill_minutes: int = Field(default=30, ge=1)
+    # Nodos de repaso y evaluación (docs/diseno/repaso-y-evaluacion.md): cuántos ejercicios de la
+    # unidad mezclan.
+    review_exercise_count: int = Field(default=6, ge=1)
+    assessment_exercise_count: int = Field(default=8, ge=1)
 
     @model_validator(mode="after")
     def _llm_is_complete(self) -> Self:
