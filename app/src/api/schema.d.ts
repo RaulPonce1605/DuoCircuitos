@@ -211,7 +211,11 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch?: never;
+        /**
+         * Update Me
+         * @description Configuración: nombre, zona horaria, notificaciones y privacidad.
+         */
+        patch: operations["updateCurrentUser"];
         trace?: never;
     };
     "/me/achievements": {
@@ -775,6 +779,12 @@ export interface components {
              * Format: uuid
              */
             id: string;
+            /** Notify Challenges */
+            notify_challenges: boolean;
+            /** Notify Streak Reminder */
+            notify_streak_reminder: boolean;
+            /** Profile Public */
+            profile_public: boolean;
             /** Streak Current */
             streak_current: number;
             /** Streak Longest */
@@ -783,6 +793,22 @@ export interface components {
             timezone: string;
             /** Xp Total */
             xp_total: number;
+        };
+        /**
+         * UserUpdate
+         * @description Lo que el alumno puede cambiar en Configuración. Solo se cambia lo que se manda.
+         */
+        UserUpdate: {
+            /** Display Name */
+            display_name?: string | null;
+            /** Notify Challenges */
+            notify_challenges?: boolean | null;
+            /** Notify Streak Reminder */
+            notify_streak_reminder?: boolean | null;
+            /** Profile Public */
+            profile_public?: boolean | null;
+            /** Timezone */
+            timezone?: string | null;
         };
         /**
          * ValidationErrorRead
@@ -1349,6 +1375,57 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorRead"];
                 };
             };
+            /** @description validation_error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorRead"];
+                };
+            };
+        };
+    };
+    updateCurrentUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UserUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserRead"];
+                };
+            };
+            /** @description invalid_token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description validation_error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorRead"];
+                };
+            };
         };
     };
     getAchievements: {
@@ -1376,6 +1453,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description validation_error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorRead"];
                 };
             };
         };

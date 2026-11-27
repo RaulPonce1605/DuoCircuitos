@@ -35,3 +35,8 @@ class User(CreatedAtMixin, Base):
     energy_used: Mapped[int] = mapped_column(default=0, server_default="0")
     # Desde cuándo corre la recarga de la siguiente unidad. Solo importa si energy_used > 0.
     energy_updated_at: Mapped[datetime | None]
+
+    # Configuración: notificaciones (se envían en la fase 3) y privacidad (ligas, amigos).
+    notify_streak_reminder: Mapped[bool] = mapped_column(default=True, server_default="true")
+    notify_challenges: Mapped[bool] = mapped_column(default=True, server_default="true")
+    profile_public: Mapped[bool] = mapped_column(default=True, server_default="true")

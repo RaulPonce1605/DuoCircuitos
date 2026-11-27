@@ -1,8 +1,8 @@
 from typing import Annotated, Literal
-from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-from pydantic import AfterValidator, BaseModel, EmailStr, Field, StringConstraints
+from pydantic import BaseModel, EmailStr, Field
 
+from app.schemas.common import DisplayName, Timezone
 from app.schemas.user import UserRead
 
 # "body": el refresh token viaja en el JSON (app móvil, se guarda en expo-secure-store).
@@ -10,18 +10,6 @@ from app.schemas.user import UserRead
 SessionMode = Literal["body", "cookie"]
 
 Password = Annotated[str, Field(min_length=8, max_length=128)]
-DisplayName = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=50)]
-
-
-def _valid_timezone(value: str) -> str:
-    try:
-        ZoneInfo(value)
-    except (ZoneInfoNotFoundError, ValueError) as exc:
-        raise ValueError("zona horaria IANA inválida") from exc
-    return value
-
-
-Timezone = Annotated[str, Field(max_length=64), AfterValidator(_valid_timezone)]
 
 
 class RegisterRequest(BaseModel):

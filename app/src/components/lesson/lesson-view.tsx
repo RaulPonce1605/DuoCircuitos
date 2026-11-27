@@ -115,7 +115,7 @@ export function LessonView({ lessonSlug }: { lessonSlug: string }) {
         disabled={feedback !== null}
       />
       {feedback ? null : helpFor === exercise.instance_id ? (
-        <TutorPanel key={exercise.instance_id} instanceId={exercise.instance_id} onClose={() => setHelpFor(null)} />
+        <TutorPanel key={`tutor-${exercise.instance_id}`} instanceId={exercise.instance_id} onClose={() => setHelpFor(null)} />
       ) : (
         <Button
           label={t("lesson.help")}

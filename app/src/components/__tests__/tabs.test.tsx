@@ -5,7 +5,6 @@ import { render, screen } from "@testing-library/react-native";
 import type { ComponentType } from "react";
 
 import LeaguesScreen from "@/app/(tabs)/ligas";
-import ProfileScreen from "@/app/(tabs)/perfil";
 import { AppProviders } from "@/components/app-providers";
 import { TAB_ROUTES } from "@/components/tab-routes";
 import i18n from "@/i18n";
@@ -43,8 +42,7 @@ describe("pestañas", () => {
 
   it.each<[string, ComponentType, keyof typeof es]>([
     ["Ligas", LeaguesScreen, "leagues"],
-    ["Perfil", ProfileScreen, "profile"],
-  ])("la pantalla %s muestra su título y su estado vacío (Inicio y Más tienen sus propias pruebas)", async (_, ScreenComponent, key) => {
+  ])("la pantalla %s muestra su título y su estado vacío (las demás tienen sus propias pruebas)", async (_, ScreenComponent, key) => {
     await render(
       <AppProviders>
         <ScreenComponent />

@@ -62,6 +62,10 @@ def _user(timezone: str = "America/Mexico_City", **fields: object) -> User:
         streak_current=0,
         streak_longest=0,
         created_at=datetime(2026, 1, 1, tzinfo=UTC),
+        energy_used=0,
+        notify_streak_reminder=True,
+        notify_challenges=True,
+        profile_public=True,
     )
     for name, value in fields.items():
         setattr(user, name, value)
