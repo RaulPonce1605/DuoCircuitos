@@ -87,3 +87,19 @@ class NotAChest(DomainError):
     """Se intentó abrir como cofre un nodo que no es cofre."""
 
     code = "not_a_chest"
+
+
+class NotEnoughCoins(DomainError):
+    code = "not_enough_coins"
+
+
+class EnergyAlreadyFull(DomainError):
+    """No tiene caso comprar una recarga con la energía llena."""
+
+    code = "energy_already_full"
+
+
+class StreakFreezeLimit(DomainError):
+    """Ya tiene guardados todos los protectores de racha que se permiten."""
+
+    code = "streak_freeze_limit"

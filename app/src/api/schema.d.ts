@@ -316,6 +316,47 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/shop": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Shop
+         * @description Monedas, artículos con su precio y si se pueden comprar ahora.
+         */
+        get: operations["getShop"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/shop/items/{item_id}/buy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Buy Shop Item
+         * @description Compra un artículo: la recarga llena la energía; el protector se guarda para un día sin
+         *     práctica.
+         */
+        post: operations["buyShopItem"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -404,6 +445,11 @@ export interface components {
             period: "daily" | "monthly";
             /** Progress */
             progress: number;
+            /**
+             * Reward Coins
+             * @default 0
+             */
+            reward_coins: number;
             /** Reward Xp */
             reward_xp: number;
         };
@@ -462,6 +508,8 @@ export interface components {
         };
         /** ChestRewardRead */
         ChestRewardRead: {
+            /** Coins */
+            coins: number;
             /** Energy */
             energy: number;
             /** Xp */
@@ -853,6 +901,33 @@ export interface components {
             /** Units */
             units: components["schemas"]["UnitRead"][];
         };
+        /**
+         * ShopItemRead
+         * @description Un artículo. La app lo nombra con i18n: `shop.items.<id>`.
+         */
+        ShopItemRead: {
+            /**
+             * Id
+             * @enum {string}
+             */
+            id: "energy_refill" | "streak_freeze";
+            /** Price */
+            price: number;
+            /** Unavailable Reason */
+            unavailable_reason: ("not_enough_coins" | "energy_already_full" | "streak_freeze_limit") | null;
+        };
+        /** ShopRead */
+        ShopRead: {
+            /** Coins */
+            coins: number;
+            energy: components["schemas"]["EnergyRead"];
+            /** Items */
+            items: components["schemas"]["ShopItemRead"][];
+            /** Streak Freeze Max */
+            streak_freeze_max: number;
+            /** Streak Freezes */
+            streak_freezes: number;
+        };
         /** StageRead */
         StageRead: {
             /** Sections */
@@ -900,6 +975,8 @@ export interface components {
         };
         /** UserRead */
         UserRead: {
+            /** Coins */
+            coins: number;
             /**
              * Created At
              * Format: date-time
@@ -927,6 +1004,8 @@ export interface components {
             profile_public: boolean;
             /** Streak Current */
             streak_current: number;
+            /** Streak Freezes */
+            streak_freezes: number;
             /** Streak Longest */
             streak_longest: number;
             /** Timezone */
@@ -1776,6 +1855,93 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+        };
+    };
+    getShop: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ShopRead"];
+                };
+            };
+            /** @description invalid_token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description validation_error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorRead"];
+                };
+            };
+        };
+    };
+    buyShopItem: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: "energy_refill" | "streak_freeze";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ShopRead"];
+                };
+            };
+            /** @description invalid_token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description not_enough_coins, energy_already_full, streak_freeze_limit */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description validation_error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorRead"];
                 };
             };
         };

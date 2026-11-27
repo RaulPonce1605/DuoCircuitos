@@ -18,6 +18,8 @@ class ChallengeRead(BaseModel):
     goal: int
     progress: int
     reward_xp: int
+    # Monedas que da al cumplirse (iguales para todos los desafíos).
+    reward_coins: int = 0
     completed_at: datetime | None
 
 

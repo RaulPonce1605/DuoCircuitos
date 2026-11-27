@@ -32,6 +32,9 @@ class UserRead(BaseModel):
     # Nivel de liga (índice en LEAGUE_TIERS) y su id para traducir el nombre.
     league_tier: int
     league_tier_id: str
+    # Tienda: monedas y protectores de racha guardados.
+    coins: int
+    streak_freezes: int
 
 
 class UserUpdate(BaseModel):

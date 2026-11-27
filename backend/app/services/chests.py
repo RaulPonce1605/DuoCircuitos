@@ -65,12 +65,16 @@ async def _open(db: AsyncSession, user: User, chest: Chest, now: datetime) -> Ch
         if chest.source == "node":
             xp = _roll(settings.chest_node_xp_min, settings.chest_node_xp_max)
             energy_reward = settings.chest_node_energy
+            coins = settings.chest_node_coins
         else:
             xp = _roll(settings.chest_lesson_xp_min, settings.chest_lesson_xp_max)
             energy_reward = settings.chest_lesson_energy
+            coins = _roll(settings.chest_lesson_coins_min, settings.chest_lesson_coins_max)
         chest.opened_at = now
         chest.reward_xp = xp
         chest.reward_energy = energy_reward
+        chest.reward_coins = coins
+        user.coins += coins
         user.xp_total += xp
         if xp > 0:
             db.add(XpEvent(user_id=user.id, amount=xp, source="chest"))
@@ -90,7 +94,11 @@ def _roll(low: int, high: int) -> int:
 
 def _chest_read(chest: Chest, user: User, now: datetime, new_badges: list[BadgeRead]) -> ChestRead:
     reward = (
-        ChestRewardRead(xp=chest.reward_xp or 0, energy=chest.reward_energy or 0)
+        ChestRewardRead(
+            xp=chest.reward_xp or 0,
+            energy=chest.reward_energy or 0,
+            coins=chest.reward_coins or 0,
+        )
         if chest.opened_at is not None
         else None
     )

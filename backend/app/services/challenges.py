@@ -104,6 +104,7 @@ async def record(
         if challenge.progress >= challenge.goal:
             challenge.completed_at = now
             completed.append(challenge)
+            user.coins += get_settings().challenge_reward_coins
             if challenge.reward_xp > 0:
                 user.xp_total += challenge.reward_xp
                 db.add(XpEvent(user_id=user.id, amount=challenge.reward_xp, source="challenge"))
@@ -122,7 +123,8 @@ def _period_end(user: User, start: date, period: str) -> datetime:
 
 
 def challenge_read(challenge: Challenge) -> ChallengeRead:
-    return ChallengeRead.model_validate(challenge)
+    read = ChallengeRead.model_validate(challenge)
+    return read.model_copy(update={"reward_coins": get_settings().challenge_reward_coins})
 
 
 async def overview(db: AsyncSession, user: User, now: datetime) -> ChallengesRead:

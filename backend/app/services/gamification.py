@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
 from app.models import LessonAttempt, User
-from app.models.gamification import XpEvent
+from app.models.gamification import StreakFreezeUse, XpEvent
 
 
 @dataclass(frozen=True)
@@ -54,14 +54,38 @@ def local_date(moment: datetime, timezone: str) -> date:
     return moment.astimezone(zone).date()
 
 
-def effective_streak(user: User, now: datetime) -> int:
-    """La racha que se muestra: se rompe sola si el último día con lección es anterior a ayer."""
+def missed_days(user: User, today: date) -> int:
+    """Días completos sin lección entre la última racha y hoy (0 si practicó ayer u hoy)."""
     if user.streak_last_date is None:
         return 0
-    today = local_date(now, user.timezone)
-    if user.streak_last_date < today - timedelta(days=1):
+    return max(0, (today - user.streak_last_date).days - 1)
+
+
+def effective_streak(user: User, now: datetime) -> int:
+    """La racha que se muestra: se rompe sola si el último día con lección es anterior a ayer,
+    salvo que los protectores de racha guardados alcancen para cubrir los días que faltaron."""
+    if user.streak_last_date is None:
+        return 0
+    missed = missed_days(user, local_date(now, user.timezone))
+    if missed > (user.streak_freezes or 0):
         return 0
     return user.streak_current
+
+
+def apply_streak_freezes(user: User, now: datetime) -> list[date]:
+    """Gasta protectores de racha para cubrir los días sin lección, si alcanzan para todos.
+
+    Devuelve los días cubiertos. Si no alcanzan, no gasta ninguno (la racha se rompe igual).
+    La fila del usuario debe estar bloqueada.
+    """
+    today = local_date(now, user.timezone)
+    missed = missed_days(user, today)
+    if missed == 0 or missed > (user.streak_freezes or 0) or user.streak_last_date is None:
+        return []
+    covered = [user.streak_last_date + timedelta(days=i) for i in range(1, missed + 1)]
+    user.streak_freezes -= missed
+    user.streak_last_date = today - timedelta(days=1)  # como si hubiera practicado ayer
+    return covered
 
 
 def register_lesson_day(user: User, now: datetime) -> bool:
@@ -87,6 +111,8 @@ async def award_lesson_completion(
         raise ValueError("el intento ya estaba completado")
     xp = lesson_xp(attempt.exercise_count, first_try_correct)
     accuracy = accuracy_percent(first_try_correct, attempt.exercise_count)
+    for day in apply_streak_freezes(user, now):
+        db.add(StreakFreezeUse(user_id=user.id, day=day, used_at=now))
     extended = register_lesson_day(user, now)
 
     attempt.completed_at = now

@@ -51,7 +51,7 @@ Sistema **extensible**: cada tipo tiene **un componente** en la app y **un valid
 
 ### 1.5 Gamificación
 
-EXP, racha, energía, desafíos diarios y mensuales, ligas semanales, cofres, logros y medallas. Las cifras (EXP por ejercicio, recarga de energía, tamaño de liga, etc.) viven en la configuración del backend, nunca fijas en la app.
+EXP, racha, energía, desafíos diarios y mensuales, ligas semanales, cofres, logros, medallas y una tienda con monedas. Las cifras (EXP por ejercicio, recarga de energía, tamaño de liga, etc.) viven en la configuración del backend, nunca fijas en la app.
 
 ### 1.6 Navegación
 
@@ -156,6 +156,9 @@ La columna "En código" es el nombre obligatorio en modelos, tipos, rutas y vari
 | Liga | Competencia semanal por EXP entre un grupo de usuarios | `league` |
 | Logro | Hito alcanzado (p. ej. 7 días de racha) | `achievement` |
 | Medalla | Insignia visible que representa un logro | `badge` |
+| Moneda | Lo que se gana en cofres y desafíos y se gasta en la tienda (no es EXP) | `coins` |
+| Tienda | Donde se cambian monedas por recargas de energía o protectores de racha | `shop` |
+| Protector de racha | Cubre un día sin practicar para que la racha no se rompa | `streak_freeze` |
 | Tutor | Asistente con IA que da pistas | `tutor` |
 | Pista | Ayuda parcial que no revela la respuesta | `hint` |
 | Temario | Todo el contenido en `contenido/` | `syllabus` |
