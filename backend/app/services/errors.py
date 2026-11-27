@@ -75,3 +75,9 @@ class NotEnoughEnergy(DomainError):
     """El alumno se quedó sin energía: debe esperar a que se recargue."""
 
     code = "not_enough_energy"
+
+
+class NodeNotPlayable(DomainError):
+    """El nodo no tiene ejercicios (un cofre se abre, no se juega)."""
+
+    code = "node_not_playable"

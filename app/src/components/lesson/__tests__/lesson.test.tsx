@@ -31,6 +31,7 @@ const NUM = {
 };
 const ATTEMPT: LessonAttempt = {
   attempt_id: "a-1",
+  node: { key: "ohm-01", type: "lesson", unit_title: "Ley de Ohm" },
   lesson: { slug: "ohm-01", title: "Voltaje, corriente y resistencia" },
   progress: { completed: 0, total: 2 },
   current_exercise: MC,
@@ -151,6 +152,7 @@ describe("LessonView", () => {
 
 const SUMMARY: LessonSummary = {
   attempt_id: "a-1",
+  node: { key: "ohm-01", type: "lesson", unit_title: "Ley de Ohm" },
   lesson: { slug: "ohm-01", title: "Voltaje, corriente y resistencia" },
   exercise_count: 5,
   first_try_correct: 4,
@@ -181,6 +183,21 @@ describe("SummaryView", () => {
 
     await fireEvent.press(screen.getByRole("button", { name: es.summary.continue }));
     expect(mockRouter.replace).toHaveBeenCalledWith("/");
+  });
+
+  it("en un repaso el título sale de la unidad", async () => {
+    mockSummary.mockResolvedValue({
+      ...SUMMARY,
+      node: { key: "u01-ley-de-ohm:review:1", type: "review", unit_title: "Ley de Ohm" },
+      lesson: null,
+    });
+    await render(
+      <AppProviders>
+        <SummaryView attemptId="a-1" />
+      </AppProviders>,
+    );
+
+    expect(await screen.findByText("Repaso: Ley de Ohm")).toBeOnTheScreen();
   });
 
   it("si la racha no subió lo dice, en singular", async () => {

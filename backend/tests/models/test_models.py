@@ -102,7 +102,9 @@ async def test_full_attempt_graph(db: AsyncSession) -> None:
     await db.flush()
 
     now = datetime.now(UTC)
-    attempt = LessonAttempt(user_id=user.id, lesson_id=lesson.id, started_at=now, exercise_count=1)
+    attempt = LessonAttempt(
+        user_id=user.id, node_id=node.id, lesson_id=lesson.id, started_at=now, exercise_count=1
+    )
     db.add(attempt)
     await db.flush()
     db.add(
@@ -125,10 +127,15 @@ async def test_full_attempt_graph(db: AsyncSession) -> None:
 
 async def test_xp_only_set_when_attempt_completed(db: AsyncSession) -> None:
     user = await _make_user(db)
-    lesson = await _make_lesson(db, await _make_unit(db))
+    unit = await _make_unit(db)
+    lesson = await _make_lesson(db, unit)
+    node = Node(unit_id=unit.id, key="n-xp", type="lesson", position=0, lesson_id=lesson.id)
+    db.add(node)
+    await db.flush()
     db.add(
         LessonAttempt(
             user_id=user.id,
+            node_id=node.id,
             lesson_id=lesson.id,
             started_at=datetime.now(UTC),
             exercise_count=1,

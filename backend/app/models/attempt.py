@@ -6,11 +6,12 @@ from sqlalchemy import BigInteger, CheckConstraint, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base
-from app.models.syllabus import Exercise, Lesson
+from app.models.syllabus import Exercise, Lesson, Node
 
 
 class LessonAttempt(Base):
-    """Un intento de lección: se crea al iniciarla y se completa al acertar todos sus ejercicios."""
+    """Un intento de un nodo jugable (lección, repaso o evaluación): se crea al iniciarlo y se
+    completa al acertar todos sus ejercicios. `lesson_id` solo existe en los de lección."""
 
     __tablename__ = "lesson_attempts"
     __table_args__ = (
@@ -24,7 +25,8 @@ class LessonAttempt(Base):
     user_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("users.id", ondelete="CASCADE"), index=True
     )
-    lesson_id: Mapped[int] = mapped_column(ForeignKey("lessons.id"), index=True)
+    node_id: Mapped[int] = mapped_column(ForeignKey("nodes.id"), index=True)
+    lesson_id: Mapped[int | None] = mapped_column(ForeignKey("lessons.id"), index=True)
     started_at: Mapped[datetime]
     completed_at: Mapped[datetime | None]
     exercise_count: Mapped[int]
@@ -34,7 +36,8 @@ class LessonAttempt(Base):
     # Si al terminar este intento la racha subió (la pantalla de racha lo celebra).
     streak_extended: Mapped[bool | None]
 
-    lesson: Mapped[Lesson] = relationship()
+    node: Mapped[Node] = relationship()
+    lesson: Mapped[Lesson | None] = relationship()
     instances: Mapped[list["ExerciseInstance"]] = relationship(
         back_populates="attempt", order_by="ExerciseInstance.position"
     )

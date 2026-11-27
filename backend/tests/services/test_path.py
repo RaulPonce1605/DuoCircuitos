@@ -74,14 +74,25 @@ async def test_finishing_unit_lessons_opens_extras_and_next_unit(
     path = await path_service.get_path(db, user_session.user)
     status = _status(path)
 
-    # Fase 1: repaso, cofre y evaluación se abren pero no bloquean la siguiente unidad.
+    # El repaso es obligatorio: después de él todo sigue bloqueado.
     assert status["u01-ley-de-ohm:review:1"] == "available"
+    assert status["u01-ley-de-ohm:chest:1"] == "locked"
+    assert status["u01-ley-de-ohm:assessment:1"] == "locked"
+    assert status["sp-01"] == "locked"
+    current = [node.key for node in _nodes(path) if node.is_current]
+    assert current == ["u01-ley-de-ohm:review:1"]
+
+    await _complete(db, user_session.user, "u01-ley-de-ohm:review:1")
+    status = _status(await path_service.get_path(db, user_session.user))
+    # El cofre aún no frena el avance; la evaluación sí.
     assert status["u01-ley-de-ohm:chest:1"] == "available"
     assert status["u01-ley-de-ohm:assessment:1"] == "available"
+    assert status["sp-01"] == "locked"
+
+    await _complete(db, user_session.user, "u01-ley-de-ohm:assessment:1")
+    status = _status(await path_service.get_path(db, user_session.user))
     assert status["sp-01"] == "available"
     assert status["sp-02"] == "locked"
-    current = [node.key for node in _nodes(path) if node.is_current]
-    assert current == ["sp-01"]
 
 
 async def test_progress_is_per_user(db: AsyncSession, user_session: auth_service.Session) -> None:
@@ -110,15 +121,18 @@ async def test_archived_nodes_are_hidden(
     )
 
 
-async def test_get_unlocked_lesson(db: AsyncSession, user_session: auth_service.Session) -> None:
+async def test_get_unlocked_node(db: AsyncSession, user_session: auth_service.Session) -> None:
     user = user_session.user
-    assert (await path_service.get_unlocked_lesson(db, user, "ohm-01")).slug == "ohm-01"
+    assert (await path_service.get_unlocked_node(db, user, "ohm-01")).key == "ohm-01"
     with pytest.raises(NodeLocked):
-        await path_service.get_unlocked_lesson(db, user, "ohm-02")
+        await path_service.get_unlocked_node(db, user, "ohm-02")
+    with pytest.raises(NodeLocked):
+        await path_service.get_unlocked_node(db, user, "u01-ley-de-ohm:review:1")
     with pytest.raises(NotFound):
-        await path_service.get_unlocked_lesson(db, user, "no-existe")
+        await path_service.get_unlocked_node(db, user, "no-existe")
 
-    await _complete(db, user, "ohm-01")
-    assert (await path_service.get_unlocked_lesson(db, user, "ohm-02")).slug == "ohm-02"
-    # Una lección completada se puede repetir.
-    assert (await path_service.get_unlocked_lesson(db, user, "ohm-01")).slug == "ohm-01"
+    await _complete(db, user, "ohm-01", "ohm-02")
+    review = await path_service.get_unlocked_node(db, user, "u01-ley-de-ohm:review:1")
+    assert (review.type, review.lesson) == ("review", None)
+    # Un nodo completado se puede repetir.
+    assert (await path_service.get_unlocked_node(db, user, "ohm-01")).key == "ohm-01"

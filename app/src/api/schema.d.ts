@@ -174,6 +174,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/nodes/{node_key}/attempts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Start Node
+         * @description Inicia cualquier nodo jugable: lección (su clave es el slug), repaso o evaluación.
+         */
+        post: operations["startNode"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/path": {
         parameters: {
             query?: never;
@@ -294,7 +314,8 @@ export interface components {
             attempt_id: string;
             current_exercise: components["schemas"]["ExerciseInstanceRead"];
             energy: components["schemas"]["EnergyRead"];
-            lesson: components["schemas"]["LessonRefRead"];
+            lesson: components["schemas"]["LessonRefRead"] | null;
+            node: components["schemas"]["NodeRefRead"];
             progress: components["schemas"]["LessonProgressRead"];
         };
         /** LessonAttemptSummaryRead */
@@ -312,7 +333,8 @@ export interface components {
             exercise_count: number;
             /** First Try Correct */
             first_try_correct: number;
-            lesson: components["schemas"]["LessonRefRead"];
+            lesson: components["schemas"]["LessonRefRead"] | null;
+            node: components["schemas"]["NodeRefRead"];
             /** Streak */
             streak: number;
             /** Streak Extended */
@@ -401,6 +423,21 @@ export interface components {
              * @enum {string}
              */
             type: "lesson" | "review" | "chest" | "assessment";
+        };
+        /**
+         * NodeRefRead
+         * @description El nodo del intento. La app arma el título de un repaso o evaluación con `unit_title`.
+         */
+        NodeRefRead: {
+            /** Key */
+            key: string;
+            /**
+             * Type
+             * @enum {string}
+             */
+            type: "lesson" | "review" | "chest" | "assessment";
+            /** Unit Title */
+            unit_title: string;
         };
         /** NumericAnswer */
         NumericAnswer: {
@@ -1036,6 +1073,64 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+        };
+    };
+    startNode: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                node_key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LessonAttemptRead"];
+                };
+            };
+            /** @description invalid_token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description not_found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description node_locked, node_not_playable, not_enough_energy */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorRead"];
+                };
+            };
+            /** @description validation_error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorRead"];
                 };
             };
         };

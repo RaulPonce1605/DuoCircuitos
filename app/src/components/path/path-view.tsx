@@ -17,7 +17,8 @@ export function PathView() {
   const path = usePath();
   const me = useCurrentUser();
 
-  const openLesson = (slug: string) => router.push({ pathname: "/leccion/[slug]", params: { slug } });
+  // La ruta de la lección también juega repasos y evaluaciones: `slug` es la clave del nodo.
+  const openNode = (key: string) => router.push({ pathname: "/leccion/[slug]", params: { slug: key } });
 
   return (
     <View style={{ gap: theme.spacing.lg }}>
@@ -67,7 +68,7 @@ export function PathView() {
             </AppText>
             {stage.sections.flatMap((section) =>
               section.units.map((unit) => (
-                <UnitCard key={unit.slug} unit={unit} onOpenLesson={openLesson} />
+                <UnitCard key={unit.slug} unit={unit} onOpenNode={openNode} />
               )),
             )}
           </View>

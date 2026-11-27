@@ -15,7 +15,7 @@ from sqlalchemy.orm import selectinload
 
 from app.content_import.schema import FillPatternExercise, MultipleChoiceExercise, NumericExercise
 from app.core.config import get_settings
-from app.models import Exercise, ExerciseInstance, LessonAttempt, User
+from app.models import Exercise, ExerciseInstance, LessonAttempt, Node, User
 from app.services.auth import Session
 from app.services.exercises import get_validator
 from app.services.exercises.numeric import correct_value
@@ -59,8 +59,11 @@ async def _instance(db: AsyncSession, user: User, exercise_type: str) -> Exercis
         .options(selectinload(Exercise.lesson))
     )
     assert exercise is not None
+    node_id = await db.scalar(select(Node.id).where(Node.lesson_id == exercise.lesson_id))
+    assert node_id is not None
     attempt = LessonAttempt(
         user_id=user.id,
+        node_id=node_id,
         lesson_id=exercise.lesson_id,
         started_at=datetime.now(UTC),
         exercise_count=1,

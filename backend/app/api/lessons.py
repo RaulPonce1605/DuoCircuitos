@@ -18,6 +18,7 @@ from app.services.errors import (
     InvalidAnswer,
     InvalidToken,
     NodeLocked,
+    NodeNotPlayable,
     NotCurrentExercise,
     NotEnoughEnergy,
     NotFound,
@@ -35,6 +36,18 @@ router = APIRouter(tags=["lessons"], responses=VALIDATION_ERROR_RESPONSES)
 )
 async def start_lesson(lesson_slug: str, db: DbSession, user: CurrentUser) -> LessonAttemptRead:
     return await lesson_service.start_attempt(db, user, lesson_slug)
+
+
+@router.post(
+    "/nodes/{node_key}/attempts",
+    response_model=LessonAttemptRead,
+    status_code=201,
+    operation_id="startNode",
+    responses=error_responses(InvalidToken, NotFound, NodeLocked, NodeNotPlayable, NotEnoughEnergy),
+)
+async def start_node(node_key: str, db: DbSession, user: CurrentUser) -> LessonAttemptRead:
+    """Inicia cualquier nodo jugable: lección (su clave es el slug), repaso o evaluación."""
+    return await lesson_service.start_attempt(db, user, node_key)
 
 
 @router.post(

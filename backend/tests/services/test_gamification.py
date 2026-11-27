@@ -5,7 +5,7 @@ import pytest
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models import Lesson, LessonAttempt, User
+from app.models import LessonAttempt, Node, User
 from app.models.gamification import XpEvent
 from app.services import auth as auth_service
 from app.services.gamification import (
@@ -133,10 +133,14 @@ async def _attempt(db: AsyncSession, user: User, count: int = 5) -> LessonAttemp
     from app.content_import.validate import DEFAULT_SYLLABUS_DIR
 
     await import_syllabus(db, DEFAULT_SYLLABUS_DIR)
-    lesson_id = await db.scalar(select(Lesson.id).where(Lesson.slug == "ohm-01"))
-    assert lesson_id is not None
+    node = await db.scalar(select(Node).where(Node.key == "ohm-01"))
+    assert node is not None
     attempt = LessonAttempt(
-        user_id=user.id, lesson_id=lesson_id, started_at=datetime.now(UTC), exercise_count=count
+        user_id=user.id,
+        node_id=node.id,
+        lesson_id=node.lesson_id,
+        started_at=datetime.now(UTC),
+        exercise_count=count,
     )
     db.add(attempt)
     await db.flush()
@@ -180,9 +184,11 @@ async def test_second_lesson_same_day_adds_xp_but_not_streak(
     user = user_session.user
     now = datetime.now(UTC)
     first = await award_lesson_completion(db, user, await _attempt(db, user), 5, now)
+    template = await _attempt(db, user)
     second_attempt = LessonAttempt(
         user_id=user.id,
-        lesson_id=(await _attempt(db, user)).lesson_id,
+        node_id=template.node_id,
+        lesson_id=template.lesson_id,
         started_at=now,
         exercise_count=5,
     )

@@ -14,7 +14,9 @@ Json = dict[str, Any]
 
 
 async def _start(client: AsyncClient, headers: dict[str, str], lesson: str = "ohm-01") -> Json:
-    response = await client.post(f"/lessons/{lesson}/attempts", headers=headers)
+    # Las lecciones también se inician por su nodo; la clave del nodo es el slug.
+    url = f"/lessons/{lesson}/attempts" if ":" not in lesson else f"/nodes/{lesson}/attempts"
+    response = await client.post(url, headers=headers)
     assert response.status_code == 201, response.text
     data: Json = response.json()
     return data
@@ -319,22 +321,33 @@ async def test_repeating_a_lesson_counts_again_but_streak_once_per_day(
 async def test_whole_path_can_be_completed_in_order(
     client: AsyncClient, db: AsyncSession, auth_headers: dict[str, str]
 ) -> None:
-    """Recorre las 10 lecciones del temario real en orden: cada una se desbloquea al terminar
-    la anterior y todas se pueden completar respondiendo bien."""
-    lessons = ["ohm-01", "ohm-02", "sp-01", "sp-02", "kir-01", "kir-02"]
-    lessons += ["thev-01", "thev-02", "rc-01", "rc-02"]
-    for slug in lessons:
-        await _play(client, db, auth_headers, slug)
-
-    me = (await client.get("/me", headers=auth_headers)).json()
-    assert me["xp_total"] == 55 * len(lessons)
+    """Recorre el temario real en orden: lecciones, repasos y evaluaciones. Cada nodo se
+    desbloquea al terminar el anterior y todos se pueden completar respondiendo bien."""
     path = (await client.get("/path", headers=auth_headers)).json()
-    statuses = [
-        node["status"]
+    playable = [
+        node
         for stage in path["stages"]
         for section in stage["sections"]
         for unit in section["units"]
         for node in unit["nodes"]
-        if node["type"] == "lesson"
+        if node["type"] != "chest"
     ]
-    assert statuses == ["completed"] * len(lessons)
+    assert [node["type"] for node in playable[:4]] == ["lesson", "lesson", "review", "assessment"]
+    xp = 0
+    for node in playable:
+        played = await _play(client, db, auth_headers, node["key"])
+        assert played["node"]["type"] == node["type"]
+        xp += 10 * played["progress"]["total"] + 5  # todo al primer intento + bono perfecto
+
+    me = (await client.get("/me", headers=auth_headers)).json()
+    assert me["xp_total"] == xp
+    path = (await client.get("/path", headers=auth_headers)).json()
+    statuses = {
+        node["type"]: node["status"]
+        for stage in path["stages"]
+        for section in stage["sections"]
+        for unit in section["units"]
+        for node in unit["nodes"]
+        if node["type"] != "chest"
+    }
+    assert statuses == {"lesson": "completed", "review": "completed", "assessment": "completed"}

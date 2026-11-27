@@ -4,6 +4,7 @@ import type { ComponentProps } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, View } from "react-native";
 
+import { attemptTitle } from "@/components/lesson/attempt-title";
 import { AppText, Button, Card, Screen } from "@/components/ui";
 import { useLessonSummary } from "@/hooks/use-lesson-summary";
 import { useTheme } from "@/hooks/use-theme";
@@ -83,7 +84,7 @@ export function SummaryView({ attemptId }: { attemptId: string }) {
           {t("summary.title")}
         </AppText>
         <AppText color="textMuted" align="center">
-          {data.lesson.title}
+          {attemptTitle(data)}
         </AppText>
       </View>
 

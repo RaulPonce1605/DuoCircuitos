@@ -3,12 +3,21 @@ import uuid
 from pydantic import BaseModel
 
 from app.schemas.exercises import ExerciseAnswer, ExercisePublic
+from app.schemas.path import NodeType
 from app.schemas.user import EnergyRead
 
 
 class LessonRefRead(BaseModel):
     slug: str
     title: str
+
+
+class NodeRefRead(BaseModel):
+    """El nodo del intento. La app arma el título de un repaso o evaluación con `unit_title`."""
+
+    key: str
+    type: NodeType
+    unit_title: str
 
 
 class LessonProgressRead(BaseModel):
@@ -24,7 +33,9 @@ class ExerciseInstanceRead(BaseModel):
 
 class LessonAttemptRead(BaseModel):
     attempt_id: uuid.UUID
-    lesson: LessonRefRead
+    node: NodeRefRead
+    # Solo en los nodos de lección; null en repaso y evaluación.
+    lesson: LessonRefRead | None
     progress: LessonProgressRead
     current_exercise: ExerciseInstanceRead
     energy: EnergyRead
@@ -49,7 +60,8 @@ class CheckResultRead(BaseModel):
 
 class LessonAttemptSummaryRead(BaseModel):
     attempt_id: uuid.UUID
-    lesson: LessonRefRead
+    node: NodeRefRead
+    lesson: LessonRefRead | None
     exercise_count: int
     first_try_correct: int
     accuracy: int
