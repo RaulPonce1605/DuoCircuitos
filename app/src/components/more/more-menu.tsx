@@ -15,6 +15,7 @@ export function MoreMenu() {
         {t("more.title")}
       </AppText>
       <Card style={{ gap: theme.spacing.xs }}>
+        <ListRow icon="people" label={t("more.friends")} onPress={() => router.push("/amigos")} />
         <ListRow icon="trophy" label={t("more.achievements")} onPress={() => router.push("/logros")} />
         <ListRow icon="medal" iconColor="accent" label={t("more.badges")} onPress={() => router.push("/medallas")} />
         <ListRow icon="storefront" iconColor="coins" label={t("more.shop")} onPress={() => router.push("/tienda")} />
