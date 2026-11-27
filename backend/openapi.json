@@ -702,6 +702,56 @@
         "title": "StatusRead",
         "type": "object"
       },
+      "TutorReplyRead": {
+        "properties": {
+          "help_level": {
+            "title": "Help Level",
+            "type": "integer"
+          },
+          "remaining_requests": {
+            "title": "Remaining Requests",
+            "type": "integer"
+          },
+          "reply": {
+            "title": "Reply",
+            "type": "string"
+          },
+          "source": {
+            "enum": [
+              "llm",
+              "hint"
+            ],
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reply",
+          "source",
+          "help_level",
+          "remaining_requests"
+        ],
+        "title": "TutorReplyRead",
+        "type": "object"
+      },
+      "TutorRequest": {
+        "properties": {
+          "message": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          }
+        },
+        "title": "TutorRequest",
+        "type": "object"
+      },
       "UnitRead": {
         "properties": {
           "nodes": {
@@ -1126,6 +1176,104 @@
         "summary": "Check Exercise",
         "tags": [
           "lessons"
+        ]
+      }
+    },
+    "/exercise-instances/{instance_id}/tutor": {
+      "post": {
+        "operationId": "askTutor",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "instance_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Instance Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TutorRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TutorReplyRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "invalid_token"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "not_found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "already_answered"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorRead"
+                }
+              }
+            },
+            "description": "validation_error"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRead"
+                }
+              }
+            },
+            "description": "tutor_rate_limited, tutor_exercise_limit"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Ask Tutor",
+        "tags": [
+          "tutor"
         ]
       }
     },

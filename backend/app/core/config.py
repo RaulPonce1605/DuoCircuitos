@@ -1,8 +1,8 @@
 from functools import lru_cache
 from pathlib import Path
-from typing import Literal
+from typing import Literal, Self
 
-from pydantic import Field, SecretStr, computed_field
+from pydantic import Field, SecretStr, computed_field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy.engine import URL
 
@@ -33,9 +33,18 @@ class Settings(BaseSettings):
     refresh_cookie_secure: bool = True
     refresh_cookie_samesite: Literal["lax", "strict", "none"] = "lax"
 
-    llm_provider: str = ""
+    # Tutor (backend/CLAUDE.md 3.9). Sin proveedor, el tutor responde con las pistas del temario.
+    llm_provider: Literal["", "anthropic"] = ""
     llm_model: str = ""
     llm_api_key: SecretStr = SecretStr("")
+    # Esfuerzo de razonamiento del modelo; vacío = el predeterminado del modelo.
+    llm_effort: Literal["", "low", "medium", "high"] = "low"
+    llm_timeout_seconds: float = Field(default=30, gt=0)
+    # Si el modelo rechaza la petición, el proveedor reintenta con otro modelo (Anthropic).
+    llm_server_fallbacks: bool = True
+    # Límites para no gastar de más: por usuario por hora y por ejercicio mostrado.
+    tutor_requests_per_hour: int = Field(default=30, ge=1)
+    tutor_requests_per_exercise: int = Field(default=6, ge=1)
 
     cors_origins: list[str] = []
 
@@ -43,6 +52,12 @@ class Settings(BaseSettings):
     xp_per_exercise_first_try: int = Field(default=10, ge=0)
     xp_per_exercise_retry: int = Field(default=5, ge=0)
     xp_perfect_lesson_bonus: int = Field(default=5, ge=0)
+
+    @model_validator(mode="after")
+    def _llm_is_complete(self) -> Self:
+        if self.llm_provider and not (self.llm_model and self.llm_api_key.get_secret_value()):
+            raise ValueError("LLM_PROVIDER necesita LLM_MODEL y LLM_API_KEY")
+        return self
 
     @computed_field  # type: ignore[prop-decorator]
     @property

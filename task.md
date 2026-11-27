@@ -76,13 +76,13 @@ Al terminar la fase 2, el alumno puede pedir ayuda en cualquier ejercicio, y la 
 
 ### Tutor con IA
 
-- [ ] **R** — Interfaz `TutorProvider` con un adaptador para el LLM elegido (`LLM_PROVIDER`, `LLM_MODEL`)
-- [ ] **R** — Prompt del tutor: recibe enunciado, fórmula y pistas del temario, nunca el resultado
-- [ ] **R** — Filtro que bloquea respuestas con el resultado (0.5 A, 500 mA, "la B")
-- [ ] **R** — Las 3 pruebas obligatorias del tutor en `tests/tutor/`, con proveedor falso
-- [ ] **R** — Endpoint del tutor con límite de peticiones por usuario para no gastar de más
-- [ ] **D** — Lista de preguntas típicas de alumnos (incluidas las que intentan sacar la respuesta) para probar al tutor
-- [ ] **Alex** — Botón "Pedir ayuda" y panel de chat del tutor dentro de la lección
+- [x] **R** — Interfaz `TutorProvider` con un adaptador para el LLM elegido (`LLM_PROVIDER`, `LLM_MODEL`)
+- [x] **R** — Prompt del tutor: recibe enunciado, fórmula y pistas del temario, nunca el resultado
+- [x] **R** — Filtro que bloquea respuestas con el resultado (0.5 A, 500 mA, "la B")
+- [x] **R** — Las 3 pruebas obligatorias del tutor en `tests/tutor/`, con proveedor falso
+- [x] **R** — Endpoint del tutor con límite de peticiones por usuario para no gastar de más
+- [x] **D** — Lista de preguntas típicas de alumnos (incluidas las que intentan sacar la respuesta) para probar al tutor
+- [x] **Alex** — Botón "Pedir ayuda" y panel de chat del tutor dentro de la lección
 
 ### Gamificación
 
